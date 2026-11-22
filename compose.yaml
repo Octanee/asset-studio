@@ -32,7 +32,7 @@ services:
       ASSET_STUDIO_MCP_TOKEN: ${ASSET_STUDIO_MCP_TOKEN:-}
       ASSET_STUDIO_WORKER_TOKEN: ${ASSET_STUDIO_WORKER_TOKEN:-}
     volumes:
-      - ${ASSET_STUDIO_DATA_HOST_DIR:-./data}:/data
+      - asset-data:/data  # library lives in a named volume (ADR-013)
     depends_on:
       db:
         condition: service_healthy
@@ -44,7 +44,7 @@ services:
     command: ["python", "-m", "asset_studio.worker"]
     environment: *backend-env
     volumes:
-      - ${ASSET_STUDIO_DATA_HOST_DIR:-./data}:/data
+      - asset-data:/data  # library lives in a named volume (ADR-013)
     depends_on:
       db:
         condition: service_healthy
@@ -58,3 +58,4 @@ services:
 
 volumes:
   db-data:
+  asset-data:

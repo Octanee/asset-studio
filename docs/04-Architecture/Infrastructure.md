@@ -17,7 +17,8 @@ tags:
 
 - All published ports bind to `127.0.0.1` (NFR-005).
 - `db` data lives in a named volume.
-- The user's **data folder** (D-09) is bind-mounted into `api` and `worker`, and so is the **model folder** shared with ComfyUI (read-write for approved downloads).
+- The **library** lives in the named volume `asset-data` (ADR-013).
+- Windows folders are bind-mounted only for export roots, backups, the **model folder** shared with ComfyUI (read-write for approved downloads) and the training exchange folder.
 - Containers do **not** use the GPU. GPU work happens natively through the host agent (ADR-005).
 - Images are built from pinned base images (`python:3.12-slim`, `node:24` build stage → `nginx` runtime, `postgres:17`). Dependencies are locked: `uv.lock` and `pnpm-lock.yaml`.
 

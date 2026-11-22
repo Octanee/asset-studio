@@ -38,7 +38,9 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 
 | WP | Status | PR |
 |---|---|---|
-| WP-00 | 🟡 in review | scaffolding PR |
+| WP-00 | ✅ done | merged to main |
+| WP-01 | 🟡 in review — results in [[WP-01-Spike-Report]] | spikes PR |
+| WP-01b | ✅ done — 5 correct + 2 partial of 10; R-12 accepted as limitation (D-50) | spikes PR |
 
 ## Order and parallelism
 
