@@ -10,7 +10,7 @@ tags:
 
 # Project Status
 
-**Current phase:** Phase 3 — Product Design in Claude Design
+**Current phase:** Phase 5 — Technical Architecture
 **Implementation:** not started (blocked until Phase 6 approval and ≥ 96% verified understanding)
 
 | Phase | Name | Status | Gate |
@@ -18,8 +18,8 @@ tags:
 | 0 | Environment and Knowledge Assessment | ✅ done | user approved moving on (2026-11-21) |
 | 1 | Business Discovery | ✅ done | business scope approved (2026-11-21, D-41) |
 | 2 | Documentation Baseline | ✅ done | documentation baseline approved (2026-11-22, D-43) |
-| 3 | Product Design in Claude Design | ⏳ | — |
-| 4 | User UI Approval | ⏳ | complete UI/UX approval |
+| 3 | Product Design in Claude Design | ✅ done | — |
+| 4 | User UI Approval | ✅ done | UI/UX approved (2026-11-22, D-45) |
 | 5 | Technical Architecture | ⏳ | — |
 | 6 | Technical Architecture Approval | ⏳ | architecture + roadmap approval |
 | 7 | Implementation | ⏳ | per-PR review |
