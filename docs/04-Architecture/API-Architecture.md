@@ -20,7 +20,8 @@ tags:
 
 | Group | Main endpoints |
 |---|---|
-| Projects | `GET/POST /projects`, `GET/PATCH /projects/{id}`, `POST /projects/{id}:clone`, `GET /projects/{id}/config/export`, `POST /projects:import`, `POST /projects/drafts` (MCP drafts), `POST /projects/drafts/{id}:confirm` (user only), `GET /projects/{id}/config/versions` |
+| Session | `GET /session` (sets the user session cookie; loopback Host only) |
+| Projects (WP-02, implemented) | `GET/POST /projects`, `GET /projects/{id}`, `PUT /projects/{id}/config` (new version; breaking changes need `acknowledge_breaking`), `PATCH /projects/{id}/settings` (`mcp_can_decide`, user only), `POST /projects/{id}/archive` / `restore` / `clone`, `GET /projects/{id}/config/versions`, `GET /projects/{id}/config/export`, `POST /projects/import`, `POST /projects/drafts`, `GET /projects/drafts/{id}`, `POST /projects/drafts/{id}/confirm` (user only) |
 | Styles and characters | `/projects/{id}/styles`, `/projects/{id}/characters`, `/characters/{id}/loras` |
 | References | `POST /projects/{id}/references` (multipart, validated), `PATCH /references/{id}`, `GET /references/{id}/file` |
 | Poses | `/poses`, `POST /poses:detect` (job) |
@@ -33,7 +34,8 @@ tags:
 | Training | `/projects/{id}/datasets`, `POST /training-runs` (returns estimate; needs `acknowledged_estimate` for SDXL on weak hardware) |
 | Models | `GET /models`, `POST /models:rescan`, `POST /models/{id}:download` (needs `confirm` with file, source, size), `POST /models/{id}/licence-acknowledgements` |
 | Workflows | `GET/POST /workflows`, `POST /workflows:validate` |
-| System | `GET /system/status`, `GET/PATCH /settings`, `POST /backups`, `POST /backups:restore`, `GET /audit` |
+| System | `GET /system/status`, `GET/PATCH /settings`, `POST /backups`, `POST /backups:restore` |
+| Audit (WP-02, implemented) | `GET /audit?project_id&actor&action&before&limit` (cursor = entry id, newest first) |
 
 ## Confirmations as data
 
