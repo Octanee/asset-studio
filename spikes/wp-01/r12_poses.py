@@ -8,7 +8,7 @@ Usage:
   python r12_poses.py skeletons <comfy_input_dir>                     # writes r12_pose_*.png
   python r12_poses.py generate <ref_image_name> [--url http://127.0.0.1:8188]
   python r12_poses.py sheet <comfy_output_dir> <out.png> [tag]
-  generate options: --only a,b  --tag r12b  --ipa-weight 0.4  --ipa-end 0.6  --cn 1.0
+  generate options: --only a,b  --tag r12b  --ipa-weight 0.4  --ipa-end 0.6  --cn 1.0  --cn-model <file>
 """
 
 import json
@@ -103,7 +103,8 @@ NEG = "photo, realistic, text, watermark, extra limbs, deformed hands, blurry, c
 
 
 def workflow(pose_img: str, ref_img: str, text: str, seed: int, prefix: str,
-             ipa_weight: float = 0.6, ipa_end: float = 1.0, cn: float = 0.9) -> dict:
+             ipa_weight: float = 0.6, ipa_end: float = 1.0, cn: float = 0.9,
+             cn_model: str = "control-lora-openposeXL2-rank256.safetensors") -> dict:
     return {
         "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": "sd_xl_base_1.0.safetensors"}},
         "2": {"class_type": "VAELoader", "inputs": {"vae_name": "sdxl_vae_fp16fix.safetensors"}},
@@ -111,7 +112,7 @@ def workflow(pose_img: str, ref_img: str, text: str, seed: int, prefix: str,
         "4": {"class_type": "CLIPTextEncode", "inputs": {"text": NEG, "clip": ["1", 1]}},
         "5": {"class_type": "EmptyLatentImage", "inputs": {"width": SIZE, "height": SIZE, "batch_size": 1}},
         "10": {"class_type": "ControlNetLoader",
-               "inputs": {"control_net_name": "control-lora-openposeXL2-rank256.safetensors"}},
+               "inputs": {"control_net_name": cn_model}},
         "11": {"class_type": "LoadImage", "inputs": {"image": pose_img}},
         "12": {"class_type": "ControlNetApplyAdvanced", "inputs": {
             "positive": ["3", 0], "negative": ["4", 0], "control_net": ["10", 0], "image": ["11", 0],
@@ -163,7 +164,8 @@ def main() -> None:
         only = set(opt("--only", ",".join(POSES)).split(","))
         tag = opt("--tag", "r12")
         kw = {"ipa_weight": float(opt("--ipa-weight", "0.6")), "ipa_end": float(opt("--ipa-end", "1.0")),
-              "cn": float(opt("--cn", "0.9"))}
+              "cn": float(opt("--cn", "0.9")),
+              "cn_model": opt("--cn-model", "control-lora-openposeXL2-rank256.safetensors")}
         t0 = time.time()
         for i, (name, p) in enumerate(POSES.items()):
             if name not in only:

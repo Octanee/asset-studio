@@ -132,3 +132,36 @@ If WP-01b fails, the fallback options are:
 - WP-02 to WP-06 can start; they do not depend on these results.
 - ADR-013 and the ADR-010 change must be approved before WP-03 (storage) and WP-09 (processing).
 - WP-01b must run before WP-08 (Generation Studio).
+
+## WP-01b — full OpenPose ControlNet (D-49)
+
+**Setup:**
+- the same 10 skeletons and character reference;
+- `xinsir/controlnet-openpose-sdxl-1.0` (Apache-2.0, 2.5 GB, SHA-256 verified) at strength 1.0;
+- IP-Adapter weight 0.5, applied for the first 60% of the steps;
+- 61–109 s per image, 12.5 min in total.
+
+| Pose | Control-LoRA (WP-01) | Full ControlNet (WP-01b) |
+|---|---|---|
+| standing, squat, lunge, high knees, jumping jacks | ✅ 5/5 | ✅ 5/5 |
+| plank | ❌ | ⚠️ low plank, body close to the floor |
+| deadlift (hinge) | ❌ two figures | ⚠️ correct hinge, but a ball instead of a kettlebell |
+| push-up, glute bridge, toe touch | ❌ | ❌ |
+| **Correct / partial** | **5 / 0** | **5 / 2** |
+| Identity | ✅ strong | ✅ same character; outfit colours vary a little more (weaker reference) |
+
+**Conclusion:**
+- The full ControlNet is clearly better than the Control-LoRA and becomes the default pose control.
+- The ≥ 8/10 target is **not met**: 5 correct plus 2 partial.
+- The remaining failures are floor poses and the forward fold.
+
+**Limits of this test:**
+- The skeletons were built from joint angles, not taken from real people. Some, such as the bridge and the toe touch, may be anatomically unusual and harder for the model.
+- The test with skeletons detected from real photos still needs reference photos from the user.
+
+**Status of R-12:** identity ✅; pose fidelity is **partially met**.
+
+**Options to close R-12:**
+- (a) skeletons detected with DWPose from real exercise photos, already an MVP feature (D-23);
+- (b) a character LoRA trained on approved images that include floor poses (D-22);
+- (c) document floor poses as "review and regenerate" in the MVP.
