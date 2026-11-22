@@ -27,8 +27,8 @@ tags:
 | Poses | `/poses`, `POST /poses:detect` (job) |
 | Generation | `POST /generations` (single or batch → jobs), `POST /generations:check` (compatibility, licence, estimate) |
 | Jobs | `GET /jobs`, `GET /jobs/{id}`, `POST /jobs/{id}:cancel`, `:retry`, `:resume`, `POST /queue:pause` / `:resume` |
-| Assets | `GET /assets`, `GET /assets/{id}`, `GET /assets/{id}/versions`, `GET /versions/{id}/file?size=thumb\|preview\|original` |
-| Lifecycle | `POST /versions/{id}/transitions` `{action: approve\|reject\|reopen\|withdraw\|archive\|restore, reason}`, `DELETE /versions/{id}` (permanent, needs confirmation token) |
+| Assets (WP-03, implemented) | `GET /assets` (filters `project_id`, `category`, `state`, `q`, `include_archived`; cursor `before`, `limit`), `GET /assets/{id}`, `GET /assets/{id}/versions`, `POST /assets/{id}/archive` / `restore`, `GET /versions/{id}` (with transition history), `GET /versions/{id}/file?size=original\|thumb\|preview&download=` (served with `nosniff` and a sandbox CSP) |
+| Lifecycle (WP-03, implemented) | `POST /versions/{id}/transitions` `{action: approve\|reject\|reopen\|withdraw\|archive\|restore\|retry_processing, reason}`, `DELETE /versions/{id}?confirm=<version id>` (permanent, user only). System transitions (T-01 to T-04) and publishing (T-09/T-10, WP-11) are service calls, not client actions |
 | Review | `GET/POST /versions/{id}/comments`, `GET /versions/{id}/validation` |
 | Publishing | `/projects/{id}/presets`, `/projects/{id}/targets`, `POST /publications:plan` (returns file plan + overwrites), `POST /publications` (needs plan id + confirmed overwrites) |
 | Training | `/projects/{id}/datasets`, `POST /training-runs` (returns estimate; needs `acknowledged_estimate` for SDXL on weak hardware) |
