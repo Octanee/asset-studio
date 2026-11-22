@@ -43,7 +43,7 @@ These live in GitHub settings, not in files. State as of 2026-11-22:
 
 | Setting | State |
 |---|---|
-| Ruleset "Protect main" (default branch) | active: pull request required, review threads must be resolved, stale reviews dismissed, squash or rebase only, linear history, no force pushes, no deletion, no bypass |
+| Ruleset "Protect main" (default branch) | active: pull request required, review threads must be resolved, stale reviews dismissed, squash or rebase only, linear history, no force pushes, no deletion, no bypass; required checks: `Secret scan (gitleaks)`, `Dependency review`, `Analyze (actions)`, `Analyze (python)`, `Analyze (javascript-typescript)`, `backend`, `frontend`, `host-agent`, `compose`, `docs` |
 | Private vulnerability reporting | enabled |
 | Secret scanning and push protection | enabled |
 | Dependabot alerts and security updates | enabled |
@@ -51,8 +51,8 @@ These live in GitHub settings, not in files. State as of 2026-11-22:
 
 ### Planned tightening
 
-- **Required status checks** (`Secret scan (gitleaks)`, `Analyze (…)`, CI jobs) are added to the ruleset after the workflows are on `main`. Adding them earlier would block open pull requests that do not contain the workflows.
 - **Required approvals and code-owner review** stay at 0 while the project has a single maintainer, because GitHub does not let authors approve their own pull requests. Raise both to 1 when a second maintainer joins.
+- When a CI job is renamed or added, update the required checks in the ruleset too; a required check that never reports blocks every pull request.
 
 ## Licence check
 
