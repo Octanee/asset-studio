@@ -1,6 +1,13 @@
 # Contributing
 
-- Work happens on `feature/*` or `fix/*` branches, through pull requests to `main`. Nothing is pushed directly to `main`.
+- The project uses **GitHub Flow**:
+  1. Create a short-lived branch from the latest `main`: `feature/*`, `fix/*`, `docs/*`, `chore/*` or `ci/*`.
+  2. Open a pull request to `main` early; one topic per pull request.
+  3. Wait for the required checks; merge with **squash** (default) or **rebase**. Merge commits are disabled.
+  4. The branch is deleted automatically after the merge. Start the next change from the updated `main`.
+- Do not stack pull requests on top of each other. If `main` moves, use **Update branch** on the pull request (or rebase locally).
+- Nothing is pushed directly to `main`.
+- Solo-maintainer mode: no approving review is required. In an emergency (a broken external service in CI, a false-positive alert), the maintainer can merge a pull request with **bypass rules**. Direct pushes to `main` stay blocked even then. Record every bypass in the PR description.
 - Every PR follows the **Definition of Done** (`docs/09-Project-Management/Documentation-Rules.md`, brief §20):
   - tests pass;
   - lint and type checks pass;
