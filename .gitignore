@@ -34,18 +34,11 @@ node_modules/
 coverage/
 .coverage
 
-# Secrets and local data
-.env
+# Local data
 data/
 
 # Python
-.venv/
-__pycache__/
 *.pyc
-.pytest_cache/
-.mypy_cache/
-.ruff_cache/
 
 # Node
-node_modules/
 dist/
