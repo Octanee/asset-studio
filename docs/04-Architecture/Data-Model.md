@@ -29,7 +29,8 @@ tags:
 | `licence` | id, spdx_or_name, commercial_use (`allowed`/`forbidden`/`unknown`), url | |
 | `lora` | id, model_id, project_id, character_id null, style_id null, trigger_word, training_run_id | |
 | `workflow` / `workflow_version` | id, name, engine (`comfyui`/`svg`/`builtin`), version, definition jsonb, inputs schema jsonb, required_model_kinds, validated_at | |
-| `job` | id, kind (`generate`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`), lane (`gpu`/`cpu`), state, priority, params jsonb (frozen), attempts, max_attempts, progress jsonb, error jsonb, locked_by, locked_until, enqueued_by_actor, created_at, started_at, finished_at | queue indexes on (lane, state, priority, created_at) |
+| `job` | id, kind (`generate`/`remove_background`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`), lane (`gpu`/`cpu`), state (`queued`/`running`/`completed`/`failed`/`cancelled`/`interrupted`), priority, params jsonb (frozen), result jsonb, attempts, max_attempts, progress jsonb, error jsonb, wait_reason, cancel_requested, locked_by, locked_until, project_id, enqueued_by_actor, created_at, started_at, finished_at | queue index on (lane, state, priority, id); state and lane are check-constrained (WP-04) |
+| `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |
 | `asset` | id, project_id, category, slug, name, archived_at | unique (project_id, slug) |
 | `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, created_at | unique (asset_id, number) |

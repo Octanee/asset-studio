@@ -8,10 +8,12 @@ from asset_studio.api.router import api_router
 from asset_studio.api.security import HostOriginMiddleware
 from asset_studio.config import get_settings
 from asset_studio.logging import configure_logging
+from asset_studio.models import load_all
 
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    load_all()
     configure_logging(settings.log_level, settings.log_json)
     app = FastAPI(title="Universal Asset Studio API", version=__version__)
     app.add_middleware(HostOriginMiddleware)

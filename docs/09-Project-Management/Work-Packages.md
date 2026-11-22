@@ -39,8 +39,10 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP | Status | PR |
 |---|---|---|
 | WP-00 | ✅ done | merged to main |
-| WP-01 | 🟡 in review — results in [[WP-01-Spike-Report]] | spikes PR |
-| WP-01b | ✅ done — 5 correct + 2 partial of 10; R-12 accepted as limitation (D-50) | spikes PR |
+| WP-01 | ✅ done — results in [[WP-01-Spike-Report]] | #15 |
+| WP-01b | ✅ done — 5 correct + 2 partial of 10; R-12 accepted as limitation (D-50) | #15 |
+| WP-02 | ✅ done — projects, configuration versions, audit, actors, Host/Origin checks | #16 |
+| WP-04 | 🟡 in review — job queue, worker lanes, SSE events, recovery after restart | WP-04 PR |
 
 ## Order and parallelism
 
