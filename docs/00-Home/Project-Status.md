@@ -41,7 +41,7 @@ A feasibility prototype on a 6 GB VRAM NVIDIA laptop GPU confirmed:
 
 | ID | Risk | Phase |
 |---|---|---|
-| R-12 | Identity consistent 10/10; floor/hinge poses unreliable → WP-01b proposed | open |
+| R-12 | Identity consistent; floor/forward-fold poses unreliable (WP-01b: 5 correct + 2 partial of 10) → accepted MVP limitation (D-50), re-test in WP-07/08 | accepted |
 | R-19 | DWPose: Apache-2.0 verified upstream; CPU 2–4 s per image | WP-01 ✅ closed |
 | R-20 | BiRefNet: MIT verified; CPU too slow (22–141 s, ~19 GB RAM) → GPU via ComfyUI proposed | WP-01 ✅ measured |
 | S-5 | IP-Adapter ComfyUI node no longer actively maintained | 5 |

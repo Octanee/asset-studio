@@ -159,7 +159,7 @@ If WP-01b fails, the fallback options are:
 - The skeletons were built from joint angles, not taken from real people. Some, such as the bridge and the toe touch, may be anatomically unusual and harder for the model.
 - The test with skeletons detected from real photos still needs reference photos from the user.
 
-**Status of R-12:** identity ✅; pose fidelity is **partially met**.
+**Status of R-12:** identity ✅; pose fidelity is **partially met**. **Accepted as a known MVP limitation (D-50).**
 
 **Options to close R-12:**
 - (a) skeletons detected with DWPose from real exercise photos, already an MVP feature (D-23);

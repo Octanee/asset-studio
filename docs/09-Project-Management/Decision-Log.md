@@ -61,5 +61,6 @@ User decisions recorded during Phases 0–1 (all dated 2026-11-21).
 | D-47 | Whole library in a Docker named volume (ADR-013); Windows folders only for exports, backups, models and training exchange. Narrows D-09 (2026-11-22) |
 | D-48 | Background removal on the GPU via ComfyUI (ADR-010 amended) (2026-11-22) |
 | D-49 | Follow-up spike WP-01b approved, including the 2.5 GB `xinsir/controlnet-openpose-sdxl-1.0` download (2026-11-22) |
+| D-50 | R-12 accepted as a known MVP limitation: floor and forward-fold poses are flagged "review and regenerate"; the full OpenPose ControlNet becomes the default pose control; pose-from-photo and character LoRA are re-tested in WP-07/WP-08 (2026-11-22) |
 
 IDs D-11 (licence delegated → D-20) and D-16 (ambiguous → D-18) were superseded and are kept for history.
