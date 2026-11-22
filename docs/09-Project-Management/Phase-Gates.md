@@ -19,8 +19,8 @@ Silence is not approval. A general instruction to continue does not approve a sp
 | G-1 | Final business scope | ✅ approved (D-41) | 2026-11-21 |
 | G-2 | Documentation baseline | ✅ approved (D-43) | 2026-11-22 |
 | G-4 | Complete UI/UX design | ✅ approved (D-45) | 2026-11-22 |
-| G-6a | Technical architecture | ⏳ | — |
-| G-6b | Implementation roadmap | ⏳ | — |
+| G-6a | Technical architecture | 🟡 awaiting review | — |
+| G-6b | Implementation roadmap | 🟡 awaiting review | — |
 | G-9 | Public release | ⏳ | — |
 
 ## Standing authorisations (2026-11-21)

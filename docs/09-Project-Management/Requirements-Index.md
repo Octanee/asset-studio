@@ -21,7 +21,8 @@ tags:
 | US-xxx | User story | [[User-Stories]] | 13 |
 | AC-xxx | Acceptance criterion | [[Acceptance-Criteria]] | 15 |
 | T-xx | Lifecycle transition | [[Asset-Lifecycle]] | 13 |
-| ADR-xxx | Architecture decision record | [[ADR-Index]] | 0 |
+| ADR-xxx | Architecture decision record | [[ADR-Index]] | 12 (proposed) |
+| WP-xx | Work package | [[Work-Packages]] | 19 (proposed) |
 | TEST-xxx | Test specification | Phase 5+ | 0 |
 | D-xx | Recorded user decision | [[Decision-Log]] | 41 |
 
