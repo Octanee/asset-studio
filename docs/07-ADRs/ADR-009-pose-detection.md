@@ -1,7 +1,7 @@
 ---
 title: ADR-009 DWPose for pose detection
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-009: DWPose for pose detection
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 D-23 needs pose detection from images. R-19: the original OpenPose (CMU) licence is non-commercial.

@@ -1,7 +1,7 @@
 ---
 title: ADR-005 Docker Compose for the app; ComfyUI and training native
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-005: Docker Compose for the app; ComfyUI and training native
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 D-17/D-19: Docker Compose in the MVP. The prototype measured ComfyUI and kohya natively on Windows. CUDA works in Docker, but GPU work there was not benchmarked. Containers cannot start native processes.

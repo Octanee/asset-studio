@@ -1,7 +1,7 @@
 ---
 title: ADR-003 React + TypeScript + Vite frontend
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-003: React + TypeScript + Vite frontend
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 Brief §8.1 prefers React/TS/Vite. The approved design needs dense image grids, a pose editor, comparison views and PL/EN.

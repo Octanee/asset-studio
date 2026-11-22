@@ -1,7 +1,7 @@
 ---
 title: API Architecture
 type: architecture
-status: in-review
+status: approved
 created: 2026-11-22
 updated: 2026-11-22
 tags:

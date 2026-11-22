@@ -19,8 +19,8 @@ Silence is not approval. A general instruction to continue does not approve a sp
 | G-1 | Final business scope | ✅ approved (D-41) | 2026-11-21 |
 | G-2 | Documentation baseline | ✅ approved (D-43) | 2026-11-22 |
 | G-4 | Complete UI/UX design | ✅ approved (D-45) | 2026-11-22 |
-| G-6a | Technical architecture | 🟡 awaiting review | — |
-| G-6b | Implementation roadmap | 🟡 awaiting review | — |
+| G-6a | Technical architecture | ✅ approved (D-46) | 2026-11-22 |
+| G-6b | Implementation roadmap | ✅ approved (D-46) | 2026-11-22 |
 | G-9 | Public release | ⏳ | — |
 
 ## Standing authorisations (2026-11-21)
@@ -30,4 +30,15 @@ Silence is not approval. A general instruction to continue does not approve a sp
 
 ## Verified understanding
 
-About 93% after Phase 1; implementation requires ≥ 96%. Remaining gaps: UX/UI (Phase 3) and architecture (Phase 5).
+Assessed at about **96%** after gate G-6 (2026-11-22). Every area now has approved, documented decisions:
+- business scope and rules (G-1);
+- documentation baseline (G-2);
+- UI/UX (G-4);
+- architecture and roadmap (G-6).
+
+The remaining uncertainties are known and bounded:
+- R-12: consistency across many poses;
+- R-19, R-20: upstream licences of DWPose and BiRefNet;
+- R-21: bind-mount speed.
+
+They are verified in **WP-01** before the modules that depend on them, and a negative result comes back to the user as a proposed ADR change. The UX gaps UXQ-01–UXQ-04 are designed before their features (D-45).

@@ -1,7 +1,7 @@
 ---
 title: ADR-006 Provider adapters for generation and training
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-006: Provider adapters for generation and training
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 Brief §5.1: the domain must not be coupled to ComfyUI, and future providers must be possible.

@@ -1,7 +1,7 @@
 ---
 title: ADR-010 BiRefNet for background removal
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-010: BiRefNet for background removal
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 D-34 puts background removal in the MVP. R-20 requires a permissive licence.

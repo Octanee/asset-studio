@@ -1,7 +1,7 @@
 ---
 title: ADR-012 Security model for a local single-user app
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-012: Security model for a local single-user app
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 D-29: one user, no login. Local web apps are exposed to CSRF and DNS rebinding.

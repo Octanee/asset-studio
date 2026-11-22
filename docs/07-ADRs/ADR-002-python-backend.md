@@ -1,7 +1,7 @@
 ---
 title: ADR-002 Python 3.12 + FastAPI backend
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-002: Python 3.12 + FastAPI backend
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 The backend integrates with AI tools (ComfyUI API, kohya, ONNX Runtime, Pillow) and needs background jobs and file processing. Brief §8.2 asks us to evaluate Go and Python and to use one backend language.

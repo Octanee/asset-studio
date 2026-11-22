@@ -1,7 +1,7 @@
 ---
 title: ADR-008 MCP server as an API client
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-008: MCP server as an API client
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 Brief §10: MCP must call the backend API and not bypass rules. D-26/D-30: MCP decisions are allowed per project and off by default.

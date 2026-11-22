@@ -1,7 +1,7 @@
 ---
 title: ADR-011 kohya sd-scripts for LoRA training
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-011: kohya sd-scripts for LoRA training
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 D-22/D-24: SDXL and SD1.5 LoRA training in the MVP. The prototype measured kohya on 6 GB.

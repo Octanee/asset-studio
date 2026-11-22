@@ -1,14 +1,14 @@
 ---
 title: Work Packages
 type: roadmap
-status: in-review
+status: approved
 created: 2026-11-21
 updated: 2026-11-22
 tags:
   - roadmap
 ---
 
-# Implementation Work Packages (proposal for gate G-6)
+# Implementation Work Packages (approved at gate G-6, D-46)
 
 Every package is one or more small PRs on a `feature/*` branch, reviewed by the user. Each follows the Definition of Done: tests, docs and traceability.
 

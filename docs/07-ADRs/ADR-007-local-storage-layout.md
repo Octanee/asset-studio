@@ -1,7 +1,7 @@
 ---
 title: ADR-007 Local storage with abstraction and immutable versions
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-007: Local storage with abstraction and immutable versions
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 Brief §8.4. Binary files must not live in the database. Approved files must never be overwritten.

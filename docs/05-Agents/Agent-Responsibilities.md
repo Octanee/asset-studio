@@ -1,7 +1,7 @@
 ---
 title: Agent Responsibilities
 type: agents
-status: in-review
+status: approved
 created: 2026-11-21
 updated: 2026-11-22
 tags:

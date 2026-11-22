@@ -1,7 +1,7 @@
 ---
 title: ADR-004 PostgreSQL for data and the job queue
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-004: PostgreSQL for data and the job queue
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 Jobs must persist and survive restarts (brief §5.3, NFR-003). There is one GPU lane and few concurrent jobs.

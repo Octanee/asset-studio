@@ -1,7 +1,7 @@
 ---
 title: System Architecture
 type: architecture
-status: in-review
+status: approved
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -11,7 +11,7 @@ tags:
 
 # System Architecture
 
-> [!info] Phase 5 proposal — awaiting approval (gate G-6). No implementation before approval.
+> [!success] Approved by the user on 2026-11-22 (gate G-6, D-46).
 
 ## Summary
 

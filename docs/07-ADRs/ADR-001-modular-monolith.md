@@ -1,7 +1,7 @@
 ---
 title: ADR-001 Modular monolith
 type: adr
-status: proposed
+status: accepted
 created: 2026-11-22
 updated: 2026-11-22
 tags:
@@ -10,7 +10,7 @@ tags:
 
 # ADR-001: Modular monolith
 
-**Status:** proposed — decided at gate G-6.
+**Status:** accepted at gate G-6 (2026-11-22, D-46).
 
 ## Context
 One person runs the app locally. Brief §8.5 prefers a modular monolith.
