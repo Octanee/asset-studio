@@ -11,6 +11,18 @@ permissions:
 jobs:
   backend:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: asset_studio
+          POSTGRES_PASSWORD: ci
+          POSTGRES_DB: asset_studio_test
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U asset_studio" --health-interval 5s --health-retries 10
+    env:
+      ASSET_STUDIO_TEST_DATABASE_URL: postgresql+psycopg://asset_studio:ci@localhost:5432/asset_studio_test
     defaults:
       run:
         working-directory: backend
@@ -77,4 +89,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      - run: ASSET_STUDIO_DB_PASSWORD=ci docker compose config --quiet
+      - run: ASSET_STUDIO_DB_PASSWORD=ci ASSET_STUDIO_SESSION_SECRET=ci docker compose config --quiet

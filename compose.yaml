@@ -21,9 +21,16 @@ services:
 
   api:
     build: ./backend
+    # Migrations run before the API starts (forward-only, see Data-Model).
+    command: ["sh", "-c", "alembic upgrade head && uvicorn asset_studio.main:app --host 0.0.0.0 --port 8400"]
     environment: &backend-env
       ASSET_STUDIO_DATABASE_URL: postgresql+psycopg://asset_studio:${ASSET_STUDIO_DB_PASSWORD}@db:5432/asset_studio
       ASSET_STUDIO_DATA_DIR: /data
+      # 'api' is the internal service name used by the worker and the MCP server.
+      ASSET_STUDIO_ALLOWED_HOSTS: 127.0.0.1,localhost,api
+      ASSET_STUDIO_SESSION_SECRET: ${ASSET_STUDIO_SESSION_SECRET:?set ASSET_STUDIO_SESSION_SECRET in .env}
+      ASSET_STUDIO_MCP_TOKEN: ${ASSET_STUDIO_MCP_TOKEN:-}
+      ASSET_STUDIO_WORKER_TOKEN: ${ASSET_STUDIO_WORKER_TOKEN:-}
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
     depends_on:
