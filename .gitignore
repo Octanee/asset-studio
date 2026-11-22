@@ -1,0 +1,6 @@
+# Local, machine-specific notes and reports — never published (decision Q-15)
+.private/
+
+# Obsidian per-user workspace state
+docs/.obsidian/workspace*.json
+docs/.obsidian/cache
