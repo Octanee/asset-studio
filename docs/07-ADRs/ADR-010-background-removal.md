@@ -16,7 +16,9 @@ tags:
 D-34 puts background removal in the MVP. R-20 requires a permissive licence.
 
 ## Decision
-BiRefNet (MIT) as ONNX on CPU in the worker; optional per project workflow. Falls back to a ComfyUI workflow (native BiRefNet support) if CPU speed is not acceptable.
+BiRefNet (MIT), run as a **ComfyUI workflow on the GPU** (native BiRefNet support) in the GPU lane; an optional step in the project's processing workflow.
+
+> **Amended 2026-11-22 (D-48):** the original decision (ONNX on CPU) was measured in WP-01 at 22–141 s per image and ~19 GB RAM ([[WP-01-Spike-Report]]). With the engine stopped, background-removal steps wait in the queue with a clear status; all other processing continues.
 
 ## Alternatives considered
 
@@ -26,4 +28,4 @@ BiRefNet (MIT) as ONNX on CPU in the worker; optional per project workflow. Fall
 | rembg U²-Net | Apache-2.0, small | lower edge quality |
 
 ## Consequences
-Works with the engine stopped (RULE-013). CPU time per image is verified in WP-01.
+Fast, and does not compete for system RAM. Background removal becomes GPU-dependent, like diffusion and training (RULE-013 applies to it accordingly).

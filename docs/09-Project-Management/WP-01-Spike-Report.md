@@ -41,7 +41,11 @@ The benchmark ran in the backend container, twice for each storage type:
 - Large files on the bind mount are fine. Generation writes about 1 image per minute.
 - Reading many small files is ~150× slower, which breaks NFR-010 (smooth browsing of 10,000 versions).
 
-### Proposed ADR-013: derived files in a Docker volume
+### Decision (D-47): the whole library in a Docker volume
+
+The user chose to keep the **whole library** in a named volume ([[ADR-013-library-in-docker-volume]]). The original proposal is kept below for the record.
+
+#### Original proposal: derived files in a Docker volume
 
 - **Originals and references** stay in the user's data folder (bind mount), as D-09 requires: they are user-visible, backed up, and written rarely.
 - **Thumbnails and previews**, which are regenerable, live in a named volume `asset-cache` that the API serves from.
@@ -82,7 +86,7 @@ The training-data terms behind the checkpoints are not stated by these sources; 
 
 This is far too slow and memory-hungry for a processing step on the reference machine.
 
-### Proposed change to ADR-010
+### Change to ADR-010 (approved, D-48)
 
 - Run BiRefNet as a **ComfyUI workflow on the GPU** (supported natively by ComfyUI) in the GPU lane.
 - When the engine is stopped, *background removal* steps wait in the queue with a clear status. All other processing, validation, review and export keep working.
@@ -111,7 +115,7 @@ This is far too slow and memory-hungry for a processing step on the reference ma
 - Pose fidelity for non-upright exercises is **not yet reliable** with the Control-LoRA on 6 GB.
 - R-12 stays **open**.
 
-### Proposed follow-up spike WP-01b (before WP-08)
+### Follow-up spike WP-01b (approved, D-49)
 
 1. Full **SDXL OpenPose ControlNet** (`xinsir/controlnet-openpose-sdxl-1.0`, Apache-2.0, 2.5 GB download) instead of the Control-LoRA.
 2. Skeletons taken from **detected real poses** (DWPose on reference photos the user supplies) instead of synthetic angles.

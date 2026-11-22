@@ -24,3 +24,4 @@ tags:
 | [[ADR-010-background-removal]] | BiRefNet for background removal | accepted |
 | [[ADR-011-training-kohya]] | kohya sd-scripts for LoRA training | accepted |
 | [[ADR-012-security-model]] | Security model for a local single-user app | accepted |
+| [[ADR-013-library-in-docker-volume]] | Library storage in a Docker volume | accepted |

@@ -116,8 +116,8 @@ Every capability here was measured on the reference machine (6 GB VRAM) in the P
 | ComfyUI SDXL / pose / reference on 6 GB | ✅ measured |
 | kohya SD1.5 and SDXL LoRA on 6 GB | ✅ measured (SDXL 8–20 h) |
 | CUDA inside Docker (WSL2) | ✅ verified, not used for GPU work |
-| Docker bind-mount speed for the data folder on NTFS | ⚠️ **to verify** (R-21) |
-| DWPose and BiRefNet via ONNX Runtime on CPU in the worker (speed, quality) | ⚠️ **to verify** |
+| Docker bind-mount speed for the data folder on NTFS | ✅ measured: too slow for the library → ADR-013 |
+| DWPose on CPU / BiRefNet | ✅ DWPose on CPU; BiRefNet moved to the GPU (D-48) |
 | Consistency across many different poses | ⚠️ **to verify** (R-12) |
 
 Related: [[Domain-Model]] · [[Data-Model]] · [[API-Architecture]] · [[AI-Generation-Architecture]] · [[MCP-Architecture]] · [[Infrastructure]] · [[Security-Architecture]] · [[Storage-and-Backup]] · [[Testing-Strategy]]

@@ -58,5 +58,8 @@ User decisions recorded during Phases 0–1 (all dated 2026-11-21).
 | D-44 | One-time exception: bootstrap `main` with LICENSE and .gitignore pushed directly, because the remote was empty and a pull request needs a base branch (2026-11-22). All further changes go through pull requests |
 | D-45 | UI/UX design approved as presented (2026-11-22). Open items UXQ-01–UXQ-04 stay open and are designed before their features are implemented |
 | D-46 | Technical architecture (ADR-001–ADR-012) and work packages WP-00–WP-18 approved (2026-11-22) |
+| D-47 | Whole library in a Docker named volume (ADR-013); Windows folders only for exports, backups, models and training exchange. Narrows D-09 (2026-11-22) |
+| D-48 | Background removal on the GPU via ComfyUI (ADR-010 amended) (2026-11-22) |
+| D-49 | Follow-up spike WP-01b approved, including the 2.5 GB `xinsir/controlnet-openpose-sdxl-1.0` download (2026-11-22) |
 
 IDs D-11 (licence delegated → D-20) and D-16 (ambiguous → D-18) were superseded and are kept for history.

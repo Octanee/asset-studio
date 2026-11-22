@@ -15,7 +15,7 @@ tags:
 
 The `Storage` interface provides `put(key, stream) -> {sha256, bytes}`, `open(key)`, `exists`, `delete` and `url_for(key)`. The MVP has one implementation, `LocalStorage(root)`.
 
-Keys are server-generated and never contain user input:
+The library root `<data>` is the Docker named volume `asset-data` (ADR-013, D-47). Keys are server-generated and never contain user input:
 
 ```
 <data>/
