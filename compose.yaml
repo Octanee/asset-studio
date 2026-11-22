@@ -1,0 +1,53 @@
+# Universal Asset Studio — application services (ADR-005).
+# Every port is published on 127.0.0.1 only (NFR-005). ComfyUI and training run natively
+# under the host agent. The MCP server is added in WP-15.
+name: asset-studio
+
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: asset_studio
+      POSTGRES_USER: asset_studio
+      POSTGRES_PASSWORD: ${ASSET_STUDIO_DB_PASSWORD:?set ASSET_STUDIO_DB_PASSWORD in .env}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U asset_studio -d asset_studio"]
+      interval: 5s
+      retries: 10
+    ports:
+      - "127.0.0.1:${ASSET_STUDIO_DB_PORT:-5433}:5432"
+
+  api:
+    build: ./backend
+    environment: &backend-env
+      ASSET_STUDIO_DATABASE_URL: postgresql+psycopg://asset_studio:${ASSET_STUDIO_DB_PASSWORD}@db:5432/asset_studio
+      ASSET_STUDIO_DATA_DIR: /data
+    volumes:
+      - ${ASSET_STUDIO_DATA_HOST_DIR:-./data}:/data
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${ASSET_STUDIO_API_PORT:-8400}:8400"
+
+  worker:
+    build: ./backend
+    command: ["python", "-m", "asset_studio.worker"]
+    environment: *backend-env
+    volumes:
+      - ${ASSET_STUDIO_DATA_HOST_DIR:-./data}:/data
+    depends_on:
+      db:
+        condition: service_healthy
+
+  web:
+    build: ./frontend
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:${ASSET_STUDIO_WEB_PORT:-8480}:8080"
+
+volumes:
+  db-data:

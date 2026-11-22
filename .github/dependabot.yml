@@ -1,0 +1,32 @@
+# Dependabot version updates. Security updates are enabled in repository settings.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: ci
+
+  - package-ecosystem: uv
+    directories: [/backend, /host-agent]
+    schedule:
+      interval: weekly
+    groups:
+      python:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: chore
+
+  - package-ecosystem: npm   # pnpm-lock.yaml is supported
+    directory: /frontend
+    schedule:
+      interval: weekly
+    groups:
+      frontend:
+        update-types: [minor, patch]
+    commit-message:
+      prefix: chore
