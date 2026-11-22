@@ -10,7 +10,7 @@ tags:
 
 # Roadmap
 
-> [!note] The implementation roadmap is a gated deliverable approved in Phase 6. This page shows the phase plan; work packages will be added after the architecture is approved.
+> [!note] The implementation roadmap (work packages WP-00–WP-18) is proposed in [[Work-Packages]] and is approved at gate G-6.
 
 ```mermaid
 flowchart LR
