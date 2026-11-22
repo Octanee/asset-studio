@@ -10,7 +10,7 @@ tags:
 
 # ADR-007: Local storage with abstraction and immutable versions
 
-**Status:** accepted at gate G-6 (2026-11-22, D-46).
+**Status:** accepted at gate G-6 (2026-11-22, D-46). Where the library lives is amended by [[ADR-013-library-in-docker-volume]].
 
 ## Context
 Brief §8.4. Binary files must not live in the database. Approved files must never be overwritten.

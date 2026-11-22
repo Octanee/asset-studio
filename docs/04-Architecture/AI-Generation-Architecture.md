@@ -71,9 +71,10 @@ It sets `PYTHONUTF8=1` (prototype S-3) and keeps kohya in its own Python 3.11 ve
 | Function | Choice | Licence | Where |
 |---|---|---|---|
 | Pose detection | DWPose (ONNX: YOLOX detector + DW-LL pose) | Apache-2.0, code via mmpose (to confirm upstream) | worker, ONNX Runtime CPU |
-| Background removal | BiRefNet (ONNX) | MIT | worker, ONNX Runtime CPU |
+| Background removal | BiRefNet | MIT | ComfyUI workflow on the GPU (D-48) |
 
-Running both on CPU keeps them usable while ComfyUI is stopped (RULE-013) and leaves the 6 GB VRAM to diffusion. If WP-01 shows CPU is too slow, the fallback is to run them as ComfyUI workflows (BiRefNet is supported natively there).
+- **Pose detection** runs on CPU: 2–4 s per image in WP-01, so it is usable while ComfyUI is stopped.
+- **Background removal** runs on the GPU. On CPU it took 22–141 s and ~19 GB RAM in WP-01, so it waits for the engine like diffusion (D-48).
 
 ## Reproducibility metadata (RULE-011)
 

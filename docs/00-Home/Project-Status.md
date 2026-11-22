@@ -41,8 +41,8 @@ A feasibility prototype on a 6 GB VRAM NVIDIA laptop GPU confirmed:
 
 | ID | Risk | Phase |
 |---|---|---|
-| R-12 | Style/character consistency across many poses not yet proven | 5 (spike), 8 |
-| R-19 | Pose detector licence → DWPose proposed (ADR-009), upstream licence to verify | WP-01 |
-| R-20 | Background-removal licence → BiRefNet MIT proposed (ADR-010) | WP-01 |
+| R-12 | Identity consistent; floor/forward-fold poses unreliable (WP-01b: 5 correct + 2 partial of 10) → accepted MVP limitation (D-50), re-test in WP-07/08 | accepted |
+| R-19 | DWPose: Apache-2.0 verified upstream; CPU 2–4 s per image | WP-01 ✅ closed |
+| R-20 | BiRefNet: MIT verified; CPU too slow (22–141 s, ~19 GB RAM) → GPU via ComfyUI proposed | WP-01 ✅ measured |
 | S-5 | IP-Adapter ComfyUI node no longer actively maintained | 5 |
-| R-21 | Docker bind-mount speed for the data folder on NTFS | WP-01 |
+| R-21 | Bind mount ~150× slower for small-file reads → ADR-013 proposed (derived files in a volume) | WP-01 ✅ measured |
