@@ -43,16 +43,23 @@ These live in GitHub settings, not in files. State as of 2026-11-22:
 
 | Setting | State |
 |---|---|
-| Ruleset "Protect main" (default branch) | active: pull request required, review threads must be resolved, stale reviews dismissed, squash or rebase only, linear history, no force pushes, no deletion, no bypass; required checks: `Secret scan (gitleaks)`, `Dependency review`, `Analyze (actions)`, `Analyze (python)`, `Analyze (javascript-typescript)`, `backend`, `frontend`, `host-agent`, `compose`, `docs` |
+| Ruleset "Protect main" (default branch) | active: pull request required, review threads must be resolved, stale reviews dismissed, squash or rebase only, linear history, no force pushes, no deletion, bypass: repository admin, only through a pull request (emergency use); required checks: `Secret scan (gitleaks)`, `Dependency review`, `Analyze (actions)`, `Analyze (python)`, `Analyze (javascript-typescript)`, `backend`, `frontend`, `host-agent`, `compose`, `docs` |
+| Merge methods | squash and rebase; merge commits disabled; "Update branch" enabled |
+| Branches after merge | deleted automatically |
+| Auto-merge | enabled; used by `dependabot-auto-merge.yml` for Dependabot **patch** updates only, after all required checks pass |
 | Private vulnerability reporting | enabled |
 | Secret scanning and push protection | enabled |
 | Dependabot alerts and security updates | enabled |
 | Secret scanning for generic patterns, validity checks | not available (need a GitHub Secret Protection licence) |
 
-### Planned tightening
+### Solo-maintainer mode
 
-- **Required approvals and code-owner review** stay at 0 while the project has a single maintainer, because GitHub does not let authors approve their own pull requests. Raise both to 1 when a second maintainer joins.
-- When a CI job is renamed or added, update the required checks in the ruleset too; a required check that never reports blocks every pull request.
+The project has a single maintainer, so the rules must never leave them unable to merge:
+
+- **Required approvals and code-owner review** stay at 0, because GitHub does not let authors approve their own pull requests. Raise both to 1 when a second maintainer joins.
+- **Bypass** for the repository admin works only through a pull request, so `main` never receives untested direct pushes. Use it only when a required check is broken for reasons outside the change, and say so in the PR description.
+- When a CI job is renamed or added, update the required checks in the ruleset too; a required check that never reports blocks every pull request. Workflows have no path filters, so every required check reports on every pull request.
+- Auto-merged Dependabot pull requests are merged by `GITHUB_TOKEN`, which does not trigger the `push` workflows on `main`; the same checks have already passed on the pull request.
 
 ## Licence check
 
