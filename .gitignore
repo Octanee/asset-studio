@@ -4,3 +4,48 @@
 # Obsidian per-user workspace state
 docs/.obsidian/workspace*.json
 docs/.obsidian/cache
+
+# Secrets and local configuration — never committed (Security-Architecture: Tokens)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+
+# Model weights and generated data — never committed or redistributed
+*.safetensors
+*.ckpt
+*.pt
+*.pth
+*.onnx
+*.bin
+
+# Python / Node tooling
+.venv/
+__pycache__/
+*.py[cod]
+node_modules/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+coverage/
+.coverage
+
+# Secrets and local data
+.env
+data/
+
+# Python
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Node
+node_modules/
+dist/

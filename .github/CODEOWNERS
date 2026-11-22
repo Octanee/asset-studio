@@ -1,0 +1,8 @@
+# Code owners — a review from an owner is required before merging to main.
+*                       @Octanee
+
+# Security-sensitive areas (explicit, so they stay owned if the default changes)
+/.github/               @Octanee
+/SECURITY.md            @Octanee
+/docs/04-Architecture/  @Octanee
+/docs/07-ADRs/          @Octanee
