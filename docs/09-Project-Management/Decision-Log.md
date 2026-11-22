@@ -56,5 +56,6 @@ User decisions recorded during Phases 0–1 (all dated 2026-11-21).
 | D-42 | Phases run continuously, stopping at each gate; git authorisation as in [[Phase-Gates]] |
 | D-43 | Documentation baseline approved (2026-11-22) |
 | D-44 | One-time exception: bootstrap `main` with LICENSE and .gitignore pushed directly, because the remote was empty and a pull request needs a base branch (2026-11-22). All further changes go through pull requests |
+| D-45 | UI/UX design approved as presented (2026-11-22). Open items UXQ-01–UXQ-04 stay open and are designed before their features are implemented |
 
 IDs D-11 (licence delegated → D-20) and D-16 (ambiguous → D-18) were superseded and are kept for history.
