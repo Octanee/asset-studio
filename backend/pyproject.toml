@@ -1,0 +1,89 @@
+[project]
+name = "asset-studio"
+version = "0.1.0"
+description = "Universal Asset Studio backend: local-first AI asset creation and management."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "fastapi>=0.115,<1",
+  "uvicorn[standard]>=0.32,<1",
+  "pydantic>=2.9,<3",
+  "pydantic-settings>=2.6,<3",
+  "sqlalchemy>=2.0.36,<2.1",
+  "psycopg[binary]>=3.2,<4",
+  "alembic>=1.14,<2",
+  "structlog>=24.4",
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "httpx>=0.28",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  "import-linter>=2.1",
+]
+
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/asset_studio"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+mypy_path = "src"
+packages = ["asset_studio"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.importlinter]
+root_package = "asset_studio"
+
+[[tool.importlinter.contracts]]
+name = "Domain modules never import the API layer"
+type = "forbidden"
+source_modules = ["asset_studio.modules"]
+forbidden_modules = ["asset_studio.api"]
+
+[[tool.importlinter.contracts]]
+name = "Foundation modules do not depend on domain modules"
+type = "forbidden"
+source_modules = [
+  "asset_studio.modules.audit",
+  "asset_studio.modules.jobs",
+  "asset_studio.modules.providers",
+  "asset_studio.modules.storage",
+]
+forbidden_modules = [
+  "asset_studio.modules.projects",
+  "asset_studio.modules.styles",
+  "asset_studio.modules.references",
+  "asset_studio.modules.poses",
+  "asset_studio.modules.models",
+  "asset_studio.modules.workflows",
+  "asset_studio.modules.generation",
+  "asset_studio.modules.assets",
+  "asset_studio.modules.processing",
+  "asset_studio.modules.quality",
+  "asset_studio.modules.training",
+  "asset_studio.modules.publishing",
+  "asset_studio.modules.system",
+]

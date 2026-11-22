@@ -1,0 +1,7 @@
+{
+  "app": {
+    "name": "Asset Studio",
+    "tagline": "A local workbench for consistent AI-made visual assets."
+  },
+  "status": { "api": "API", "checking": "Checking…", "ok": "Running", "down": "Not reachable" }
+}

@@ -1,0 +1,7 @@
+{
+  "app": {
+    "name": "Asset Studio",
+    "tagline": "Lokalny warsztat do spójnych grafik tworzonych z AI."
+  },
+  "status": { "api": "API", "checking": "Sprawdzanie…", "ok": "Działa", "down": "Brak połączenia" }
+}

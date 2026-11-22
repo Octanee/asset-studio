@@ -1,0 +1,73 @@
+/* Asset Studio design tokens (from the approved design system, gate G-4). */
+:root,
+[data-theme="dark"] {
+  --surface-0: #121417;
+  --surface-1: #1a1d21;
+  --surface-2: #23272c;
+  --line: #30353b;
+  --line-strong: #4a5158;
+  --ink: #e8eae6;
+  --ink-muted: #9aa1a6;
+  --accent: #3cc3e0;
+  --accent-ink: #06232b;
+  --checker-a: #2a2e33;
+  --checker-b: #202327;
+  --st-generated: #a3adb7;
+  --st-processing: #7fb2ff;
+  --st-review: #f0b54a;
+  --st-approved: #4cc38a;
+  --st-rejected: #f07167;
+  --st-published: #b9a4ff;
+  --st-failed: #ff8f63;
+  --st-archived: #7d858c;
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.5);
+  color-scheme: dark;
+}
+[data-theme="light"] {
+  --surface-0: #eef0ed;
+  --surface-1: #ffffff;
+  --surface-2: #e6e9e5;
+  --line: #cfd4ce;
+  --line-strong: #9aa29b;
+  --ink: #16191c;
+  --ink-muted: #555c62;
+  --accent: #0a7590;
+  --accent-ink: #ffffff;
+  --checker-a: #ffffff;
+  --checker-b: #dfe2de;
+  --st-generated: #56616c;
+  --st-processing: #2a5fbf;
+  --st-review: #8a5900;
+  --st-approved: #1b7a4d;
+  --st-rejected: #b73226;
+  --st-published: #5f45c0;
+  --st-failed: #a9431b;
+  --st-archived: #6e767d;
+  --shadow-pop: 0 8px 24px rgba(22, 25, 28, 0.18);
+  color-scheme: light;
+}
+:root {
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --font-display: "Archivo", "IBM Plex Sans", system-ui, sans-serif;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+  background: var(--surface-0);
+}
+* {
+  box-sizing: border-box;
+}

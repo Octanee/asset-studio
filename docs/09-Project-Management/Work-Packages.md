@@ -34,6 +34,12 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-17 | Setup/start scripts for Windows, ComfyUI and training install with approval prompts | NFR-013, NFR-014 | WP-05, WP-13 | infra / Sonnet |
 | WP-18 | QA hardening: E2E for AC-001–AC-015, failure scenarios, GPU integration run, docs completion | all AC | all | QA / Sonnet; final review Opus |
 
+## Status
+
+| WP | Status | PR |
+|---|---|---|
+| WP-00 | 🟡 in review | scaffolding PR |
+
 ## Order and parallelism
 
 ```mermaid
