@@ -11,6 +11,7 @@ from asset_studio.api import (
     models,
     poses,
     projects,
+    publishing,
     references,
     session,
     styles,
@@ -37,5 +38,10 @@ api_router.include_router(assets.assets_router, prefix="/assets", tags=["assets"
 api_router.include_router(assets.versions_router, prefix="/versions", tags=["assets"])
 api_router.include_router(collections.project_router, prefix="/projects", tags=["collections"])
 api_router.include_router(collections.router, prefix="/collections", tags=["collections"])
+api_router.include_router(publishing.roots_router, prefix="/export-roots", tags=["publishing"])
+api_router.include_router(publishing.project_router, prefix="/projects", tags=["publishing"])
+api_router.include_router(publishing.presets_router, prefix="/presets", tags=["publishing"])
+api_router.include_router(publishing.targets_router, prefix="/targets", tags=["publishing"])
+api_router.include_router(publishing.router, prefix="/publications", tags=["publishing"])
 api_router.include_router(jobs.jobs_router, prefix="/jobs", tags=["jobs"])
 api_router.include_router(jobs.events_router, prefix="/events", tags=["events"])

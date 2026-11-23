@@ -7,6 +7,7 @@ from typing import Any
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from asset_studio.modules.projects.config_schema import ProjectConfig
+from asset_studio.modules.publishing.presets import PresetDefinition
 
 
 class ProjectOut(BaseModel):
@@ -243,3 +244,84 @@ class QueueSummary(BaseModel):
     lanes: dict[str, dict[str, int]]
     wait_reasons: dict[str, str]
     workers: list[dict[str, Any]]
+
+
+class ExportRootOut(BaseModel):
+    """A configured export folder (ADR-013); its host path stays on the server."""
+
+    id: str
+    name: str
+
+
+class PresetOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    project_id: uuid.UUID
+    name: str
+    definition: PresetDefinition
+    archived_at: datetime | None
+    created_at: datetime
+    updated_at: datetime
+
+
+class TargetOut(BaseModel):
+    id: uuid.UUID
+    project_id: uuid.UUID
+    name: str
+    root_name: str | None
+    subdir: str
+    available: bool
+    archived_at: datetime | None
+    created_at: datetime
+
+
+class PlanFileOut(BaseModel):
+    path: str
+    exists: bool
+    existing_sha256: str | None = None
+
+
+class PlanItemOut(BaseModel):
+    version_id: uuid.UUID
+    asset_id: uuid.UUID
+    asset: str
+    number: int
+    state: str
+    files: list[PlanFileOut]
+
+
+class PlanOut(BaseModel):
+    """The files a publish would write; ``overwrites`` must each be confirmed (RULE-004)."""
+
+    id: uuid.UUID
+    project_id: uuid.UUID
+    preset_id: uuid.UUID
+    target_id: uuid.UUID
+    items: list[PlanItemOut]
+    skipped: list[dict[str, Any]]
+    files: int
+    overwrites: list[str]
+    created_at: datetime
+    used_at: datetime | None
+    job_id: uuid.UUID | None
+
+
+class PublicationFileOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    relative_path: str
+    sha256: str
+    bytes: int
+    overwrote_sha256: str | None
+    confirmed_overwrite: bool
+
+
+class PublicationOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    asset_version_id: uuid.UUID
+    target_id: uuid.UUID
+    preset_id: uuid.UUID
+    job_id: uuid.UUID | None
+    actor: str
+    at: datetime
+    files: list[PublicationFileOut] = Field(default_factory=list)

@@ -262,6 +262,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/export-roots": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Roots
+         * @description The export folders the containers can write to (ADR-013).
+         */
+        get: operations["list_roots_api_v1_export_roots_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/generations": {
         parameters: {
             query?: never;
@@ -570,6 +590,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/presets/{preset_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Update Preset */
+        put: operations["update_preset_api_v1_presets__preset_id__put"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/presets/{preset_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Preset */
+        post: operations["archive_preset_api_v1_presets__preset_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/presets/{preset_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Preset */
+        post: operations["restore_preset_api_v1_presets__preset_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects": {
         parameters: {
             query?: never;
@@ -828,6 +899,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/presets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Presets */
+        get: operations["list_presets_api_v1_projects__project_id__presets_get"];
+        put?: never;
+        /** Create Preset */
+        post: operations["create_preset_api_v1_projects__project_id__presets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/references": {
         parameters: {
             query?: never;
@@ -892,6 +981,106 @@ export interface paths {
         put?: never;
         /** Create Style */
         post: operations["create_style_api_v1_projects__project_id__styles_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Targets */
+        get: operations["list_targets_api_v1_projects__project_id__targets_get"];
+        put?: never;
+        /** Create Target */
+        post: operations["create_target_api_v1_projects__project_id__targets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/publications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Publications
+         * @description Publications, newest first: version, preset, target, file hashes, time (FR-093).
+         */
+        get: operations["list_publications_api_v1_publications_get"];
+        put?: never;
+        /**
+         * Publish
+         * @description Publish a plan. Existing files need ``confirm_overwrites`` (RULE-004); Claude may
+         *     publish only where the project allows it and never overwrites (RULE-005).
+         */
+        post: operations["publish_api_v1_publications_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/publications/current": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Current Publications
+         * @description What each target currently holds for the asset (FR-093).
+         */
+        get: operations["current_publications_api_v1_publications_current_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/publications/plans/{plan_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Plan */
+        get: operations["get_plan_api_v1_publications_plans__plan_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/publications:plan": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Plan Publication
+         * @description The files a publish would write, with the ones that already exist (DD-006).
+         */
+        post: operations["plan_publication_api_v1_publications_plan_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1129,6 +1318,40 @@ export interface paths {
         get: operations["health_api_v1_system_health_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/targets/{target_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Target */
+        post: operations["archive_target_api_v1_targets__target_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/targets/{target_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Target */
+        post: operations["restore_target_api_v1_targets__target_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1828,6 +2051,16 @@ export interface components {
             /** Reason */
             reason: string | null;
         };
+        /**
+         * ExportRootOut
+         * @description A configured export folder (ADR-013); its host path stays on the server.
+         */
+        ExportRootOut: {
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+        };
         /** FamilyUpdate */
         FamilyUpdate: {
             /** Family Id */
@@ -2207,6 +2440,111 @@ export interface components {
              */
             width: number;
         };
+        /** PlanFileOut */
+        PlanFileOut: {
+            /** Existing Sha256 */
+            existing_sha256?: string | null;
+            /** Exists */
+            exists: boolean;
+            /** Path */
+            path: string;
+        };
+        /** PlanItemOut */
+        PlanItemOut: {
+            /** Asset */
+            asset: string;
+            /**
+             * Asset Id
+             * Format: uuid
+             */
+            asset_id: string;
+            /** Files */
+            files: components["schemas"]["PlanFileOut"][];
+            /** Number */
+            number: number;
+            /** State */
+            state: string;
+            /**
+             * Version Id
+             * Format: uuid
+             */
+            version_id: string;
+        };
+        /**
+         * PlanOut
+         * @description The files a publish would write; ``overwrites`` must each be confirmed (RULE-004).
+         */
+        PlanOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Files */
+            files: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Items */
+            items: components["schemas"]["PlanItemOut"][];
+            /** Job Id */
+            job_id: string | null;
+            /** Overwrites */
+            overwrites: string[];
+            /**
+             * Preset Id
+             * Format: uuid
+             */
+            preset_id: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Skipped */
+            skipped: {
+                [key: string]: unknown;
+            }[];
+            /**
+             * Target Id
+             * Format: uuid
+             */
+            target_id: string;
+            /** Used At */
+            used_at: string | null;
+        };
+        /**
+         * PlanRequest
+         * @description What to publish: chosen versions, a collection, or the whole project (FR-092).
+         */
+        PlanRequest: {
+            /** Collection Id */
+            collection_id?: string | null;
+            /**
+             * Preset Id
+             * Format: uuid
+             */
+            preset_id: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /**
+             * Target Id
+             * Format: uuid
+             */
+            target_id: string;
+            /** Version Ids */
+            version_ids?: string[] | null;
+            /**
+             * Whole Project
+             * @default false
+             */
+            whole_project: boolean;
+        };
         /** PoseCreate */
         PoseCreate: {
             /**
@@ -2283,6 +2621,89 @@ export interface components {
             name?: string | null;
             /** View */
             view?: ("front" | "back" | "left" | "right" | "three_quarter" | "other") | null;
+        };
+        /** PresetDefinition */
+        PresetDefinition: {
+            /**
+             * Background
+             * @default keep
+             * @enum {string}
+             */
+            background: "keep" | "white";
+            /**
+             * Folders
+             * @default
+             */
+            folders: string;
+            /**
+             * Format
+             * @default webp
+             * @enum {string}
+             */
+            format: "png" | "webp" | "jpeg";
+            /**
+             * Metadata
+             * @default none
+             * @enum {string}
+             */
+            metadata: "none" | "sidecar";
+            /**
+             * Naming
+             * @default {asset}-{view}{suffix}
+             */
+            naming: string;
+            /**
+             * Optimize
+             * @default true
+             */
+            optimize: boolean;
+            /**
+             * Quality
+             * @default 90
+             */
+            quality: number;
+            /**
+             * Resize
+             * @default contain
+             * @enum {string}
+             */
+            resize: "contain" | "cover";
+            /** Sizes */
+            sizes?: components["schemas"]["Size"][];
+        };
+        /** PresetOut */
+        PresetOut: {
+            /** Archived At */
+            archived_at: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            definition: components["schemas"]["PresetDefinition"];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** PresetRequest */
+        PresetRequest: {
+            definition?: components["schemas"]["PresetDefinition"];
+            /** Name */
+            name: string;
         };
         /** Problem */
         Problem: {
@@ -2458,6 +2879,63 @@ export interface components {
             /** Type */
             type: string;
         };
+        /** PublicationFileOut */
+        PublicationFileOut: {
+            /** Bytes */
+            bytes: number;
+            /** Confirmed Overwrite */
+            confirmed_overwrite: boolean;
+            /** Overwrote Sha256 */
+            overwrote_sha256: string | null;
+            /** Relative Path */
+            relative_path: string;
+            /** Sha256 */
+            sha256: string;
+        };
+        /** PublicationOut */
+        PublicationOut: {
+            /** Actor */
+            actor: string;
+            /**
+             * Asset Version Id
+             * Format: uuid
+             */
+            asset_version_id: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Files */
+            files?: components["schemas"]["PublicationFileOut"][];
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Job Id */
+            job_id: string | null;
+            /**
+             * Preset Id
+             * Format: uuid
+             */
+            preset_id: string;
+            /**
+             * Target Id
+             * Format: uuid
+             */
+            target_id: string;
+        };
+        /** PublishRequest */
+        PublishRequest: {
+            /** Confirm Overwrites */
+            confirm_overwrites?: string[];
+            /**
+             * Plan Id
+             * Format: uuid
+             */
+            plan_id: string;
+        };
         /** QueueSummary */
         QueueSummary: {
             /** Lanes */
@@ -2620,6 +3098,18 @@ export interface components {
             /** Mcp Can Decide */
             mcp_can_decide: boolean;
         };
+        /** Size */
+        Size: {
+            /** Height */
+            height: number;
+            /**
+             * Suffix
+             * @default
+             */
+            suffix: string;
+            /** Width */
+            width: number;
+        };
         /** StyleAttributes */
         StyleAttributes: {
             /** Avoid */
@@ -2699,6 +3189,46 @@ export interface components {
             count: number;
             /** Tag */
             tag: string;
+        };
+        /** TargetOut */
+        TargetOut: {
+            /** Archived At */
+            archived_at: string | null;
+            /** Available */
+            available: boolean;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Root Name */
+            root_name: string | null;
+            /** Subdir */
+            subdir: string;
+        };
+        /** TargetRequest */
+        TargetRequest: {
+            /** Name */
+            name: string;
+            /** Root Id */
+            root_id: string;
+            /**
+             * Subdir
+             * @default
+             */
+            subdir: string;
         };
         /** TransitionOut */
         TransitionOut: {
@@ -3446,6 +3976,26 @@ export interface operations {
             };
         };
     };
+    list_roots_api_v1_export_roots_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ExportRootOut"][];
+                };
+            };
+        };
+    };
     generate_api_v1_generations_post: {
         parameters: {
             query?: never;
@@ -4074,6 +4624,103 @@ export interface operations {
             };
         };
     };
+    update_preset_api_v1_presets__preset_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PresetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_preset_api_v1_presets__preset_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_preset_api_v1_presets__preset_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                preset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_projects_api_v1_projects_get: {
         parameters: {
             query?: {
@@ -4672,6 +5319,74 @@ export interface operations {
             };
         };
     };
+    list_presets_api_v1_projects__project_id__presets_get: {
+        parameters: {
+            query?: {
+                include_archived?: boolean;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_preset_api_v1_projects__project_id__presets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PresetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_references_api_v1_projects__project_id__references_get: {
         parameters: {
             query?: {
@@ -4869,6 +5584,236 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_targets_api_v1_projects__project_id__targets_get: {
+        parameters: {
+            query?: {
+                include_archived?: boolean;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_target_api_v1_projects__project_id__targets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["TargetRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_publications_api_v1_publications_get: {
+        parameters: {
+            query?: {
+                project_id?: string | null;
+                asset_id?: string | null;
+                version_id?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    publish_api_v1_publications_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PublishRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    current_publications_api_v1_publications_current_get: {
+        parameters: {
+            query: {
+                asset_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PublicationOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_plan_api_v1_publications_plans__plan_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plan_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    plan_publication_api_v1_publications_plan_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PlanRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlanOut"];
                 };
             };
             /** @description Validation Error */
@@ -5355,6 +6300,68 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    archive_target_api_v1_targets__target_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_target_api_v1_targets__target_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TargetOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

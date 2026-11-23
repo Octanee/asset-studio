@@ -1308,6 +1308,25 @@
         "title": "EngineState",
         "type": "object"
       },
+      "ExportRootOut": {
+        "description": "A configured export folder (ADR-013); its host path stays on the server.",
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name"
+        ],
+        "title": "ExportRootOut",
+        "type": "object"
+      },
       "FamilyUpdate": {
         "properties": {
           "family_id": {
@@ -2306,6 +2325,233 @@
         "title": "OutputDefaults",
         "type": "object"
       },
+      "PlanFileOut": {
+        "properties": {
+          "existing_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Existing Sha256"
+          },
+          "exists": {
+            "title": "Exists",
+            "type": "boolean"
+          },
+          "path": {
+            "title": "Path",
+            "type": "string"
+          }
+        },
+        "required": [
+          "path",
+          "exists"
+        ],
+        "title": "PlanFileOut",
+        "type": "object"
+      },
+      "PlanItemOut": {
+        "properties": {
+          "asset": {
+            "title": "Asset",
+            "type": "string"
+          },
+          "asset_id": {
+            "format": "uuid",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/PlanFileOut"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          },
+          "version_id": {
+            "format": "uuid",
+            "title": "Version Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version_id",
+          "asset_id",
+          "asset",
+          "number",
+          "state",
+          "files"
+        ],
+        "title": "PlanItemOut",
+        "type": "object"
+      },
+      "PlanOut": {
+        "description": "The files a publish would write; ``overwrites`` must each be confirmed (RULE-004).",
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "files": {
+            "title": "Files",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/PlanItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "overwrites": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Overwrites",
+            "type": "array"
+          },
+          "preset_id": {
+            "format": "uuid",
+            "title": "Preset Id",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "skipped": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Skipped",
+            "type": "array"
+          },
+          "target_id": {
+            "format": "uuid",
+            "title": "Target Id",
+            "type": "string"
+          },
+          "used_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Used At"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "preset_id",
+          "target_id",
+          "items",
+          "skipped",
+          "files",
+          "overwrites",
+          "created_at",
+          "used_at",
+          "job_id"
+        ],
+        "title": "PlanOut",
+        "type": "object"
+      },
+      "PlanRequest": {
+        "description": "What to publish: chosen versions, a collection, or the whole project (FR-092).",
+        "properties": {
+          "collection_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collection Id"
+          },
+          "preset_id": {
+            "format": "uuid",
+            "title": "Preset Id",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "target_id": {
+            "format": "uuid",
+            "title": "Target Id",
+            "type": "string"
+          },
+          "version_ids": {
+            "anyOf": [
+              {
+                "items": {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                "maxItems": 2000,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Ids"
+          },
+          "whole_project": {
+            "default": false,
+            "title": "Whole Project",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "project_id",
+          "preset_id",
+          "target_id"
+        ],
+        "title": "PlanRequest",
+        "type": "object"
+      },
       "PoseCreate": {
         "properties": {
           "aspect": {
@@ -2595,6 +2841,156 @@
           }
         },
         "title": "PoseUpdate",
+        "type": "object"
+      },
+      "PresetDefinition": {
+        "additionalProperties": false,
+        "properties": {
+          "background": {
+            "default": "keep",
+            "enum": [
+              "keep",
+              "white"
+            ],
+            "title": "Background",
+            "type": "string"
+          },
+          "folders": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Folders",
+            "type": "string"
+          },
+          "format": {
+            "default": "webp",
+            "enum": [
+              "png",
+              "webp",
+              "jpeg"
+            ],
+            "title": "Format",
+            "type": "string"
+          },
+          "metadata": {
+            "default": "none",
+            "enum": [
+              "none",
+              "sidecar"
+            ],
+            "title": "Metadata",
+            "type": "string"
+          },
+          "naming": {
+            "default": "{asset}-{view}{suffix}",
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Naming",
+            "type": "string"
+          },
+          "optimize": {
+            "default": true,
+            "title": "Optimize",
+            "type": "boolean"
+          },
+          "quality": {
+            "default": 90,
+            "maximum": 100.0,
+            "minimum": 50.0,
+            "title": "Quality",
+            "type": "integer"
+          },
+          "resize": {
+            "default": "contain",
+            "enum": [
+              "contain",
+              "cover"
+            ],
+            "title": "Resize",
+            "type": "string"
+          },
+          "sizes": {
+            "items": {
+              "$ref": "#/components/schemas/Size"
+            },
+            "maxItems": 10,
+            "minItems": 1,
+            "title": "Sizes",
+            "type": "array"
+          }
+        },
+        "title": "PresetDefinition",
+        "type": "object"
+      },
+      "PresetOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "definition": {
+            "$ref": "#/components/schemas/PresetDefinition"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "name",
+          "definition",
+          "archived_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PresetOut",
+        "type": "object"
+      },
+      "PresetRequest": {
+        "properties": {
+          "definition": {
+            "$ref": "#/components/schemas/PresetDefinition"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "PresetRequest",
         "type": "object"
       },
       "Problem": {
@@ -2994,6 +3390,131 @@
           "created_at"
         ],
         "title": "ProjectOut",
+        "type": "object"
+      },
+      "PublicationFileOut": {
+        "properties": {
+          "bytes": {
+            "title": "Bytes",
+            "type": "integer"
+          },
+          "confirmed_overwrite": {
+            "title": "Confirmed Overwrite",
+            "type": "boolean"
+          },
+          "overwrote_sha256": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Overwrote Sha256"
+          },
+          "relative_path": {
+            "title": "Relative Path",
+            "type": "string"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          }
+        },
+        "required": [
+          "relative_path",
+          "sha256",
+          "bytes",
+          "overwrote_sha256",
+          "confirmed_overwrite"
+        ],
+        "title": "PublicationFileOut",
+        "type": "object"
+      },
+      "PublicationOut": {
+        "properties": {
+          "actor": {
+            "title": "Actor",
+            "type": "string"
+          },
+          "asset_version_id": {
+            "format": "uuid",
+            "title": "Asset Version Id",
+            "type": "string"
+          },
+          "at": {
+            "format": "date-time",
+            "title": "At",
+            "type": "string"
+          },
+          "files": {
+            "items": {
+              "$ref": "#/components/schemas/PublicationFileOut"
+            },
+            "title": "Files",
+            "type": "array"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "preset_id": {
+            "format": "uuid",
+            "title": "Preset Id",
+            "type": "string"
+          },
+          "target_id": {
+            "format": "uuid",
+            "title": "Target Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "asset_version_id",
+          "target_id",
+          "preset_id",
+          "job_id",
+          "actor",
+          "at"
+        ],
+        "title": "PublicationOut",
+        "type": "object"
+      },
+      "PublishRequest": {
+        "properties": {
+          "confirm_overwrites": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 20000,
+            "title": "Confirm Overwrites",
+            "type": "array"
+          },
+          "plan_id": {
+            "format": "uuid",
+            "title": "Plan Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "plan_id"
+        ],
+        "title": "PublishRequest",
         "type": "object"
       },
       "QueueSummary": {
@@ -3420,6 +3941,35 @@
         "title": "SettingsUpdate",
         "type": "object"
       },
+      "Size": {
+        "additionalProperties": false,
+        "properties": {
+          "height": {
+            "maximum": 4096.0,
+            "minimum": 16.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "suffix": {
+            "default": "",
+            "pattern": "^[a-z0-9-]{0,20}$",
+            "title": "Suffix",
+            "type": "string"
+          },
+          "width": {
+            "maximum": 4096.0,
+            "minimum": 16.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "width",
+          "height"
+        ],
+        "title": "Size",
+        "type": "object"
+      },
       "StyleAttributes": {
         "additionalProperties": false,
         "properties": {
@@ -3602,6 +4152,99 @@
           "count"
         ],
         "title": "TagOut",
+        "type": "object"
+      },
+      "TargetOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "root_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Root Name"
+          },
+          "subdir": {
+            "title": "Subdir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "name",
+          "root_name",
+          "subdir",
+          "available",
+          "archived_at",
+          "created_at"
+        ],
+        "title": "TargetOut",
+        "type": "object"
+      },
+      "TargetRequest": {
+        "properties": {
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "root_id": {
+            "maxLength": 10,
+            "title": "Root Id",
+            "type": "string"
+          },
+          "subdir": {
+            "default": "",
+            "maxLength": 300,
+            "title": "Subdir",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "root_id"
+        ],
+        "title": "TargetRequest",
         "type": "object"
       },
       "TransitionOut": {
@@ -5252,6 +5895,32 @@
         ]
       }
     },
+    "/api/v1/export-roots": {
+      "get": {
+        "description": "The export folders the containers can write to (ADR-013).",
+        "operationId": "list_roots_api_v1_export_roots_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ExportRootOut"
+                  },
+                  "title": "Response List Roots Api V1 Export Roots Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Roots",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
     "/api/v1/generations": {
       "post": {
         "operationId": "generate_api_v1_generations_post",
@@ -6281,6 +6950,145 @@
         ]
       }
     },
+    "/api/v1/presets/{preset_id}": {
+      "put": {
+        "operationId": "update_preset_api_v1_presets__preset_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Preset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Preset",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/presets/{preset_id}/archive": {
+      "post": {
+        "operationId": "archive_preset_api_v1_presets__preset_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Preset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Preset",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/presets/{preset_id}/restore": {
+      "post": {
+        "operationId": "restore_preset_api_v1_presets__preset_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "preset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Preset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Preset",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
     "/api/v1/projects": {
       "get": {
         "operationId": "list_projects_api_v1_projects_get",
@@ -7143,6 +7951,114 @@
         ]
       }
     },
+    "/api/v1/projects/{project_id}/presets": {
+      "get": {
+        "operationId": "list_presets_api_v1_projects__project_id__presets_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PresetOut"
+                  },
+                  "title": "Response List Presets Api V1 Projects  Project Id  Presets Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Presets",
+        "tags": [
+          "publishing"
+        ]
+      },
+      "post": {
+        "operationId": "create_preset_api_v1_projects__project_id__presets_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PresetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PresetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Preset",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
     "/api/v1/projects/{project_id}/references": {
       "get": {
         "operationId": "list_references_api_v1_projects__project_id__references_get",
@@ -7560,6 +8476,388 @@
         "summary": "Create Style",
         "tags": [
           "styles"
+        ]
+      }
+    },
+    "/api/v1/projects/{project_id}/targets": {
+      "get": {
+        "operationId": "list_targets_api_v1_projects__project_id__targets_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TargetOut"
+                  },
+                  "title": "Response List Targets Api V1 Projects  Project Id  Targets Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Targets",
+        "tags": [
+          "publishing"
+        ]
+      },
+      "post": {
+        "operationId": "create_target_api_v1_projects__project_id__targets_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TargetRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Target",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/publications": {
+      "get": {
+        "description": "Publications, newest first: version, preset, target, file hashes, time (FR-093).",
+        "operationId": "list_publications_api_v1_publications_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "asset_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Asset Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "version_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Version Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PublicationOut"
+                  },
+                  "title": "Response List Publications Api V1 Publications Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Publications",
+        "tags": [
+          "publishing"
+        ]
+      },
+      "post": {
+        "description": "Publish a plan. Existing files need ``confirm_overwrites`` (RULE-004); Claude may\npublish only where the project allows it and never overwrites (RULE-005).",
+        "operationId": "publish_api_v1_publications_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PublishRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Publish",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/publications/current": {
+      "get": {
+        "description": "What each target currently holds for the asset (FR-093).",
+        "operationId": "current_publications_api_v1_publications_current_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "asset_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Asset Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PublicationOut"
+                  },
+                  "title": "Response Current Publications Api V1 Publications Current Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Current Publications",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/publications/plans/{plan_id}": {
+      "get": {
+        "operationId": "get_plan_api_v1_publications_plans__plan_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "plan_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Plan Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Plan",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/publications:plan": {
+      "post": {
+        "description": "The files a publish would write, with the ones that already exist (DD-006).",
+        "operationId": "plan_publication_api_v1_publications_plan_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PlanRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlanOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Plan Publication",
+        "tags": [
+          "publishing"
         ]
       }
     },
@@ -8255,6 +9553,92 @@
         "summary": "Health",
         "tags": [
           "system"
+        ]
+      }
+    },
+    "/api/v1/targets/{target_id}/archive": {
+      "post": {
+        "operationId": "archive_target_api_v1_targets__target_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Target Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Target",
+        "tags": [
+          "publishing"
+        ]
+      }
+    },
+    "/api/v1/targets/{target_id}/restore": {
+      "post": {
+        "operationId": "restore_target_api_v1_targets__target_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "target_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Target Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TargetOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Target",
+        "tags": [
+          "publishing"
         ]
       }
     },

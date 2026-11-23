@@ -26,10 +26,11 @@ The library root `<data>` is the Docker named volume `asset-data` (ADR-013, D-47
     assets/<asset_id>/v<number>/thumb-256.webp, preview-1024.webp
     training/<dataset_id>/...
   staging/            # temp files, cleaned on start
-  exports/<job_id>/   # export packages before copying to a target
   backups/
   logs/
 ```
+
+Publishing (WP-11) writes outside the library, into export roots: bind mounts of Windows folders (`ASSET_STUDIO_EXPORTS_HOST_DIR` → `/exports`, ADR-013). A target is a subfolder of a root; every path, including those made from a preset's patterns, is resolved and must stay inside its root. Each file is written to a temporary name and renamed into place.
 
 ## Rules
 

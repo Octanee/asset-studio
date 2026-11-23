@@ -175,7 +175,24 @@
     "CONFIRMATION_REQUIRED": "Potwierdź trwałe usunięcie.",
     "ASSET_NOT_FOUND": "Ten asset już nie istnieje.",
     "VERSION_NOT_FOUND": "Ta wersja już nie istnieje.",
-    "FILE_NOT_AVAILABLE": "Plik jest niedostępny."
+    "FILE_NOT_AVAILABLE": "Plik jest niedostępny.",
+    "OVERWRITE_NOT_CONFIRMED": "Niektóre pliki już istnieją w celu. Potwierdź każde nadpisanie.",
+    "MCP_OVERWRITE_NOT_ALLOWED": "Claude nigdy nie nadpisuje plików; opublikuj to samodzielnie.",
+    "PLAN_USED": "Ten plan został już opublikowany. Zaplanuj ponownie.",
+    "PLAN_EXPIRED": "Plan jest zbyt stary. Zaplanuj ponownie.",
+    "PLAN_OTHER_ACTOR": "Ten plan przygotował ktoś inny.",
+    "PLAN_PATH_COLLISION": "Dwie wersje zapisałyby ten sam plik. Zmień nazewnictwo lub wybór.",
+    "PLAN_TOO_LARGE": "Za dużo wersji naraz.",
+    "NOTHING_TO_PUBLISH": "Nie ma zatwierdzonej wersji do publikacji.",
+    "EXPORT_ROOT_UNKNOWN": "Wybierz jeden ze skonfigurowanych folderów eksportu.",
+    "EXPORT_ROOT_UNAVAILABLE": "Folder eksportu tego celu nie jest już skonfigurowany.",
+    "TARGET_PATH_INVALID": "Folder musi leżeć wewnątrz folderu eksportu.",
+    "NAME_TAKEN": "Ta nazwa jest już używana w projekcie.",
+    "PRESET_NOT_FOUND": "Ten preset już nie istnieje.",
+    "TARGET_NOT_FOUND": "Ten cel już nie istnieje.",
+    "NOT_APPROVED": "Wersja nie jest już zatwierdzona.",
+    "ARCHIVED": "Preset lub cel jest zarchiwizowany.",
+    "OTHER_PROJECT": "Preset i cel muszą należeć do projektu."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -578,7 +595,9 @@
     "select": "Zaznacz {{name}}",
     "thumbAlt": "{{name}}, wersja {{n}}",
     "noImage": "Brak obrazu",
-    "versions": "wersje: {{count}}"
+    "versions": "wersje: {{count}}",
+    "publish": "Publikuj",
+    "publishHint": "Wybierz assety, których najnowsza wersja jest zatwierdzona."
   },
   "asset": {
     "back": "Wróć do biblioteki",
@@ -623,8 +642,12 @@
       "asset_version_archive": "zarchiwizowano",
       "asset_version_restore": "przywrócono",
       "asset_version_deleted": "usunięto trwale",
-      "review_comment_created": "dodano komentarz"
-    }
+      "review_comment_created": "dodano komentarz",
+      "publication_created": "opublikowano do celu",
+      "publication_file_overwritten": "nadpisano plik"
+    },
+    "publications": "Publikacje",
+    "notPublished": "Jeszcze nieopublikowany."
   },
   "review": {
     "emptyTitle": "Nic do przeglądu",
@@ -715,5 +738,79 @@
     "onlyChanges": "Tylko różnice",
     "noChanges": "Parametry są takie same.",
     "parameter": "Parametr"
+  },
+  "publish": {
+    "what": "Co publikować",
+    "sources": {
+      "versions": "Wybrane wersje",
+      "collection": "Kolekcja",
+      "project": "Cały projekt"
+    },
+    "newestApproved": "Każdy asset wnosi swoją najnowszą zatwierdzoną lub opublikowaną wersję.",
+    "noneApproved": "Nie ma jeszcze zatwierdzonych wersji.",
+    "all": "Wszystkie ({{count}})",
+    "chooseSource": "Wybierz, co publikować.",
+    "needPreset": "Najpierw utwórz preset eksportu.",
+    "needTarget": "Najpierw utwórz folder docelowy.",
+    "targetUnavailable": "Folder eksportu tego celu nie jest już skonfigurowany.",
+    "planFiles": "Zaplanuj pliki",
+    "planFirst": "Najpierw zaplanuj pliki: zobaczysz każdy plik i każde nadpisanie.",
+    "publish": "Publikuj",
+    "publishN": "Publikuj wersje: {{count}}",
+    "confirmFirst": "Najpierw potwierdź każde nadpisanie (zostało: {{count}}).",
+    "preset": "Preset eksportu",
+    "edit": "Edytuj",
+    "new": "Nowy",
+    "noPresets": "Nie ma jeszcze presetów.",
+    "presetName": "Nazwa presetu",
+    "format": "Format",
+    "quality": "Jakość",
+    "sizes": "Rozmiary",
+    "suffix": "sufiks",
+    "suffixN": "Sufiks rozmiaru {{n}}",
+    "widthN": "Szerokość rozmiaru {{n}}",
+    "heightN": "Wysokość rozmiaru {{n}}",
+    "removeSize": "Usuń rozmiar {{n}}",
+    "addSize": "Dodaj rozmiar",
+    "naming": "Nazwa pliku",
+    "namingHint": "Pola: {asset} {view} {category} {version} {size} {suffix} {project}",
+    "folders": "Foldery",
+    "background": "Tło",
+    "backgrounds": {
+      "keep": "Jak po obróbce",
+      "white": "Białe"
+    },
+    "resize": "Dopasowanie",
+    "resizes": {
+      "contain": "Cały obraz (contain)",
+      "cover": "Wypełnij i przytnij (cover)"
+    },
+    "optimize": "Optymalizuj pliki",
+    "sidecar": "Plik metadanych (.json) obok każdego obrazu",
+    "savePreset": "Zapisz preset",
+    "target": "Folder docelowy",
+    "noRoots": "Nie skonfigurowano folderu eksportu. Ustaw ASSET_STUDIO_EXPORTS_HOST_DIR i uruchom ponownie.",
+    "targetName": "Nazwa celu",
+    "root": "Folder eksportu",
+    "subdir": "Podfolder",
+    "addTarget": "Dodaj cel",
+    "plan": "Zaplanowane pliki: {{files}} (wersje: {{versions}})",
+    "confirmAll": "Potwierdź wszystkie nadpisania ({{count}})",
+    "overwriteWarning": "Istniejące pliki zostaną zastąpione: {{count}}. Potwierdź każdy z nich.",
+    "version": "Wersja",
+    "file": "Plik",
+    "status": "Stan",
+    "overwrites": "nadpisze",
+    "confirmPath": "Potwierdź nadpisanie {{path}}",
+    "newFile": "nowy",
+    "skipped": "Pominięte: {{count}}",
+    "reasons": {
+      "NOT_APPROVED": "niezatwierdzona",
+      "NO_APPROVED_VERSION": "brak zatwierdzonej wersji",
+      "REPUBLISH_USER_ONLY": "ponowna publikacja to decyzja użytkownika"
+    },
+    "done": "Opublikowane wersje: {{count}}.",
+    "history": "Ostatnie publikacje",
+    "overwrote": "nadpisano pliki"
   }
 }
