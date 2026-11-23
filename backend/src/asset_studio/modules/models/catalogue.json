@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "version": 1,
+  "families": [
+    { "id": "sdxl", "name": "Stable Diffusion XL" },
+    { "id": "sd15", "name": "Stable Diffusion 1.5" }
+  ],
+  "licences": [
+    {
+      "id": "openrail-pp-m",
+      "name": "CreativeML Open RAIL++-M",
+      "commercial_use": "allowed",
+      "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/blob/main/LICENSE.md",
+      "notes": "Commercial use allowed with use-based restrictions."
+    },
+    {
+      "id": "creativeml-openrail-m",
+      "name": "CreativeML OpenRAIL-M",
+      "commercial_use": "allowed",
+      "url": "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/blob/main/README.md",
+      "notes": "Commercial use allowed with use-based restrictions."
+    },
+    {
+      "id": "apache-2.0",
+      "name": "Apache-2.0",
+      "commercial_use": "allowed",
+      "url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "notes": ""
+    },
+    {
+      "id": "mit",
+      "name": "MIT",
+      "commercial_use": "allowed",
+      "url": "https://opensource.org/license/mit",
+      "notes": ""
+    },
+    {
+      "id": "unknown",
+      "name": "Not stated",
+      "commercial_use": "unknown",
+      "url": "",
+      "notes": "The source does not state the licence terms; check them before commercial use."
+    }
+  ],
+  "models": [
+    {
+      "id": "sdxl-base-1.0",
+      "name": "SDXL base 1.0",
+      "kind": "checkpoint",
+      "family": "sdxl",
+      "file_name": "sd_xl_base_1.0.safetensors",
+      "source_url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/resolve/main/sd_xl_base_1.0.safetensors",
+      "sha256": "31e35c80fc4829d14f90153f4c74cd59c90b779f6afe05a74cd6120b893f7e5b",
+      "bytes": 6938078334,
+      "licence": "openrail-pp-m",
+      "notes": ""
+    },
+    {
+      "id": "sd15-pruned-emaonly",
+      "name": "Stable Diffusion 1.5 (pruned, EMA only)",
+      "kind": "checkpoint",
+      "family": "sd15",
+      "file_name": "v1-5-pruned-emaonly.safetensors",
+      "source_url": "https://huggingface.co/stable-diffusion-v1-5/stable-diffusion-v1-5/resolve/main/v1-5-pruned-emaonly.safetensors",
+      "sha256": "6ce0161689b3853acaa03779ec93eafe75a02f4ced659bee03f50797806fa2fa",
+      "bytes": 4265146304,
+      "licence": "creativeml-openrail-m",
+      "notes": ""
+    },
+    {
+      "id": "sdxl-vae-fp16-fix",
+      "name": "SDXL VAE (fp16 fix)",
+      "kind": "vae",
+      "family": "sdxl",
+      "file_name": "sdxl_vae_fp16fix.safetensors",
+      "source_url": "https://huggingface.co/madebyollin/sdxl-vae-fp16-fix/resolve/main/sdxl_vae.safetensors",
+      "sha256": "235745af8d86bf4a4c1b5b4f529868b37019a10f7c0b2e79ad0abca3a22bc6e1",
+      "bytes": 334641162,
+      "licence": "mit",
+      "notes": "Lets the SDXL VAE run in fp16 without artefacts."
+    },
+    {
+      "id": "controlnet-openpose-sdxl-xinsir",
+      "name": "OpenPose ControlNet SDXL (xinsir)",
+      "kind": "controlnet",
+      "family": "sdxl",
+      "file_name": "xinsir-openpose-sdxl-1.0.safetensors",
+      "source_url": "https://huggingface.co/xinsir/controlnet-openpose-sdxl-1.0/resolve/main/diffusion_pytorch_model.safetensors",
+      "sha256": "b8524e557a7df60d081f5d4a0eb109967d107df217943bf88c2d99b9ebcc06c5",
+      "bytes": 2502139104,
+      "licence": "apache-2.0",
+      "notes": "Default pose control (D-50)."
+    },
+    {
+      "id": "control-lora-openpose-sdxl",
+      "name": "OpenPose Control-LoRA SDXL rank 256 (thibaud)",
+      "kind": "controlnet",
+      "family": "sdxl",
+      "file_name": "control-lora-openposeXL2-rank256.safetensors",
+      "source_url": "https://huggingface.co/thibaud/controlnet-openpose-sdxl-1.0/resolve/main/control-lora-openposeXL2-rank256.safetensors",
+      "sha256": "8afa079285bf9384eaf8f6322884cb4f24bbe405da490f91f5540d3bff585e75",
+      "bytes": 774423024,
+      "licence": "unknown",
+      "notes": "Smaller pose control; the model card marks the licence as 'other'."
+    },
+    {
+      "id": "ip-adapter-plus-sdxl-vit-h",
+      "name": "IP-Adapter Plus SDXL (ViT-H)",
+      "kind": "ip_adapter",
+      "family": "sdxl",
+      "file_name": "ip-adapter-plus_sdxl_vit-h.safetensors",
+      "source_url": "https://huggingface.co/h94/IP-Adapter/resolve/main/sdxl_models/ip-adapter-plus_sdxl_vit-h.safetensors",
+      "sha256": "3f5062b8400c94b7159665b21ba5c62acdcd7682262743d7f2aefedef00e6581",
+      "bytes": 847517512,
+      "licence": "apache-2.0",
+      "notes": "Reference conditioning; needs the CLIP ViT-H image encoder."
+    },
+    {
+      "id": "clip-vit-h-14",
+      "name": "CLIP ViT-H-14 image encoder",
+      "kind": "clip_vision",
+      "family": null,
+      "file_name": "CLIP-ViT-H-14-laion2B-s32B-b79K.safetensors",
+      "source_url": "https://huggingface.co/h94/IP-Adapter/resolve/main/models/image_encoder/model.safetensors",
+      "sha256": "6ca9667da1ca9e0b0f75e46bb030f7e011f44f86cbfb8d5a36590fcd7507b030",
+      "bytes": 2528373448,
+      "licence": "apache-2.0",
+      "notes": "Distributed in the IP-Adapter repository; trained by LAION."
+    },
+    {
+      "id": "dwpose-yolox-l",
+      "name": "DWPose person detector (YOLOX-L)",
+      "kind": "pose",
+      "family": null,
+      "file_name": "yolox_l.onnx",
+      "source_url": "https://huggingface.co/yzd-v/DWPose/resolve/main/yolox_l.onnx",
+      "sha256": "7860ae79de6c89a3c1eb72ae9a2756c0ccfbe04b7791bb5880afabd97855a411",
+      "bytes": 216746733,
+      "licence": "apache-2.0",
+      "notes": "Pose detection (ADR-009)."
+    },
+    {
+      "id": "dwpose-dw-ll",
+      "name": "DWPose whole-body pose (DW-LL 384)",
+      "kind": "pose",
+      "family": null,
+      "file_name": "dw-ll_ucoco_384.onnx",
+      "source_url": "https://huggingface.co/yzd-v/DWPose/resolve/main/dw-ll_ucoco_384.onnx",
+      "sha256": "724f4ff2439ed61afb86fb8a1951ec39c6220682803b4a8bd4f598cd913b1843",
+      "bytes": 134399116,
+      "licence": "apache-2.0",
+      "notes": "Pose detection (ADR-009)."
+    }
+  ]
+}

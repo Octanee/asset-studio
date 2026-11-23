@@ -119,7 +119,17 @@
     "POSE_BOX_INVALID": "The box has no size.",
     "REQUEST_INVALID": "Some values are not valid. Check the fields and try again.",
     "NETWORK": "The API cannot be reached.",
-    "POSE_MODEL_CORRUPT": "A pose detection model file is damaged. Install the models again."
+    "POSE_MODEL_CORRUPT": "A pose detection model file is damaged. Install the models again.",
+    "DOWNLOAD_CONFIRMATION_MISMATCH": "The catalogue entry changed. Reload and confirm again.",
+    "DOWNLOAD_IN_PROGRESS": "This model is already being downloaded.",
+    "MODEL_ALREADY_INSTALLED": "This model is already installed.",
+    "MODEL_NOT_INSTALLED": "The model is not installed.",
+    "VERIFY_IN_PROGRESS": "This model is already being checked.",
+    "CHECKSUM_MISMATCH": "The downloaded file did not match its checksum and was discarded.",
+    "DOWNLOAD_FAILED": "The download failed. Try again later.",
+    "DOWNLOAD_INCOMPLETE": "The download stopped early. Start it again to continue.",
+    "LICENCE_NO_CONFLICT": "This model's licence fits the project.",
+    "MODEL_FROM_CATALOGUE": "The catalogue sets this model's family."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -261,5 +271,74 @@
     "drawBox": "Draw box",
     "waiting": "Waiting: {{reason}}",
     "manualFallback": "You can also set the pose by hand in the editor."
+  },
+  "models": {
+    "title": "Model registry",
+    "summary": "{{installed}} of {{total}} installed",
+    "rescan": "Rescan folders",
+    "scanning": "Scanning…",
+    "scanned": "Folders scanned; {{added}} new files found.",
+    "kind": "Model type",
+    "all": "All",
+    "kinds": {
+      "checkpoint": "Checkpoint",
+      "lora": "LoRA",
+      "controlnet": "ControlNet",
+      "ip_adapter": "IP-Adapter",
+      "clip_vision": "CLIP vision",
+      "vae": "VAE",
+      "pose": "Pose detection"
+    },
+    "name": "Model",
+    "family": "Family",
+    "licence": "Licence",
+    "size": "Size",
+    "state": "State",
+    "actions": "Actions",
+    "familyOf": "Family of {{name}}",
+    "familyUnknown": "Not known",
+    "families": {
+      "sdxl": "SDXL",
+      "sd15": "SD 1.5"
+    },
+    "anyFamily": "Any",
+    "use": {
+      "allowed": "Commercial use allowed",
+      "forbidden": "No commercial use",
+      "unknown": "Terms not stated"
+    },
+    "confirmed": "Use confirmed",
+    "licenceWarning": "Licence warning",
+    "vram": "VRAM ≥ {{gb}} GB",
+    "vramNote": "VRAM is the size of the weights, a lower bound; generation needs more.",
+    "status": {
+      "installed": "Installed",
+      "available": "Available",
+      "missing": "Missing",
+      "downloading": "Downloading"
+    },
+    "check": {
+      "ok": "Checksum OK",
+      "unverified": "Not checked",
+      "mismatch": "Checksum differs"
+    },
+    "queued": "Waiting in the queue",
+    "verifying": "Checking {{pct}}%",
+    "downloadingPct": "{{pct}}% of {{of}}",
+    "cancel": "Cancel",
+    "download": "Download…",
+    "verify": "Check file",
+    "confirmTitle": "Download {{name}}?",
+    "confirmBody": "Nothing is downloaded until you confirm. The file is checked against its SHA-256 before it is used; an interrupted download continues where it stopped.",
+    "file": "File",
+    "source": "Source",
+    "confirmDownload": "Download {{size}}",
+    "licenceTitle": "Licence warning: {{name}}",
+    "licenceBody": "This project is commercial, and the licence ({{licence}}) says: {{use}}. You can still use the model; your confirmation is recorded in the audit log.",
+    "readLicence": "Read the licence",
+    "note": "Note (optional)",
+    "understand": "I checked the licence and accept the risk for this project.",
+    "confirmUse": "Confirm use",
+    "licenceUnknown": "Not stated"
   }
 }

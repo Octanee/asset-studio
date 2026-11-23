@@ -93,6 +93,15 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - are resumable with HTTP ranges and lock against duplicates;
 - are verified by SHA-256, then moved into the model folder (prototype S-1).
 
+### Implementation notes (WP-12)
+
+- **Catalogue:** `backend/src/asset_studio/modules/models/catalogue.json` (families, licences, models with HTTPS source, SHA-256 and size). Each entry was checked against the source's LFS metadata when added. It is synced into the database when the registry is read.
+- **Model folder:** the host folder `ASSET_STUDIO_MODELS_HOST_DIR` in ComfyUI's layout (`checkpoints`, `loras`, `controlnet`, `ipadapter`, `clip_vision`, `vae`) is mounted read-only into the API (scan) and read-write into the worker (downloads). DWPose files stay in `<data>/models/pose`.
+- **Scan (FR-081):** a file with the catalogue's name is that model; any other model file becomes a `local` model with an unknown licence and family (the user can set the family). A size different from the catalogue marks the file as mismatched; a changed size makes a verified file unverified again.
+- **Downloads (FR-082, RULE-008, NFR-007):** the user confirms file, source and size, which must equal the catalogue entry. A `download` job on the CPU lane writes `<file>.part`, resumes with `Range` (a server without ranges restarts it), refuses non-HTTPS redirects, checks the SHA-256 and only then renames the file. A wrong file is deleted; an interrupted one stays for the next attempt. One download per model at a time.
+- **Checks:** `verify_model` jobs hash an installed file. Compatibility (FR-084, RULE-015): one checkpoint, add-ons of the same family, IP-Adapter needs CLIP vision, files installed and not mismatched.
+- **Licences (RULE-007, FR-083):** a commercial project conflicts with any licence whose commercial use is not `allowed` (`unknown` included). The user confirms per project and model, with an optional note; it is audited and stays valid while the licence and the intended use are unchanged. `licence_gate` is the check WP-08 runs before queueing.
+
 ## Implementation notes (WP-05)
 
 - **Code:** `backend/src/asset_studio/modules/providers/`:

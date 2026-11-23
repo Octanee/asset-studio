@@ -3,7 +3,7 @@ title: Decision Log
 type: decision-log
 status: draft
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - decisions
 ---
@@ -63,5 +63,6 @@ User decisions recorded during Phases 0–1 (all dated 2026-11-21).
 | D-49 | Follow-up spike WP-01b approved, including the 2.5 GB `xinsir/controlnet-openpose-sdxl-1.0` download (2026-11-22) |
 | D-50 | R-12 accepted as a known MVP limitation: floor and forward-fold poses are flagged "review and regenerate"; the full OpenPose ControlNet becomes the default pose control; pose-from-photo and character LoRA are re-tested in WP-07/WP-08 (2026-11-22) |
 | D-51 | DWPose added to the backend image (ONNX Runtime, NumPy, Pillow) and its two model files installed by a checksum-verified installer; approved by the user for WP-07 (2026-11-23) |
+| D-52 | WP-12 (model registry) is done before WP-08, because generation's family and licence checks need it; WP-08 then follows in two PRs: backend first, then the Generation Studio and Queue screens (2026-11-23) |
 
 IDs D-11 (licence delegated → D-20) and D-16 (ambiguous → D-18) were superseded and are kept for history.

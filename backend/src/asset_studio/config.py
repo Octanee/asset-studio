@@ -34,6 +34,8 @@ class Settings(BaseSettings):
     engine_health_ttl_seconds: float = 5.0
     # DWPose model files (ADR-009); empty means <data_dir>/models/pose.
     pose_models_dir: str = ""
+    # Model folders in the ComfyUI layout (checkpoints, loras, ...); empty means <data_dir>/models.
+    models_dir: str = ""
 
     @field_validator("allowed_hosts", mode="before")
     @classmethod
