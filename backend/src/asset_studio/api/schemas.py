@@ -112,3 +112,44 @@ class AssetSummary(AssetOut):
 
 class AssetDetail(AssetOut):
     versions: list[VersionOut]
+
+
+class JobOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    kind: str
+    lane: str
+    state: str
+    priority: int
+    params: dict[str, Any]
+    result: dict[str, Any]
+    progress: dict[str, Any]
+    error: dict[str, Any] | None
+    wait_reason: str | None
+    attempts: int
+    max_attempts: int
+    cancel_requested: bool
+    project_id: uuid.UUID | None
+    enqueued_by_actor: str
+    created_at: datetime
+    started_at: datetime | None
+    finished_at: datetime | None
+
+
+class JobEventOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    job_id: uuid.UUID
+    at: datetime
+    kind: str
+    data: dict[str, Any]
+
+
+class JobDetail(JobOut):
+    events: list[JobEventOut]
+
+
+class QueueSummary(BaseModel):
+    lanes: dict[str, dict[str, int]]
+    wait_reasons: dict[str, str]
+    workers: list[dict[str, Any]]

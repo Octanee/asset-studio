@@ -11,6 +11,7 @@ from asset_studio.api.router import api_router
 from asset_studio.api.security import HostOriginMiddleware
 from asset_studio.config import get_settings
 from asset_studio.logging import configure_logging
+from asset_studio.models import load_all
 from asset_studio.modules.storage.local import get_storage
 
 
@@ -22,6 +23,7 @@ async def lifespan(_: FastAPI) -> AsyncIterator[None]:
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    load_all()
     configure_logging(settings.log_level, settings.log_json)
     app = FastAPI(title="Universal Asset Studio API", version=__version__, lifespan=lifespan)
     app.add_middleware(HostOriginMiddleware)

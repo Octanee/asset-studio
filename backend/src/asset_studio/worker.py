@@ -1,20 +1,36 @@
-"""Worker process entry point. The persistent job queue arrives in WP-04."""
+"""Worker process entry point: runs the persistent job queue (ADR-004, WP-04).
 
+Modules that own work register job handlers in ``HANDLERS`` (generation in WP-08,
+processing in WP-09, ...). A NOTIFY on enqueue wakes the worker; it also polls.
+"""
+
+import os
 import signal
+import socket
 import time
+import uuid
 from types import FrameType
 
+import psycopg
 import structlog
 
 from asset_studio.config import get_settings
+from asset_studio.db import get_engine, get_sessionmaker
 from asset_studio.logging import configure_logging
+from asset_studio.models import load_all
+from asset_studio.modules.jobs.runner import Handler, Runner
+from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
 
-_running = True
+HANDLERS: dict[str, Handler] = {}
+POLL_SECONDS = 2.0
+
+
+class _Stop:
+    requested = False
 
 
 def _stop(_signum: int, _frame: FrameType | None) -> None:
-    global _running
-    _running = False
+    _Stop.requested = True
 
 
 def main() -> None:
@@ -23,11 +39,31 @@ def main() -> None:
     log = structlog.get_logger("worker")
     signal.signal(signal.SIGTERM, _stop)
     signal.signal(signal.SIGINT, _stop)
-    log.info("worker.started")
-    while _running:
-        log.debug("worker.heartbeat")
-        time.sleep(5)
-    log.info("worker.stopped")
+
+    load_all()  # every table, so foreign keys to other modules resolve
+    worker_id = f"{socket.gethostname()}-{os.getpid()}-{uuid.uuid4().hex[:6]}"
+    runner = Runner(get_sessionmaker(), worker_id, HANDLERS)
+    # The API applies migrations on start; wait for them instead of crashing.
+    while not _Stop.requested:
+        try:
+            runner.start()
+            break
+        except Exception as exc:
+            log.warning("worker.waiting_for_database", error=type(exc).__name__)
+            time.sleep(POLL_SECONDS)
+    dsn = get_engine().url.set(drivername="postgresql").render_as_string(hide_password=False)
+    log.info("worker.started", worker_id=worker_id, kinds=sorted(HANDLERS))
+    with psycopg.connect(dsn, autocommit=True) as listen:
+        listen.execute(f"LISTEN {NOTIFY_CHANNEL}")
+        while not _Stop.requested:
+            try:
+                runner.tick()
+            except Exception:  # keep the worker alive; the next tick retries
+                log.exception("worker.tick_failed")
+            for _ in listen.notifies(timeout=POLL_SECONDS, stop_after=1):
+                pass
+    runner.stop()
+    log.info("worker.stopped", worker_id=worker_id)
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-030 | UC-007 | AC-001 | — | — |
 | BR-001 | FR-031 | UC-007 | AC-001 | — | — |
 | BR-001 | FR-034 | UC-007, UC-008 | AC-001 | — | — |
-| BR-001 | FR-038 | UC-007 | AC-001 | — | — |
+| BR-001 | FR-038 | UC-007 | AC-001 | WP-04 | `test_fr038_*`, `test_jobs_api_*` |
 | BR-001 | FR-046 | UC-014 | — | — | — |
 | BR-001 | FR-047 | UC-014 | — | — | — |
 | BR-001 | FR-049 | — | — | — | — |
@@ -54,12 +54,12 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-005 | FR-005 | UC-003 | AC-010, AC-015 | WP-02 | `test_ac010_*` |
 | BR-005 | FR-006 | UC-003 | AC-010 | WP-02 | `test_fr006_*, test_ac010_*` |
 | BR-005 | FR-010 | UC-004 | — | — | — |
-| BR-006 | FR-042 | — | — | — | — |
-| BR-006 | FR-043 | — | AC-006 | — | — |
+| BR-006 | FR-042 | — | — | WP-04 | `test_rule012_*` (training hand-off in WP-13) |
+| BR-006 | FR-043 | — | AC-006 | WP-04 | `test_rule013_*` (engine and GPU status in WP-05) |
 | BR-006 | FR-081 | UC-013 | — | — | — |
 | BR-006 | FR-082 | UC-013 | — | — | — |
-| BR-007 | FR-040 | — | — | — | — |
-| BR-007 | FR-041 | — | AC-005 | — | — |
+| BR-007 | FR-040 | — | — | WP-04 | `test_fr040_*`, `test_claim_*` |
+| BR-007 | FR-041 | — | AC-005 | WP-04 | `test_nfr003_*`, `test_failure_requeues_*` |
 | BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
 | BR-007 | FR-051 | — | — | WP-03 | `test_fr051_*` |
 | BR-007 | FR-052 | UC-010 | AC-002 | — | — |

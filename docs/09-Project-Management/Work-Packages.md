@@ -42,7 +42,8 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-01 | ✅ done — results in [[WP-01-Spike-Report]] | #15 |
 | WP-01b | ✅ done — 5 correct + 2 partial of 10; R-12 accepted as limitation (D-50) | #15 |
 | WP-02 | ✅ done — projects, configuration versions, audit, actors, Host/Origin checks | #16 |
-| WP-03 | 🟡 in review — storage, assets, versions, lifecycle and transitions API; regeneration (FR-052) moves to WP-08 with the job pipeline | WP-03 PR |
+| WP-03 | ✅ done — storage, assets, versions, lifecycle and transitions API; regeneration (FR-052) moves to WP-08 with the job pipeline | #17 |
+| WP-04 | 🟡 in review — job queue, worker lanes, SSE events, recovery after restart | WP-04 PR |
 
 ## Order and parallelism
 

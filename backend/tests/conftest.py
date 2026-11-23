@@ -12,7 +12,7 @@ from alembic.config import Config
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Connection
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 
 from asset_studio.modules.storage.local import LocalStorage, get_storage
 
@@ -68,11 +68,12 @@ def storage(tmp_path: Path) -> LocalStorage:
 
 @pytest.fixture
 def client(connection: Connection, storage: LocalStorage) -> Iterator[TestClient]:
-    from asset_studio.db import get_session
+    from asset_studio.db import get_session, get_sessionmaker
     from asset_studio.main import create_app
 
     app = create_app()
     app.dependency_overrides[get_storage] = lambda: storage
+    app.dependency_overrides[get_sessionmaker] = lambda: bound_sessions(connection)
 
     def _session() -> Iterator[Session]:
         with Session(
@@ -85,6 +86,13 @@ def client(connection: Connection, storage: LocalStorage) -> Iterator[TestClient
     with TestClient(app, base_url="http://127.0.0.1") as c:
         assert c.get("/api/v1/session").status_code == 200
         yield c
+
+
+def bound_sessions(connection: Connection) -> sessionmaker[Session]:
+    """Sessions that share the test transaction (each commit releases a savepoint)."""
+    return sessionmaker(
+        bind=connection, join_transaction_mode="create_savepoint", expire_on_commit=False
+    )
 
 
 @pytest.fixture
