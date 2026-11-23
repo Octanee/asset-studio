@@ -33,11 +33,13 @@ tags:
 | `job` | id, kind (`generate`/`remove_background`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`), lane (`gpu`/`cpu`), state (`queued`/`running`/`completed`/`failed`/`cancelled`/`interrupted`), priority, params jsonb (frozen), result jsonb, attempts, max_attempts, progress jsonb, error jsonb, wait_reason, cancel_requested, locked_by, locked_until, project_id, enqueued_by_actor, created_at, started_at, finished_at | queue index on (lane, state, priority, id); state and lane are check-constrained (WP-04) |
 | `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |
-| `asset` | id, project_id, category, slug, name, archived_at | unique (project_id, slug) |
-| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, first_published_at, deleted_at, processing jsonb, created_at | unique (asset_id, number); `processing` holds the steps, the processed file (key, SHA-256, size), the cut-out and the last error (WP-09); `storage_key` is null after permanent deletion (T-13) and `state` is checked against the lifecycle states (WP-03) |
+| `asset` | id, project_id, category, slug, name, tags text[], favorite_at, archived_at | unique (project_id, slug); GIN index on `tags` (WP-10) |
+| `collection` | id, project_id, name, created_at | unique (project_id, name) (WP-10) |
+| `collection_item` | collection_id, asset_id, added_at | primary key (collection_id, asset_id); removed with its collection, never with the asset (WP-10) |
+| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, first_published_at, deleted_at, processing jsonb, created_at | unique (asset_id, number); `processing` holds the steps, the processed file (key, SHA-256, size), the cut-out, the last error (WP-09) and the difference hash of the processed image for duplicate detection (WP-10); `storage_key` is null after permanent deletion (T-13) and `state` is checked against the lifecycle states (WP-03) |
 | `state_transition` | id, asset_version_id, transition_id (`T-05`…), from_state, to_state, actor, reason, at | append-only, enforced by a trigger (WP-03) |
 | `validation_result` | id, asset_version_id, run_id, rule, status (`passed`/`failed`/`skipped`), details jsonb, created_at | one row per rule per run; the newest run is the report (WP-09) |
-| `review_comment` | id, asset_version_id, actor, body, at | |
+| `review_comment` | id, asset_version_id, actor (`user`/`mcp`), body ≤ 4000, at | append-only, enforced by a trigger (WP-10) |
 | `export_preset` | id, project_id, name, definition jsonb (formats, sizes, naming, folders, optimisation, metadata) | |
 | `export_target` | id, project_id, name, path | the path is validated against allowed roots |
 | `publication` | id, asset_version_id, target_id, preset_id, actor, at | |

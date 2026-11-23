@@ -12,13 +12,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, BinaryIO
 
-from sqlalchemy import exists, func, select
+from sqlalchemy import Select, exists, func, select
 from sqlalchemy.orm import Session
 
 from asset_studio.db import utcnow
 from asset_studio.errors import DomainError
 from asset_studio.modules.assets.lifecycle import TRANSITIONS, actor_allowed
-from asset_studio.modules.assets.models import Asset, AssetVersion, StateTransition
+from asset_studio.modules.assets.models import (
+    Asset,
+    AssetVersion,
+    CollectionItem,
+    StateTransition,
+)
 from asset_studio.modules.audit.service import Actor, record
 from asset_studio.modules.projects.service import current_config, get_project
 from asset_studio.modules.storage.local import KeyExistsError, LocalStorage
@@ -26,6 +31,8 @@ from asset_studio.modules.storage.local import KeyExistsError, LocalStorage
 MIME_EXT = {"image/png": "png", "image/webp": "webp", "image/jpeg": "jpg", "image/svg+xml": "svg"}
 MAX_VERSION_BYTES = 200 * 1024 * 1024
 DERIVED = {"thumb": "thumb-256.webp", "preview": "preview-1024.webp"}
+MAX_TAGS, MAX_TAG = 20, 40
+SORTS = ("newest", "oldest", "name", "updated")
 
 
 def _slugify(name: str) -> str:
@@ -117,11 +124,84 @@ def set_asset_archived(
     return asset
 
 
+def normalise_tags(tags: list[str]) -> list[str]:
+    """Lower case, words joined by ``-``, unique, in the given order (FR-049)."""
+    out: list[str] = []
+    for tag in tags:
+        t = re.sub(r"[^\w]+", "-", tag.strip().lower()).strip("-")[:MAX_TAG]
+        if t and t not in out:
+            out.append(t)
+    if len(out) > MAX_TAGS:
+        raise DomainError(422, "TOO_MANY_TAGS", f"An asset has at most {MAX_TAGS} tags.")
+    return out
+
+
+def update_asset(
+    session: Session,
+    asset_id: uuid.UUID,
+    actor: Actor,
+    *,
+    name: str | None = None,
+    tags: list[str] | None = None,
+    favorite: bool | None = None,
+) -> Asset:
+    """Rename, tag (FR-049) or mark as favourite (FR-057). The slug, and so the export
+    file name, never changes."""
+    if actor != "user":
+        raise DomainError(403, "ACTOR_NOT_ALLOWED", "Only the user can edit assets.")
+    asset = get_asset(session, asset_id)
+    changes: dict[str, Any] = {}
+    if name is not None and name.strip() and name.strip() != asset.name:
+        asset.name = changes["name"] = name.strip()[:200]
+    if tags is not None:
+        clean = normalise_tags(tags)
+        if clean != list(asset.tags):
+            asset.tags = clean
+            changes["tags"] = clean
+    if favorite is not None and favorite != (asset.favorite_at is not None):
+        asset.favorite_at = utcnow() if favorite else None
+        changes["favorite"] = favorite
+    if changes:
+        record(
+            session,
+            actor=actor,
+            action="asset.updated",
+            subject_type="asset",
+            subject_id=asset.id,
+            project_id=asset.project_id,
+            data=changes,
+        )
+        session.flush()
+    return asset
+
+
+def tag_suggestions(
+    session: Session, project_id: uuid.UUID, prefix: str = "", limit: int = 20
+) -> list[tuple[str, int]]:
+    """The project's tags starting with ``prefix``, most used first (auto-suggest)."""
+    tag = func.unnest(Asset.tags).label("tag")
+    inner = select(tag).where(Asset.project_id == project_id).subquery()
+    q = (
+        select(inner.c.tag, func.count().label("n"))
+        .group_by(inner.c.tag)
+        .order_by(func.count().desc(), inner.c.tag)
+        .limit(limit)
+    )
+    clean = normalise_tags([prefix]) if prefix else []
+    if clean:
+        q = q.where(inner.c.tag.startswith(clean[0], autoescape=True))
+    return [(t, n) for t, n in session.execute(q)]
+
+
 @dataclass
 class AssetRow:
     asset: Asset
     latest: AssetVersion | None
     version_count: int
+
+
+def _has_version(query: Select[Asset], *conditions: Any) -> Select[Asset]:
+    return query.where(exists().where(AssetVersion.asset_id == Asset.id, *conditions))
 
 
 def list_assets(
@@ -131,12 +211,32 @@ def list_assets(
     category: str | None = None,
     state: str | None = None,
     q: str | None = None,
+    style_id: uuid.UUID | None = None,
+    character_id: uuid.UUID | None = None,
+    collection_id: uuid.UUID | None = None,
+    tag: str | None = None,
+    favorite: bool | None = None,
     include_archived: bool = False,
+    sort: str = "newest",
     before: uuid.UUID | None = None,
+    offset: int = 0,
     limit: int = 50,
 ) -> list[AssetRow]:
-    """Newest first; ``before`` is a cursor (an asset id, time-ordered UUIDv7)."""
-    query = select(Asset).order_by(Asset.id.desc()).limit(limit)
+    """Search and filter the library (FR-050).
+
+    Newest first by default, with ``before`` as a cursor (an asset id, time-ordered UUIDv7);
+    the other sorts page with ``offset``. Style and character match any version generated
+    with them (the generation metadata, RULE-011).
+    """
+    order = {
+        "newest": (Asset.id.desc(),),
+        "oldest": (Asset.id.asc(),),
+        "name": (func.lower(Asset.name).asc(), Asset.id.asc()),
+        "updated": (Asset.updated_at.desc(), Asset.id.desc()),
+    }.get(sort)
+    if order is None:
+        raise DomainError(422, "SORT_UNKNOWN", f"Sort by one of {', '.join(SORTS)}.")
+    query = select(Asset).order_by(*order).limit(limit).offset(offset)
     if project_id:
         query = query.where(Asset.project_id == project_id)
     if category:
@@ -146,13 +246,34 @@ def list_assets(
     if q:
         pattern = "%" + q.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
         query = query.where(
-            Asset.name.ilike(pattern, escape="\\") | Asset.slug.ilike(pattern, escape="\\")
+            Asset.name.ilike(pattern, escape="\\")
+            | Asset.slug.ilike(pattern, escape="\\")
+            | Asset.tags.contains([q.strip().lower()])
         )
     if state:
-        query = query.where(
-            exists().where(AssetVersion.asset_id == Asset.id, AssetVersion.state == state)
+        query = _has_version(query, AssetVersion.state == state)
+    if style_id:
+        query = _has_version(
+            query, AssetVersion.generation_metadata["style"]["id"].astext == str(style_id)
         )
-    if before:
+    if character_id:
+        query = _has_version(
+            query,
+            AssetVersion.generation_metadata["character"]["id"].astext == str(character_id),
+        )
+    if collection_id:
+        query = query.where(
+            exists().where(
+                CollectionItem.asset_id == Asset.id, CollectionItem.collection_id == collection_id
+            )
+        )
+    if tag:
+        query = query.where(Asset.tags.contains([tag.strip().lower()]))
+    if favorite is not None:
+        query = query.where(
+            Asset.favorite_at.is_not(None) if favorite else Asset.favorite_at.is_(None)
+        )
+    if before and sort == "newest":
         query = query.where(Asset.id < before)
     assets = list(session.scalars(query))
     versions: dict[uuid.UUID, list[AssetVersion]] = {a.id: [] for a in assets}
@@ -188,6 +309,34 @@ def list_versions(session: Session, asset_id: uuid.UUID) -> list[AssetVersion]:
         .order_by(AssetVersion.number.desc())
     )
     return list(session.scalars(q))
+
+
+def list_versions_by_state(
+    session: Session,
+    *,
+    project_id: uuid.UUID | None = None,
+    state: str | None = None,
+    include_archived_assets: bool = False,
+    after: uuid.UUID | None = None,
+    limit: int = 50,
+) -> list[tuple[AssetVersion, Asset]]:
+    """Versions across assets, oldest first: the review queue (FR-061) with
+    ``state=awaiting_review``. ``after`` is a cursor (a version id)."""
+    q = (
+        select(AssetVersion, Asset)
+        .join(Asset, Asset.id == AssetVersion.asset_id)
+        .order_by(AssetVersion.id.asc())
+        .limit(limit)
+    )
+    if project_id:
+        q = q.where(Asset.project_id == project_id)
+    if state:
+        q = q.where(AssetVersion.state == state)
+    if not include_archived_assets:
+        q = q.where(Asset.archived_at.is_(None))
+    if after:
+        q = q.where(AssetVersion.id > after)
+    return [(v, a) for v, a in session.execute(q)]
 
 
 def history(session: Session, version_id: uuid.UUID) -> list[StateTransition]:

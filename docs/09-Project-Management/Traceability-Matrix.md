@@ -26,10 +26,10 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-038 | UC-007 | AC-001 | WP-04 (jobs), WP-08 (studio jobs and Queue screen) | `test_fr038_*`, `test_jobs_api_*`, `generation.test.tsx` |
 | BR-001 | FR-046 | UC-014 | — | — | — |
 | BR-001 | FR-047 | UC-014 | — | — | — |
-| BR-001 | FR-049 | — | — | — | — |
-| BR-001 | FR-055 | — | — | WP-03 | `test_fr055_*` |
-| BR-001 | FR-056 | — | — | — | — |
-| BR-001 | FR-057 | — | — | — | — |
+| BR-001 | FR-049 | — | — | WP-10 | `test_fr049_*`, `review.test.tsx` |
+| BR-001 | FR-055 | — | — | WP-03, WP-10 (download buttons) | `test_fr055_*` |
+| BR-001 | FR-056 | — | — | WP-10 | `test_fr056_*`, `review.test.tsx` |
+| BR-001 | FR-057 | — | — | WP-10 | `test_fr057_*`, `review.test.tsx` |
 | BR-001 | FR-065 | — | — | WP-09 | `test_fr065_*`, `test_adr010_*`, `test_t04_*`, `generation.test.tsx` |
 | BR-001 | FR-090 | UC-011 | AC-001 | — | — |
 | BR-001 | FR-091 | UC-011 | AC-001 | — | — |
@@ -60,24 +60,24 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-006 | FR-082 | UC-013 | — | WP-12 | `test_fr082_*`, `test_rule008_*`, `test_nfr007_*`, `test_tampered_*`, `models.test.tsx` |
 | BR-007 | FR-040 | — | — | WP-04, WP-08 (Queue screen) | `test_fr040_*`, `test_claim_*`, `generation.test.tsx` |
 | BR-007 | FR-041 | — | AC-005 | WP-04, WP-08 (retry and resume in Queue) | `test_nfr003_*`, `test_failure_requeues_*`, `generation.test.tsx` |
-| BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
-| BR-007 | FR-051 | — | — | WP-03 | `test_fr051_*` |
+| BR-007 | FR-050 | — | — | WP-03, WP-10 (filters, sort, Library screen) | `test_fr050_*`, `review.test.tsx` |
+| BR-007 | FR-051 | — | — | WP-03, WP-10 (Asset details, audit trail) | `test_fr051_*`, `review.test.tsx` |
 | BR-007 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*`, `generation.test.tsx` |
-| BR-007 | FR-053 | UC-017 | — | WP-03 | `test_fr053_*` |
-| BR-007 | FR-054 | UC-017 | AC-013 | WP-03 | `test_fr054_*`, `test_rule019_*` |
+| BR-007 | FR-053 | UC-017 | — | WP-03, WP-10 (UI) | `test_fr053_*`, `review.test.tsx` |
+| BR-007 | FR-054 | UC-017 | AC-013 | WP-03, WP-10 (confirmation dialog) | `test_fr054_*`, `test_rule019_*`, `review.test.tsx` |
 | BR-007 | FR-092 | UC-011 | AC-001 | — | — |
 | BR-007 | FR-093 | UC-011 | AC-001 | — | — |
 | BR-007 | FR-094 | UC-011 | AC-001, AC-003 | — | — |
 | BR-007 | FR-111 | UC-016 | AC-009 | — | — |
 | BR-007 | FR-112 | UC-016 | AC-009 | — | — |
 | BR-007 | FR-115 | — | — | WP-02 | `test_fr115_* (API; UI in WP-16)` |
-| BR-008 | FR-058 | — | — | — | — |
-| BR-008 | FR-059 | — | — | — | — |
+| BR-008 | FR-058 | — | — | WP-10 | `review.test.tsx` |
+| BR-008 | FR-059 | — | — | WP-10 | `test_fr059_*` |
 | BR-008 | FR-060 | UC-009 | — | WP-09 | `test_fr060_*`, `test_rule009_*` |
-| BR-008 | FR-061 | UC-009 | — | WP-03 | `test_review_flow_*` (API; UI in WP-10) |
-| BR-008 | FR-062 | UC-009 | AC-012 | WP-03 | `test_rule020_*` |
-| BR-008 | FR-063 | UC-009 | — | WP-03 | `test_fr063_*` |
-| BR-008 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
+| BR-008 | FR-061 | UC-009 | — | WP-03, WP-10 (Review screen, queue) | `test_review_flow_*`, `test_fr061_*`, `review.test.tsx` |
+| BR-008 | FR-062 | UC-009 | AC-012 | WP-03, WP-10 (UI) | `test_rule020_*`, `review.test.tsx` |
+| BR-008 | FR-063 | UC-009 | — | WP-03, WP-10 (UI) | `test_fr063_*` |
+| BR-008 | FR-064 | UC-009 | — | WP-03, WP-10 (comments) | `test_rule005_mcp_decisions_*`, `test_fr064_*`, `review.test.tsx` |
 | BR-009 | FR-026 | — | — | WP-07 | `test_fr026_*`, `test_links_*` |
 | BR-009 | FR-035 | UC-007 | AC-001 | WP-08 | `test_check_composes_*` |
 | BR-009 | FR-037 | UC-007 | AC-001 | WP-08 | `test_fr033_*` (metadata) |
@@ -86,7 +86,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-009 | FR-084 | UC-013 | — | WP-12 (models); WP-08 (workflows) | `test_rule015_*` |
 | BR-010 | FR-002 | — | — | WP-02 | `test_rule005_*` |
 | BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
-| BR-010 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
+| BR-010 | FR-064 | UC-009 | — | WP-03, WP-10 (comments) | `test_rule005_mcp_decisions_*`, `test_fr064_*`, `review.test.tsx` |
 | BR-010 | FR-095 | UC-011 | AC-001 | — | — |
 | BR-010 | FR-120 | — | — | — | — |
 | BR-010 | FR-121 | — | AC-004 | — | — |

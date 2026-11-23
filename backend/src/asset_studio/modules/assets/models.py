@@ -4,8 +4,17 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import BigInteger, DateTime, ForeignKey, Integer, String, UniqueConstraint
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy import (
+    BigInteger,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    UniqueConstraint,
+    text,
+)
+from sqlalchemy.dialects.postgresql import ARRAY, JSONB, UUID
 from sqlalchemy.orm import Mapped, mapped_column
 
 from asset_studio.db import Base, utcnow, uuid7
@@ -13,7 +22,10 @@ from asset_studio.db import Base, utcnow, uuid7
 
 class Asset(Base):
     __tablename__ = "asset"
-    __table_args__ = (UniqueConstraint("project_id", "slug"),)
+    __table_args__ = (
+        UniqueConstraint("project_id", "slug"),
+        Index("ix_asset_tags", "tags", postgresql_using="gin"),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid7)
     project_id: Mapped[uuid.UUID] = mapped_column(
@@ -22,6 +34,11 @@ class Asset(Base):
     category: Mapped[str] = mapped_column(String(64), nullable=False)
     slug: Mapped[str] = mapped_column(String(80), nullable=False)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
+    # Library organisation (FR-049, FR-057): free tags and a favourite mark.
+    tags: Mapped[list[str]] = mapped_column(
+        ARRAY(String(40)), default=list, server_default=text("'{}'"), nullable=False
+    )
+    favorite_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     archived_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(
@@ -77,3 +94,29 @@ class StateTransition(Base):
     actor: Mapped[str] = mapped_column(String(16), nullable=False)
     reason: Mapped[str] = mapped_column(String(1000), default="", nullable=False)
     at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class Collection(Base):
+    """A named group of a project's assets (FR-056). Removing one never touches assets."""
+
+    __tablename__ = "collection"
+    __table_args__ = (UniqueConstraint("project_id", "name"),)
+
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid7)
+    project_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("project.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    name: Mapped[str] = mapped_column(String(120), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
+
+
+class CollectionItem(Base):
+    __tablename__ = "collection_item"
+
+    collection_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("collection.id", ondelete="CASCADE"), primary_key=True
+    )
+    asset_id: Mapped[uuid.UUID] = mapped_column(
+        ForeignKey("asset.id", ondelete="RESTRICT"), primary_key=True, index=True
+    )
+    added_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)

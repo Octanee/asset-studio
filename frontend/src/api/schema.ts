@@ -11,8 +11,32 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** List Assets */
+        /**
+         * List Assets
+         * @description Search and filter the library (FR-050). ``before`` pages the newest-first sort;
+         *     the other sorts page with ``offset``.
+         */
         get: operations["list_assets_api_v1_assets_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/assets/tags": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Tags
+         * @description The project's tags for auto-suggest, most used first (FR-049).
+         */
+        get: operations["list_tags_api_v1_assets_tags_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -35,7 +59,11 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        patch?: never;
+        /**
+         * Update Asset
+         * @description Rename, tag (FR-049) or mark as favourite (FR-057); user only.
+         */
+        patch: operations["update_asset_api_v1_assets__asset_id__patch"];
         trace?: never;
     };
     "/api/v1/assets/{asset_id}/archive": {
@@ -153,6 +181,61 @@ export interface paths {
         /** Restore Character */
         post: operations["restore_character_api_v1_characters__character_id__restore_post"];
         delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/collections/{collection_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /**
+         * Delete Collection
+         * @description Remove the collection; its assets are not changed.
+         */
+        delete: operations["delete_collection_api_v1_collections__collection_id__delete"];
+        options?: never;
+        head?: never;
+        /** Rename Collection */
+        patch: operations["rename_collection_api_v1_collections__collection_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/collections/{collection_id}/assets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Add Assets */
+        post: operations["add_assets_api_v1_collections__collection_id__assets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/collections/{collection_id}/assets/{asset_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Remove Asset */
+        delete: operations["remove_asset_api_v1_collections__collection_id__assets__asset_id__delete"];
         options?: never;
         head?: never;
         patch?: never;
@@ -642,6 +725,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/collections": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Collections */
+        get: operations["list_collections_api_v1_projects__project_id__collections_get"];
+        put?: never;
+        /** Create Collection */
+        post: operations["create_collection_api_v1_projects__project_id__collections_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/config": {
         parameters: {
             query?: never;
@@ -1034,6 +1135,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/versions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Versions Across
+         * @description Versions across assets, oldest first; ``state=awaiting_review`` is the review queue
+         *     (FR-061). ``after`` is a cursor (a version id).
+         */
+        get: operations["list_versions_across_api_v1_versions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/versions/{version_id}": {
         parameters: {
             query?: never;
@@ -1047,6 +1169,47 @@ export interface paths {
         post?: never;
         /** Delete Version */
         delete: operations["delete_version_api_v1_versions__version_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/versions/{version_id}/comments": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Comments */
+        get: operations["list_comments_api_v1_versions__version_id__comments_get"];
+        put?: never;
+        /**
+         * Add Comment
+         * @description Comment on a version (FR-061). Claude may always comment over MCP (FR-064).
+         */
+        post: operations["add_comment_api_v1_versions__version_id__comments_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/versions/{version_id}/duplicates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Duplicates
+         * @description Other versions of the project with the same file or a near-identical image (FR-059).
+         */
+        get: operations["list_duplicates_api_v1_versions__version_id__duplicates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1203,11 +1366,15 @@ export interface components {
             archived_at: string | null;
             /** Category */
             category: string;
+            /** Collection Ids */
+            collection_ids?: string[];
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
+            /** Favorite At */
+            favorite_at?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1222,6 +1389,8 @@ export interface components {
             project_id: string;
             /** Slug */
             slug: string;
+            /** Tags */
+            tags?: string[];
             /** Versions */
             versions: components["schemas"]["VersionOut"][];
         };
@@ -1236,6 +1405,8 @@ export interface components {
              * Format: date-time
              */
             created_at: string;
+            /** Favorite At */
+            favorite_at?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1250,6 +1421,17 @@ export interface components {
             project_id: string;
             /** Slug */
             slug: string;
+            /** Tags */
+            tags?: string[];
+        };
+        /** AssetPatch */
+        AssetPatch: {
+            /** Favorite */
+            favorite?: boolean | null;
+            /** Name */
+            name?: string | null;
+            /** Tags */
+            tags?: string[] | null;
         };
         /** AssetSummary */
         AssetSummary: {
@@ -1257,11 +1439,15 @@ export interface components {
             archived_at: string | null;
             /** Category */
             category: string;
+            /** Collection Ids */
+            collection_ids?: string[];
             /**
              * Created At
              * Format: date-time
              */
             created_at: string;
+            /** Favorite At */
+            favorite_at?: string | null;
             /**
              * Id
              * Format: uuid
@@ -1277,6 +1463,8 @@ export interface components {
             project_id: string;
             /** Slug */
             slug: string;
+            /** Tags */
+            tags?: string[];
             /** Version Count */
             version_count: number;
         };
@@ -1417,6 +1605,65 @@ export interface components {
             /** Name */
             name: string;
         };
+        /** CollectionAssets */
+        CollectionAssets: {
+            /** Asset Ids */
+            asset_ids: string[];
+        };
+        /** CollectionOut */
+        CollectionOut: {
+            /** Asset Count */
+            asset_count: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+        };
+        /** CollectionRequest */
+        CollectionRequest: {
+            /** Name */
+            name: string;
+        };
+        /** CommentOut */
+        CommentOut: {
+            /** Actor */
+            actor: string;
+            /**
+             * Asset Version Id
+             * Format: uuid
+             */
+            asset_version_id: string;
+            /**
+             * At
+             * Format: date-time
+             */
+            at: string;
+            /** Body */
+            body: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+        };
+        /** CommentRequest */
+        CommentRequest: {
+            /** Body */
+            body: string;
+        };
         /** ConfigUpdate */
         ConfigUpdate: {
             /**
@@ -1538,6 +1785,18 @@ export interface components {
             project_id: string | null;
             /** Status */
             status: string;
+        };
+        /**
+         * DuplicateOut
+         * @description Another version with the same file (exact) or a near-identical image (FR-059).
+         */
+        DuplicateOut: {
+            asset: components["schemas"]["AssetOut"];
+            /** Distance */
+            distance: number;
+            /** Exact */
+            exact: boolean;
+            version: components["schemas"]["VersionOut"];
         };
         /** EngineOut */
         EngineOut: {
@@ -2216,6 +2475,55 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        /**
+         * QueueVersionOut
+         * @description A version with its asset, for lists across assets (the review queue).
+         */
+        QueueVersionOut: {
+            asset: components["schemas"]["AssetOut"];
+            /**
+             * Asset Id
+             * Format: uuid
+             */
+            asset_id: string;
+            /** Bytes */
+            bytes: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Deleted At */
+            deleted_at: string | null;
+            /** First Published At */
+            first_published_at: string | null;
+            /** Generation Job Id */
+            generation_job_id: string | null;
+            /** Generation Metadata */
+            generation_metadata: {
+                [key: string]: unknown;
+            };
+            /** Height */
+            height: number | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Mime */
+            mime: string;
+            /** Number */
+            number: number;
+            /** Previous State */
+            previous_state: string | null;
+            processing?: components["schemas"]["ProcessingOut"];
+            /** Sha256 */
+            sha256: string;
+            /** State */
+            state: string;
+            /** Width */
+            width: number | null;
+        };
         /** QueuedOut */
         QueuedOut: {
             /** Asset Ids */
@@ -2384,6 +2692,13 @@ export interface components {
             attributes?: components["schemas"]["StyleAttributes"] | null;
             /** Name */
             name?: string | null;
+        };
+        /** TagOut */
+        TagOut: {
+            /** Count */
+            count: number;
+            /** Tag */
+            tag: string;
         };
         /** TransitionOut */
         TransitionOut: {
@@ -2573,8 +2888,15 @@ export interface operations {
                 category?: string | null;
                 state?: ("generated" | "processing" | "processing_failed" | "awaiting_review" | "approved" | "rejected" | "published" | "archived" | "deleted") | null;
                 q?: string | null;
+                style_id?: string | null;
+                character_id?: string | null;
+                collection_id?: string | null;
+                tag?: string | null;
+                favorite?: boolean | null;
                 include_archived?: boolean;
+                sort?: "newest" | "oldest" | "name" | "updated";
                 before?: string | null;
+                offset?: number;
                 limit?: number;
             };
             header?: never;
@@ -2603,6 +2925,39 @@ export interface operations {
             };
         };
     };
+    list_tags_api_v1_assets_tags_get: {
+        parameters: {
+            query: {
+                project_id: string;
+                prefix?: string;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TagOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_asset_api_v1_assets__asset_id__get: {
         parameters: {
             query?: never;
@@ -2613,6 +2968,41 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AssetDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_asset_api_v1_assets__asset_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssetPatch"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -2733,6 +3123,7 @@ export interface operations {
                 project_id?: string | null;
                 actor?: string | null;
                 action?: string | null;
+                subject_id?: string[] | null;
                 before?: string | null;
                 limit?: number;
             };
@@ -2877,6 +3268,137 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    delete_collection_api_v1_collections__collection_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                collection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    rename_collection_api_v1_collections__collection_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                collection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CollectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_assets_api_v1_collections__collection_id__assets_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                collection_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CollectionAssets"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    remove_asset_api_v1_collections__collection_id__assets__asset_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                collection_id: string;
+                asset_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionOut"];
                 };
             };
             /** @description Validation Error */
@@ -3915,6 +4437,72 @@ export interface operations {
             };
         };
     };
+    list_collections_api_v1_projects__project_id__collections_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_collection_api_v1_projects__project_id__collections_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CollectionRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CollectionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     update_config_api_v1_projects__project_id__config_put: {
         parameters: {
             query?: never;
@@ -4771,6 +5359,40 @@ export interface operations {
             };
         };
     };
+    list_versions_across_api_v1_versions_get: {
+        parameters: {
+            query?: {
+                project_id?: string | null;
+                state?: ("generated" | "processing" | "processing_failed" | "awaiting_review" | "approved" | "rejected" | "published" | "archived" | "deleted") | null;
+                after?: string | null;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueueVersionOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_version_api_v1_versions__version_id__get: {
         parameters: {
             query?: never;
@@ -4823,6 +5445,103 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_comments_api_v1_versions__version_id__comments_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    add_comment_api_v1_versions__version_id__comments_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CommentRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CommentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_duplicates_api_v1_versions__version_id__duplicates_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DuplicateOut"][];
                 };
             };
             /** @description Validation Error */

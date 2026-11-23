@@ -150,6 +150,8 @@ class AssetOut(BaseModel):
     category: str
     slug: str
     name: str
+    tags: list[str] = Field(default_factory=list)
+    favorite_at: datetime | None = None
     archived_at: datetime | None
     created_at: datetime
 
@@ -157,10 +159,49 @@ class AssetOut(BaseModel):
 class AssetSummary(AssetOut):
     latest_version: VersionOut | None
     version_count: int
+    collection_ids: list[uuid.UUID] = Field(default_factory=list)
+
+
+class QueueVersionOut(VersionOut):
+    """A version with its asset, for lists across assets (the review queue)."""
+
+    asset: AssetOut
+
+
+class TagOut(BaseModel):
+    tag: str
+    count: int
+
+
+class CollectionOut(BaseModel):
+    id: uuid.UUID
+    project_id: uuid.UUID
+    name: str
+    created_at: datetime
+    asset_count: int
+
+
+class CommentOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    asset_version_id: uuid.UUID
+    actor: str
+    body: str
+    at: datetime
+
+
+class DuplicateOut(BaseModel):
+    """Another version with the same file (exact) or a near-identical image (FR-059)."""
+
+    version: VersionOut
+    asset: AssetOut
+    distance: int
+    exact: bool
 
 
 class AssetDetail(AssetOut):
     versions: list[VersionOut]
+    collection_ids: list[uuid.UUID] = Field(default_factory=list)
 
 
 class JobOut(BaseModel):

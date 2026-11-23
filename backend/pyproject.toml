@@ -90,6 +90,7 @@ forbidden_modules = [
   "asset_studio.modules.assets",
   "asset_studio.modules.processing",
   "asset_studio.modules.quality",
+  "asset_studio.modules.review",
   "asset_studio.modules.training",
   "asset_studio.modules.publishing",
   "asset_studio.modules.system",
