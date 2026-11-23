@@ -36,10 +36,13 @@ services:
       ASSET_STUDIO_COMFYUI_URL: http://host.docker.internal:${ASSET_STUDIO_COMFYUI_PORT:-8188}
       ASSET_STUDIO_HOST_AGENT_URL: http://host.docker.internal:${ASSET_STUDIO_AGENT_PORT:-8410}
       ASSET_STUDIO_HOST_AGENT_TOKEN: ${ASSET_STUDIO_AGENT_TOKEN:-}
+      # The host's model folder (ComfyUI layout), shared with ComfyUI (FR-081).
+      ASSET_STUDIO_MODELS_DIR: /models
     extra_hosts: &host-gateway
       - "host.docker.internal:host-gateway"
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
+      - ${ASSET_STUDIO_MODELS_HOST_DIR:-./models}:/models:ro  # scan only
     depends_on:
       db:
         condition: service_healthy
@@ -53,6 +56,7 @@ services:
     extra_hosts: *host-gateway
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
+      - ${ASSET_STUDIO_MODELS_HOST_DIR:-./models}:/models  # approved downloads (RULE-008)
     depends_on:
       db:
         condition: service_healthy

@@ -3,7 +3,7 @@ title: Development Setup
 type: operations
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - operations
 ---
@@ -48,6 +48,10 @@ docker compose up -d --build
 ```
 
 The web UI is at `http://127.0.0.1:8480`. Every port binds to 127.0.0.1 only.
+
+### Model folder
+
+Set `ASSET_STUDIO_MODELS_HOST_DIR` in `.env` to ComfyUI's `models` folder, so the app and ComfyUI see the same files. The Models screen scans it, checks files against the catalogue, and downloads catalogue models only after you confirm file, source and size. The default is `./models` in the repository (git-ignored).
 
 ### Pose detection models (DWPose, ADR-009)
 

@@ -119,7 +119,17 @@
     "POSE_BOX_INVALID": "Ramka nie ma rozmiaru.",
     "REQUEST_INVALID": "Niektóre wartości są niepoprawne. Sprawdź pola i spróbuj ponownie.",
     "NETWORK": "Nie można połączyć się z API.",
-    "POSE_MODEL_CORRUPT": "Plik modelu wykrywania pozy jest uszkodzony. Zainstaluj modele ponownie."
+    "POSE_MODEL_CORRUPT": "Plik modelu wykrywania pozy jest uszkodzony. Zainstaluj modele ponownie.",
+    "DOWNLOAD_CONFIRMATION_MISMATCH": "Wpis katalogu się zmienił. Odśwież i potwierdź ponownie.",
+    "DOWNLOAD_IN_PROGRESS": "Ten model już jest pobierany.",
+    "MODEL_ALREADY_INSTALLED": "Ten model jest już zainstalowany.",
+    "MODEL_NOT_INSTALLED": "Model nie jest zainstalowany.",
+    "VERIFY_IN_PROGRESS": "Ten model jest już sprawdzany.",
+    "CHECKSUM_MISMATCH": "Pobrany plik nie zgadzał się z sumą kontrolną i został usunięty.",
+    "DOWNLOAD_FAILED": "Pobieranie się nie udało. Spróbuj później.",
+    "DOWNLOAD_INCOMPLETE": "Pobieranie przerwało się wcześniej. Uruchom je ponownie, aby kontynuować.",
+    "LICENCE_NO_CONFLICT": "Licencja tego modelu pasuje do projektu.",
+    "MODEL_FROM_CATALOGUE": "Rodzinę tego modelu ustala katalog."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -261,5 +271,74 @@
     "drawBox": "Narysuj ramkę",
     "waiting": "Czeka: {{reason}}",
     "manualFallback": "Pozę możesz też ustawić ręcznie w edytorze."
+  },
+  "models": {
+    "title": "Rejestr modeli",
+    "summary": "Zainstalowane: {{installed}} z {{total}}",
+    "rescan": "Przeskanuj foldery",
+    "scanning": "Skanowanie…",
+    "scanned": "Foldery przeskanowane; nowe pliki: {{added}}.",
+    "kind": "Rodzaj modelu",
+    "all": "Wszystkie",
+    "kinds": {
+      "checkpoint": "Checkpoint",
+      "lora": "LoRA",
+      "controlnet": "ControlNet",
+      "ip_adapter": "IP-Adapter",
+      "clip_vision": "CLIP vision",
+      "vae": "VAE",
+      "pose": "Wykrywanie pozy"
+    },
+    "name": "Model",
+    "family": "Rodzina",
+    "licence": "Licencja",
+    "size": "Rozmiar",
+    "state": "Stan",
+    "actions": "Akcje",
+    "familyOf": "Rodzina modelu {{name}}",
+    "familyUnknown": "Nieznana",
+    "families": {
+      "sdxl": "SDXL",
+      "sd15": "SD 1.5"
+    },
+    "anyFamily": "Dowolna",
+    "use": {
+      "allowed": "Użycie komercyjne dozwolone",
+      "forbidden": "Bez użycia komercyjnego",
+      "unknown": "Warunki nieokreślone"
+    },
+    "confirmed": "Użycie potwierdzone",
+    "licenceWarning": "Ostrzeżenie licencyjne",
+    "vram": "VRAM ≥ {{gb}} GB",
+    "vramNote": "VRAM to rozmiar wag, czyli dolna granica; generowanie potrzebuje więcej.",
+    "status": {
+      "installed": "Zainstalowany",
+      "available": "Dostępny",
+      "missing": "Brak pliku",
+      "downloading": "Pobieranie"
+    },
+    "check": {
+      "ok": "Suma kontrolna OK",
+      "unverified": "Niesprawdzony",
+      "mismatch": "Suma kontrolna się nie zgadza"
+    },
+    "queued": "Czeka w kolejce",
+    "verifying": "Sprawdzanie {{pct}}%",
+    "downloadingPct": "{{pct}}% z {{of}}",
+    "cancel": "Anuluj",
+    "download": "Pobierz…",
+    "verify": "Sprawdź plik",
+    "confirmTitle": "Pobrać {{name}}?",
+    "confirmBody": "Nic nie zostanie pobrane bez Twojego potwierdzenia. Plik jest sprawdzany sumą SHA-256 przed użyciem; przerwane pobieranie wznowi się od miejsca przerwania.",
+    "file": "Plik",
+    "source": "Źródło",
+    "confirmDownload": "Pobierz {{size}}",
+    "licenceTitle": "Ostrzeżenie licencyjne: {{name}}",
+    "licenceBody": "Projekt jest komercyjny, a licencja ({{licence}}) mówi: {{use}}. Nadal możesz użyć modelu; potwierdzenie trafi do dziennika audytu.",
+    "readLicence": "Przeczytaj licencję",
+    "note": "Notatka (opcjonalnie)",
+    "understand": "Licencja sprawdzona; akceptuję ryzyko dla tego projektu.",
+    "confirmUse": "Potwierdź użycie",
+    "licenceUnknown": "Nieokreślona"
   }
 }

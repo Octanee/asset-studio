@@ -56,8 +56,8 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-005 | FR-010 | UC-004 | — | WP-07 | `test_fr010_*`, `inputs.test.tsx` (Style Studio) |
 | BR-006 | FR-042 | — | — | WP-04 | `test_rule012_*` (training hand-off in WP-13) |
 | BR-006 | FR-043 | — | AC-006 | WP-04, WP-05 | `test_rule013_*`, `test_fr043_*`, host agent `test_gpu_*` |
-| BR-006 | FR-081 | UC-013 | — | — | — |
-| BR-006 | FR-082 | UC-013 | — | — | — |
+| BR-006 | FR-081 | UC-013 | — | WP-12 | `test_fr081_*`, `test_wrong_size_*` |
+| BR-006 | FR-082 | UC-013 | — | WP-12 | `test_fr082_*`, `test_rule008_*`, `test_nfr007_*`, `test_tampered_*`, `models.test.tsx` |
 | BR-007 | FR-040 | — | — | WP-04 | `test_fr040_*`, `test_claim_*` |
 | BR-007 | FR-041 | — | AC-005 | WP-04 | `test_nfr003_*`, `test_failure_requeues_*` |
 | BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
@@ -83,7 +83,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-009 | FR-037 | UC-007 | AC-001 | — | — |
 | BR-009 | FR-051 | — | — | WP-03 | `test_fr051_*` |
 | BR-009 | FR-052 | UC-010 | AC-002 | — | — |
-| BR-009 | FR-084 | UC-013 | — | — | — |
+| BR-009 | FR-084 | UC-013 | — | WP-12 (models); WP-08 (workflows) | `test_rule015_*` |
 | BR-010 | FR-002 | — | — | WP-02 | `test_rule005_*` |
 | BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
 | BR-010 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
@@ -103,8 +103,8 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-013 | FR-074 | UC-012 | — | — | — |
 | BR-013 | FR-075 | UC-012 | — | — | — |
 | BR-014 | FR-036 | UC-007 | AC-001 | — | — |
-| BR-014 | FR-080 | UC-013 | — | — | — |
-| BR-014 | FR-083 | UC-013 | AC-008 | — | — |
+| BR-014 | FR-080 | UC-013 | — | WP-12 | `test_fr080_*`, `test_the_shipped_catalogue_*`, `models.test.tsx` |
+| BR-014 | FR-083 | UC-013 | AC-008 | WP-12 (registry and confirmation); WP-08 (check before queueing) | `test_ac008_*`, `test_licence_gate_*`, `models.test.tsx` |
 | BR-015 | FR-125 | — | AC-014 | WP-06 | `Shell.test.tsx`: language switch, i18n key parity |
 
 ## Business rules → requirements

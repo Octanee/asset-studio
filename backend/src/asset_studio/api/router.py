@@ -6,6 +6,7 @@ from asset_studio.api import (
     assets,
     audit,
     jobs,
+    models,
     poses,
     projects,
     references,
@@ -25,6 +26,8 @@ api_router.include_router(references.project_router, prefix="/projects", tags=["
 api_router.include_router(references.router, prefix="/references", tags=["references"])
 api_router.include_router(poses.project_router, prefix="/projects", tags=["poses"])
 api_router.include_router(poses.router, prefix="/poses", tags=["poses"])
+api_router.include_router(models.router, prefix="/models", tags=["models"])
+api_router.include_router(models.project_router, prefix="/projects", tags=["models"])
 api_router.include_router(audit.router, prefix="/audit", tags=["audit"])
 api_router.include_router(assets.assets_router, prefix="/assets", tags=["assets"])
 api_router.include_router(assets.versions_router, prefix="/versions", tags=["assets"])

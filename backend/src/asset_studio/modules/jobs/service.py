@@ -32,6 +32,7 @@ KIND_LANES: dict[str, Lane] = {
     "detect_pose": "cpu",
     "export": "cpu",
     "download": "cpu",
+    "verify_model": "cpu",
     "backup": "cpu",
 }
 NOTIFY_CHANNEL = "asset_studio_jobs"
