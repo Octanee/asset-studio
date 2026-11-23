@@ -27,6 +27,7 @@ from asset_studio.modules.poses.detection import load_default_detector, set_dete
 from asset_studio.modules.poses.service import handle_detect_pose
 from asset_studio.modules.processing.service import HANDLERS as PROCESSING_HANDLERS
 from asset_studio.modules.providers.engine import get_engine_monitor
+from asset_studio.modules.publishing.service import HANDLERS as PUBLISHING_HANDLERS
 
 HANDLERS: dict[str, Handler] = {
     "detect_pose": handle_detect_pose,
@@ -34,6 +35,7 @@ HANDLERS: dict[str, Handler] = {
     "download": handle_download,
     "verify_model": handle_verify_model,
     **PROCESSING_HANDLERS,
+    **PUBLISHING_HANDLERS,
 }
 POLL_SECONDS = 2.0
 

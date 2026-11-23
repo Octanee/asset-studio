@@ -36,8 +36,11 @@ class Settings(BaseSettings):
     pose_models_dir: str = ""
     # Model folders in the ComfyUI layout (checkpoints, loras, ...); empty means <data_dir>/models.
     models_dir: str = ""
+    # Folders publishing may write into (ADR-013): bind mounts of Windows folders. Every export
+    # target lives under one of them. Empty = publishing is not configured.
+    export_roots: Annotated[list[str], NoDecode] = []
 
-    @field_validator("allowed_hosts", mode="before")
+    @field_validator("allowed_hosts", "export_roots", mode="before")
     @classmethod
     def _split_hosts(cls, value: object) -> object:
         if isinstance(value, str):
