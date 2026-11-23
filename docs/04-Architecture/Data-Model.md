@@ -29,7 +29,7 @@ tags:
 | `licence` | id, name, commercial_use (`allowed`/`forbidden`/`unknown`), url, notes | synced from the catalogue; `unknown` is used for files found on disk (WP-12) |
 | `licence_acknowledgement` | id, project_id, model_id, licence_id, intended_use, actor, note, at | RULE-007: valid while the licence and the project's intended use are unchanged (WP-12) |
 | `lora` | id, model_id, project_id, character_id null, style_id null, trigger_word, training_run_id | |
-| `workflow` / `workflow_version` | id, name, engine (`comfyui`/`svg`/`builtin`), version, definition jsonb, inputs schema jsonb, required_model_kinds, validated_at | |
+| `workflow` / `workflow_version` | id, name, engine (`comfyui`/`svg`/`builtin`), version, definition jsonb, inputs schema jsonb, required_model_kinds, validated_at | not created yet: the built-in workflows are versioned code templates (WP-08); the tables arrive with workflow import |
 | `job` | id, kind (`generate`/`remove_background`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`), lane (`gpu`/`cpu`), state (`queued`/`running`/`completed`/`failed`/`cancelled`/`interrupted`), priority, params jsonb (frozen), result jsonb, attempts, max_attempts, progress jsonb, error jsonb, wait_reason, cancel_requested, locked_by, locked_until, project_id, enqueued_by_actor, created_at, started_at, finished_at | queue index on (lane, state, priority, id); state and lane are check-constrained (WP-04) |
 | `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |

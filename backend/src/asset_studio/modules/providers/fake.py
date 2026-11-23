@@ -42,6 +42,7 @@ class FakeProvider:
         self.steps = steps
         self.fail_with = fail_with
         self.freed = 0
+        self.images: list[dict[str, bytes]] = []
         self._jobs: dict[str, _Job] = {}
         self._lock = threading.Lock()
 
@@ -58,9 +59,13 @@ class FakeProvider:
     def submit(self, request: GenerationRequest) -> str:
         if not self.available:
             raise ProviderError(ENGINE_UNAVAILABLE, "The fake engine is switched off.")
-        request.workflow.render(request.inputs)  # same input validation as a real engine
+        # Image inputs become fake engine file names, then the inputs are checked as a real
+        # engine would.
+        inputs = {**request.inputs, **{k: f"fake_{k}.png" for k in request.images}}
+        request.workflow.render(inputs)
+        self.images.append(dict(request.images))
         values = {name: spec.default for name, spec in request.workflow.inputs.items()}
-        values.update(request.inputs)
+        values.update(inputs)
 
         def size(key: str, default: int) -> int:
             value = values.get(key)

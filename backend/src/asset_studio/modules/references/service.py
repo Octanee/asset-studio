@@ -332,3 +332,35 @@ def reference_file(
     return ReferenceFile(
         path=path, mime=ref.mime, filename=f"{stem}.{ref.storage_key.rsplit('.', 1)[-1]}"
     )
+
+
+def record_use(
+    session: Session,
+    reference_id: uuid.UUID,
+    target_type: str,
+    target_id: uuid.UUID,
+    weight: float,
+) -> None:
+    """History link from a reference to the job or version that used it (FR-026).
+
+    Written by the generation pipeline only; these links are never removed.
+    """
+    if target_type not in ("job", "asset_version"):
+        raise ValueError(f"record_use is for jobs and versions, not {target_type}")
+    exists = session.scalar(
+        select(ReferenceLink.id).where(
+            ReferenceLink.reference_id == reference_id,
+            ReferenceLink.target_type == target_type,
+            ReferenceLink.target_id == target_id,
+        )
+    )
+    if exists is None:
+        session.add(
+            ReferenceLink(
+                reference_id=reference_id,
+                target_type=target_type,
+                target_id=target_id,
+                weight=min(max(weight, 0.0), 2.0),
+            )
+        )
+        session.flush()

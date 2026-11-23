@@ -47,7 +47,8 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-06 | ✅ done — app shell (rail, top bar, phone bar), Ctrl K palette, design tokens and base styles, PL/EN at runtime, theme switch, client generated from OpenAPI | #19 |
 | WP-05 | ✅ done — provider layer (Fake, ComfyUI adapter, workflow templates), engine status and GPU-lane gate, host agent engine control and GPU info | #20 |
 | WP-07 | ✅ done — styles and characters (attributes, versions, archive), references (validated upload, roles, links), pose library with built-in poses, skeleton editor, `detect_pose` job running DWPose on the CPU (models installed by a checked installer) with a drawn-box fallback. FR-016 LoRA moves to WP-13 | #21 |
-| WP-12 | 🟡 in review — taken before WP-08 (D-52): versioned model catalogue, registry with install state from the shared model folder, approved resumable downloads with SHA-256, file checks, licence warnings with audited confirmation, compatibility checks, Models screen | WP-12 PR |
+| WP-12 | ✅ done — taken before WP-08 (D-52): versioned model catalogue, registry with install state from the shared model folder, approved resumable downloads with SHA-256, file checks, licence warnings with audited confirmation, compatibility checks, Models screen | #22 |
+| WP-08 | 🟡 in progress — PR 1 (in review): generation backend: built-in workflows (text/image-to-image, OpenPose pose, IP-Adapter reference, VAE), checks, licence gate, queueing with variants and batches, GPU job with step progress over `/ws`, versions with RULE-011 metadata, regeneration. PR 2: Generation Studio and Queue screens | WP-08 PR 1 |
 
 ## Order and parallelism
 

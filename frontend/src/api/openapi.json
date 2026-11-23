@@ -253,6 +253,51 @@
         "title": "AssetSummary",
         "type": "object"
       },
+      "AssetTarget": {
+        "additionalProperties": false,
+        "description": "An existing asset (a new version of it) or a new asset in a category.",
+        "properties": {
+          "asset_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Asset Id"
+          },
+          "category": {
+            "anyOf": [
+              {
+                "maxLength": 64,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Category"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "AssetTarget",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -318,6 +363,28 @@
           "data"
         ],
         "title": "AuditOut",
+        "type": "object"
+      },
+      "BatchItem": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "maxLength": 200,
+            "minLength": 1,
+            "title": "Name",
+            "type": "string"
+          },
+          "prompt": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Prompt",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "BatchItem",
         "type": "object"
       },
       "Category": {
@@ -496,35 +563,6 @@
           }
         },
         "title": "CharacterUpdate",
-        "type": "object"
-      },
-      "CheckOut": {
-        "properties": {
-          "compatible": {
-            "title": "Compatible",
-            "type": "boolean"
-          },
-          "licence_confirmation_required": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Licence Confirmation Required",
-            "type": "array"
-          },
-          "problems": {
-            "items": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "title": "Problems",
-            "type": "array"
-          }
-        },
-        "required": [
-          "compatible",
-          "problems",
-          "licence_confirmation_required"
-        ],
-        "title": "CheckOut",
         "type": "object"
       },
       "CheckRequest": {
@@ -949,6 +987,31 @@
         "title": "EngineOut",
         "type": "object"
       },
+      "EngineState": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "required": [
+          "available",
+          "reason"
+        ],
+        "title": "EngineState",
+        "type": "object"
+      },
       "FamilyUpdate": {
         "properties": {
           "family_id": {
@@ -967,6 +1030,240 @@
           "family_id"
         ],
         "title": "FamilyUpdate",
+        "type": "object"
+      },
+      "GenerationSpec": {
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "$ref": "#/components/schemas/AssetTarget"
+          },
+          "batch": {
+            "items": {
+              "$ref": "#/components/schemas/BatchItem"
+            },
+            "maxItems": 50,
+            "title": "Batch",
+            "type": "array"
+          },
+          "cfg": {
+            "default": 6.5,
+            "maximum": 30.0,
+            "minimum": 1.0,
+            "title": "Cfg",
+            "type": "number"
+          },
+          "character_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Character Id"
+          },
+          "checkpoint_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Checkpoint Id",
+            "type": "string"
+          },
+          "clip_vision_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Clip Vision Id"
+          },
+          "controlnet_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Controlnet Id"
+          },
+          "height": {
+            "default": 1024,
+            "maximum": 2048.0,
+            "minimum": 256.0,
+            "title": "Height",
+            "type": "integer"
+          },
+          "init": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/InitImage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "ip_adapter_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ip Adapter Id"
+          },
+          "negative": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Negative",
+            "type": "string"
+          },
+          "pose_end": {
+            "default": 1.0,
+            "maximum": 1.0,
+            "minimum": 0.05,
+            "title": "Pose End",
+            "type": "number"
+          },
+          "pose_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pose Id"
+          },
+          "pose_strength": {
+            "default": 1.0,
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Pose Strength",
+            "type": "number"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "prompt": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Prompt",
+            "type": "string"
+          },
+          "reference": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReferenceInput"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "sampler": {
+            "default": "dpmpp_2m",
+            "enum": [
+              "euler",
+              "euler_ancestral",
+              "dpmpp_2m",
+              "dpmpp_2m_sde",
+              "dpmpp_sde",
+              "ddim",
+              "uni_pc"
+            ],
+            "title": "Sampler",
+            "type": "string"
+          },
+          "scheduler": {
+            "default": "karras",
+            "enum": [
+              "normal",
+              "karras",
+              "exponential",
+              "sgm_uniform",
+              "simple"
+            ],
+            "title": "Scheduler",
+            "type": "string"
+          },
+          "seed": {
+            "anyOf": [
+              {
+                "maximum": 9007199254740991.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seed"
+          },
+          "steps": {
+            "default": 30,
+            "maximum": 150.0,
+            "minimum": 1.0,
+            "title": "Steps",
+            "type": "integer"
+          },
+          "style_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Style Id"
+          },
+          "vae_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vae Id"
+          },
+          "variants": {
+            "default": 1,
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Variants",
+            "type": "integer"
+          },
+          "width": {
+            "default": 1024,
+            "maximum": 2048.0,
+            "minimum": 256.0,
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "project_id",
+          "asset",
+          "checkpoint_id"
+        ],
+        "title": "GenerationSpec",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -998,6 +1295,45 @@
           "version"
         ],
         "title": "Health",
+        "type": "object"
+      },
+      "InitImage": {
+        "additionalProperties": false,
+        "description": "Image-to-image (FR-031) from a reference or an existing version.",
+        "properties": {
+          "denoise": {
+            "default": 0.6,
+            "maximum": 1.0,
+            "minimum": 0.05,
+            "title": "Denoise",
+            "type": "number"
+          },
+          "reference_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reference Id"
+          },
+          "version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version Id"
+          }
+        },
+        "title": "InitImage",
         "type": "object"
       },
       "JobDetail": {
@@ -2172,6 +2508,60 @@
         "title": "QueueSummary",
         "type": "object"
       },
+      "QueuedOut": {
+        "properties": {
+          "asset_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "title": "Asset Ids",
+            "type": "array"
+          },
+          "jobs": {
+            "items": {
+              "$ref": "#/components/schemas/JobOut"
+            },
+            "title": "Jobs",
+            "type": "array"
+          }
+        },
+        "required": [
+          "asset_ids",
+          "jobs"
+        ],
+        "title": "QueuedOut",
+        "type": "object"
+      },
+      "ReferenceInput": {
+        "additionalProperties": false,
+        "properties": {
+          "end": {
+            "default": 1.0,
+            "maximum": 1.0,
+            "minimum": 0.05,
+            "title": "End",
+            "type": "number"
+          },
+          "reference_id": {
+            "format": "uuid",
+            "title": "Reference Id",
+            "type": "string"
+          },
+          "weight": {
+            "default": 0.6,
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Weight",
+            "type": "number"
+          }
+        },
+        "required": [
+          "reference_id"
+        ],
+        "title": "ReferenceInput",
+        "type": "object"
+      },
       "ReferenceOut": {
         "properties": {
           "archived_at": {
@@ -2893,6 +3283,116 @@
         ],
         "title": "VersionOut",
         "type": "object"
+      },
+      "WorkflowRef": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "title": "WorkflowRef",
+        "type": "object"
+      },
+      "asset_studio__api__generation__CheckOut": {
+        "properties": {
+          "engine": {
+            "$ref": "#/components/schemas/EngineState"
+          },
+          "jobs": {
+            "title": "Jobs",
+            "type": "integer"
+          },
+          "licence_confirmation_required": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Licence Confirmation Required",
+            "type": "array"
+          },
+          "models": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Models",
+            "type": "object"
+          },
+          "negative": {
+            "title": "Negative",
+            "type": "string"
+          },
+          "problems": {
+            "items": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "title": "Problems",
+            "type": "array"
+          },
+          "prompts": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Prompts",
+            "type": "array"
+          },
+          "ready": {
+            "title": "Ready",
+            "type": "boolean"
+          },
+          "workflow": {
+            "$ref": "#/components/schemas/WorkflowRef"
+          }
+        },
+        "required": [
+          "ready",
+          "problems",
+          "licence_confirmation_required",
+          "workflow",
+          "models",
+          "prompts",
+          "negative",
+          "jobs",
+          "engine"
+        ],
+        "title": "CheckOut",
+        "type": "object"
+      },
+      "asset_studio__api__models__CheckOut": {
+        "properties": {
+          "compatible": {
+            "title": "Compatible",
+            "type": "boolean"
+          },
+          "licence_confirmation_required": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Licence Confirmation Required",
+            "type": "array"
+          },
+          "problems": {
+            "items": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "title": "Problems",
+            "type": "array"
+          }
+        },
+        "required": [
+          "compatible",
+          "problems",
+          "licence_confirmation_required"
+        ],
+        "title": "CheckOut",
+        "type": "object"
       }
     }
   },
@@ -3602,6 +4102,88 @@
         ]
       }
     },
+    "/api/v1/generations": {
+      "post": {
+        "operationId": "generate_api_v1_generations_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerationSpec"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueuedOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Generate",
+        "tags": [
+          "generation"
+        ]
+      }
+    },
+    "/api/v1/generations:check": {
+      "post": {
+        "operationId": "check_api_v1_generations_check_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerationSpec"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/asset_studio__api__generation__CheckOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Check",
+        "tags": [
+          "generation"
+        ]
+      }
+    },
     "/api/v1/jobs": {
       "get": {
         "operationId": "list_jobs_api_v1_jobs_get",
@@ -4196,7 +4778,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CheckOut"
+                  "$ref": "#/components/schemas/asset_studio__api__models__CheckOut"
                 }
               }
             },
@@ -6640,6 +7222,62 @@
         "summary": "Run Transition",
         "tags": [
           "assets"
+        ]
+      }
+    },
+    "/api/v1/versions/{version_id}:regenerate": {
+      "post": {
+        "operationId": "regenerate_api_v1_versions__version_id__regenerate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": true,
+                "description": "Fields of the request to change.",
+                "title": "Changes",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QueuedOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Regenerate",
+        "tags": [
+          "generation"
         ]
       }
     }

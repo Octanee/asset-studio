@@ -64,6 +64,7 @@ dependencies = [
     { name = "sqlalchemy" },
     { name = "structlog" },
     { name = "uvicorn", extra = ["standard"] },
+    { name = "websockets" },
 ]
 
 [package.dev-dependencies]
@@ -89,6 +90,7 @@ requires-dist = [
     { name = "sqlalchemy", specifier = ">=2.0.36,<2.2" },
     { name = "structlog", specifier = ">=24.4" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.32,<1" },
+    { name = "websockets", specifier = ">=13" },
 ]
 
 [package.metadata.requires-dev]
