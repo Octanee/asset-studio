@@ -35,7 +35,7 @@ The library root `<data>` is the Docker named volume `asset-data` (ADR-013, D-47
 - A version directory is written once (temp file → fsync → rename) and is never modified afterwards (RULE-003).
 - Thumbnails and previews are derived and can be regenerated.
 - Permanent deletion removes the version directory and keeps its database rows and audit trail (RULE-019).
-- On start, a consistency check reports orphan files and missing files.
+- On start, `staging/` is cleaned. A consistency check (`assets.service.consistency_report`) reports orphan files and missing files; it is exposed in the system status view in WP-16.
 
 ## Backup and restore (FR-111, FR-112)
 
