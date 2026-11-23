@@ -104,6 +104,12 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - **Verified on the GPU:** SDXL + OpenPose ControlNet + IP-Adapter at 1024², 25 steps, with step progress, then regenerated with another seed.
 - **Not yet:** one reference image per generation; LoRAs (WP-13); post-processing and validation (WP-09).
 
+### Implementation notes (WP-08, screens)
+
+- **Generation Studio** (`frontend/src/pages/GenerationStudio.tsx`): single asset (new, or a new version of an existing one) or a batch from a list (one line per asset; text after `|` is added to its prompt). Style, character, pose with strength, reference with weight, start image for image-to-image, prompt, negative prompt, variants 1/2/4/8, and the model and sampling parameters. The request is checked with `POST /generations:check` 0.4 s after the last change: problems, licences to confirm (with a link to Models), the engine state, the workflow, models and the final prompt. Queueing is disabled with a reason until the check is ready (DD-008); a stopped engine is a note, not a blocker (RULE-013). After queueing, the screen follows its jobs (step progress, reason for waiting, cancel) and shows the asset's versions, newest first, each with "new version (new seed)" (FR-052).
+- **Queue** (`frontend/src/pages/Queue.tsx`): all jobs or the current project's, filtered by state; workflow and seed for generation jobs, step progress, the reason for waiting or the error, run time; cancel, retry (failed) and resume (interrupted), and retry of all failed. The GPU panel shows the device and VRAM use from the engine status and why GPU jobs wait (RULE-012, RULE-013). Live job events refresh both screens; polling only covers a lost event stream.
+- **Scope (D-53):** no workflow picker, queue pause or reorder yet; tiles use the original file until WP-09 creates thumbnails.
+
 ### Implementation notes (WP-12)
 
 - **Catalogue:** `backend/src/asset_studio/modules/models/catalogue.json` (families, licences, models with HTTPS source, SHA-256 and size). Each entry was checked against the source's LFS metadata when added. It is synced into the database when the registry is read.
@@ -122,7 +128,7 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
   - `comfyui.py`: `/system_stats`, `/prompt`, `/history`, `/queue`, `/interrupt`, `/view` and `/free`;
   - `engine.py`: `EngineMonitor` (health cached for 5 s) and `run_generation` (submit, follow, collect; cancels the engine job when the user cancels or the worker stops).
 - **GPU lane:** the worker registers `EngineMonitor.gate` for the `gpu` lane. While the engine is down, GPU jobs stay `queued` with `wait_reason = ENGINE_UNAVAILABLE` (RULE-013) and CPU jobs keep running. The gate takes effect once GPU job handlers exist (generation in WP-08).
-- **Step progress:** the adapter reports queue position and completion. Per-step progress over ComfyUI's `/ws` socket arrives with the Generation Studio (WP-08).
+- **Step progress:** the adapter reports queue position and completion. Per-step progress over ComfyUI's `/ws` socket was added in WP-08.
 - **Problem codes:** `ENGINE_UNAVAILABLE` (503), `ENGINE_REJECTED` (ComfyUI refused the graph; lists the node ids), `ENGINE_ERROR`, `GENERATION_FAILED` (with the engine's message).
 - **Host agent:**
   - `GET /gpu` runs `nvidia-smi` with fixed arguments;

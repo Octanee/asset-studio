@@ -1339,6 +1339,15 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /** CheckOut */
+        CheckOut: {
+            /** Compatible */
+            compatible: boolean;
+            /** Licence Confirmation Required */
+            licence_confirmation_required: string[];
+            /** Problems */
+            problems: components["schemas"]["Problem"][];
+        };
         /** CheckRequest */
         CheckRequest: {
             /** Model Ids */
@@ -1507,6 +1516,27 @@ export interface components {
         FamilyUpdate: {
             /** Family Id */
             family_id: string | null;
+        };
+        /** GenerationCheckOut */
+        GenerationCheckOut: {
+            engine: components["schemas"]["EngineState"];
+            /** Jobs */
+            jobs: number;
+            /** Licence Confirmation Required */
+            licence_confirmation_required: string[];
+            /** Models */
+            models: {
+                [key: string]: string;
+            };
+            /** Negative */
+            negative: string;
+            /** Problems */
+            problems: components["schemas"]["Problem"][];
+            /** Prompts */
+            prompts: string[];
+            /** Ready */
+            ready: boolean;
+            workflow: components["schemas"]["WorkflowRef"];
         };
         /** GenerationSpec */
         GenerationSpec: {
@@ -2355,36 +2385,6 @@ export interface components {
             /** Version */
             version: number;
         };
-        /** CheckOut */
-        asset_studio__api__generation__CheckOut: {
-            engine: components["schemas"]["EngineState"];
-            /** Jobs */
-            jobs: number;
-            /** Licence Confirmation Required */
-            licence_confirmation_required: string[];
-            /** Models */
-            models: {
-                [key: string]: string;
-            };
-            /** Negative */
-            negative: string;
-            /** Problems */
-            problems: components["schemas"]["Problem"][];
-            /** Prompts */
-            prompts: string[];
-            /** Ready */
-            ready: boolean;
-            workflow: components["schemas"]["WorkflowRef"];
-        };
-        /** CheckOut */
-        asset_studio__api__models__CheckOut: {
-            /** Compatible */
-            compatible: boolean;
-            /** Licence Confirmation Required */
-            licence_confirmation_required: string[];
-            /** Problems */
-            problems: components["schemas"]["Problem"][];
-        };
     };
     responses: never;
     parameters: never;
@@ -2804,7 +2804,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["asset_studio__api__generation__CheckOut"];
+                    "application/json": components["schemas"]["GenerationCheckOut"];
                 };
             };
             /** @description Validation Error */
@@ -3152,7 +3152,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["asset_studio__api__models__CheckOut"];
+                    "application/json": components["schemas"]["CheckOut"];
                 };
             };
             /** @description Validation Error */

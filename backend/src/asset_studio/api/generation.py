@@ -36,7 +36,7 @@ class EngineState(BaseModel):
     reason: str | None
 
 
-class CheckOut(BaseModel):
+class GenerationCheckOut(BaseModel):
     ready: bool
     problems: list[Problem]
     # Models whose licence the user still has to confirm for this project (RULE-007).
@@ -55,11 +55,11 @@ class QueuedOut(BaseModel):
     jobs: list[JobOut]
 
 
-@router.post(":check", response_model=CheckOut)
-def check(db: Db, _: CurrentActor, engine: Engine, spec: GenerationSpec) -> CheckOut:
+@router.post(":check", response_model=GenerationCheckOut)
+def check(db: Db, _: CurrentActor, engine: Engine, spec: GenerationSpec) -> GenerationCheckOut:
     p = service.plan(db, spec)
     health = engine.health()
-    return CheckOut(
+    return GenerationCheckOut(
         ready=not p.problems and not p.licence_pending,
         problems=[Problem(**x) for x in p.problems],
         licence_confirmation_required=p.licence_pending,

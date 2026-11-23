@@ -565,6 +565,35 @@
         "title": "CharacterUpdate",
         "type": "object"
       },
+      "CheckOut": {
+        "properties": {
+          "compatible": {
+            "title": "Compatible",
+            "type": "boolean"
+          },
+          "licence_confirmation_required": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Licence Confirmation Required",
+            "type": "array"
+          },
+          "problems": {
+            "items": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "title": "Problems",
+            "type": "array"
+          }
+        },
+        "required": [
+          "compatible",
+          "problems",
+          "licence_confirmation_required"
+        ],
+        "title": "CheckOut",
+        "type": "object"
+      },
       "CheckRequest": {
         "properties": {
           "model_ids": {
@@ -1030,6 +1059,69 @@
           "family_id"
         ],
         "title": "FamilyUpdate",
+        "type": "object"
+      },
+      "GenerationCheckOut": {
+        "properties": {
+          "engine": {
+            "$ref": "#/components/schemas/EngineState"
+          },
+          "jobs": {
+            "title": "Jobs",
+            "type": "integer"
+          },
+          "licence_confirmation_required": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Licence Confirmation Required",
+            "type": "array"
+          },
+          "models": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Models",
+            "type": "object"
+          },
+          "negative": {
+            "title": "Negative",
+            "type": "string"
+          },
+          "problems": {
+            "items": {
+              "$ref": "#/components/schemas/Problem"
+            },
+            "title": "Problems",
+            "type": "array"
+          },
+          "prompts": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Prompts",
+            "type": "array"
+          },
+          "ready": {
+            "title": "Ready",
+            "type": "boolean"
+          },
+          "workflow": {
+            "$ref": "#/components/schemas/WorkflowRef"
+          }
+        },
+        "required": [
+          "ready",
+          "problems",
+          "licence_confirmation_required",
+          "workflow",
+          "models",
+          "prompts",
+          "negative",
+          "jobs",
+          "engine"
+        ],
+        "title": "GenerationCheckOut",
         "type": "object"
       },
       "GenerationSpec": {
@@ -3301,98 +3393,6 @@
         ],
         "title": "WorkflowRef",
         "type": "object"
-      },
-      "asset_studio__api__generation__CheckOut": {
-        "properties": {
-          "engine": {
-            "$ref": "#/components/schemas/EngineState"
-          },
-          "jobs": {
-            "title": "Jobs",
-            "type": "integer"
-          },
-          "licence_confirmation_required": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Licence Confirmation Required",
-            "type": "array"
-          },
-          "models": {
-            "additionalProperties": {
-              "type": "string"
-            },
-            "title": "Models",
-            "type": "object"
-          },
-          "negative": {
-            "title": "Negative",
-            "type": "string"
-          },
-          "problems": {
-            "items": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "title": "Problems",
-            "type": "array"
-          },
-          "prompts": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Prompts",
-            "type": "array"
-          },
-          "ready": {
-            "title": "Ready",
-            "type": "boolean"
-          },
-          "workflow": {
-            "$ref": "#/components/schemas/WorkflowRef"
-          }
-        },
-        "required": [
-          "ready",
-          "problems",
-          "licence_confirmation_required",
-          "workflow",
-          "models",
-          "prompts",
-          "negative",
-          "jobs",
-          "engine"
-        ],
-        "title": "CheckOut",
-        "type": "object"
-      },
-      "asset_studio__api__models__CheckOut": {
-        "properties": {
-          "compatible": {
-            "title": "Compatible",
-            "type": "boolean"
-          },
-          "licence_confirmation_required": {
-            "items": {
-              "type": "string"
-            },
-            "title": "Licence Confirmation Required",
-            "type": "array"
-          },
-          "problems": {
-            "items": {
-              "$ref": "#/components/schemas/Problem"
-            },
-            "title": "Problems",
-            "type": "array"
-          }
-        },
-        "required": [
-          "compatible",
-          "problems",
-          "licence_confirmation_required"
-        ],
-        "title": "CheckOut",
-        "type": "object"
       }
     }
   },
@@ -4161,7 +4161,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/asset_studio__api__generation__CheckOut"
+                  "$ref": "#/components/schemas/GenerationCheckOut"
                 }
               }
             },
@@ -4778,7 +4778,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/asset_studio__api__models__CheckOut"
+                  "$ref": "#/components/schemas/CheckOut"
                 }
               }
             },
