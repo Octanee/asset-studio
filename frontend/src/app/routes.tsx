@@ -3,15 +3,25 @@ import { Outlet, type RouteObject } from "react-router";
 
 import { ApiError } from "../api/client";
 import { useSession } from "../api/queries";
+import { GenerationStudio } from "../pages/GenerationStudio";
 import { Models } from "../pages/Models";
 import { NotFound, Placeholder, Settings, SystemStatus } from "../pages/pages";
 import { Poses } from "../pages/Poses";
+import { Queue } from "../pages/Queue";
 import { References } from "../pages/References";
 import { StyleStudio } from "../pages/StyleStudio";
 import { MODULES, type ModuleId } from "./modules";
 
 /** Modules whose screen exists; the rest show a placeholder naming their work package. */
-const BUILT = new Set<ModuleId>(["settings", "styles", "references", "poses", "models"]);
+const BUILT = new Set<ModuleId>([
+  "settings",
+  "styles",
+  "references",
+  "poses",
+  "models",
+  "generate",
+  "queue",
+]);
 import { AppShell } from "./Shell";
 
 /** The session cookie must exist before any other request (ADR-012). */
@@ -64,6 +74,8 @@ export const routes: RouteObject[] = [
             path: m.path,
             element: <Placeholder module={m} />,
           })),
+          { path: "/generate", element: <GenerationStudio /> },
+          { path: "/queue", element: <Queue /> },
           { path: "/styles", element: <StyleStudio /> },
           { path: "/references", element: <References /> },
           { path: "/poses", element: <Poses /> },

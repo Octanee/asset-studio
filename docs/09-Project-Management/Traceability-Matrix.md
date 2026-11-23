@@ -20,10 +20,10 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 
 | BR | FR | UC | AC | Implementation | Tests |
 |---|---|---|---|---|---|
-| BR-001 | FR-030 | UC-007 | AC-001 | WP-05 (provider), WP-08 (generation backend; studio screen next) | `test_check_composes_*`, `test_fr033_*` |
+| BR-001 | FR-030 | UC-007 | AC-001 | WP-05 (provider), WP-08 (backend and Generation Studio) | `test_check_composes_*`, `test_fr033_*`, `generation.test.tsx` |
 | BR-001 | FR-031 | UC-007 | AC-001 | WP-08 (`img2img` workflows) | `test_every_builtin_workflow_renders` |
 | BR-001 | FR-034 | UC-007, UC-008 | AC-001 | WP-08 | `test_fr034_*` |
-| BR-001 | FR-038 | UC-007 | AC-001 | WP-04 | `test_fr038_*`, `test_jobs_api_*` |
+| BR-001 | FR-038 | UC-007 | AC-001 | WP-04 (jobs), WP-08 (studio jobs and Queue screen) | `test_fr038_*`, `test_jobs_api_*`, `generation.test.tsx` |
 | BR-001 | FR-046 | UC-014 | — | — | — |
 | BR-001 | FR-047 | UC-014 | — | — | — |
 | BR-001 | FR-049 | — | — | — | — |
@@ -55,14 +55,14 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-005 | FR-006 | UC-003 | AC-010 | WP-02 | `test_fr006_*, test_ac010_*` |
 | BR-005 | FR-010 | UC-004 | — | WP-07 | `test_fr010_*`, `inputs.test.tsx` (Style Studio) |
 | BR-006 | FR-042 | — | — | WP-04 | `test_rule012_*` (training hand-off in WP-13) |
-| BR-006 | FR-043 | — | AC-006 | WP-04, WP-05 | `test_rule013_*`, `test_fr043_*`, host agent `test_gpu_*` |
+| BR-006 | FR-043 | — | AC-006 | WP-04, WP-05, WP-08 (waiting shown in studio and Queue) | `test_rule013_*`, `test_fr043_*`, host agent `test_gpu_*`, `generation.test.tsx` |
 | BR-006 | FR-081 | UC-013 | — | WP-12 | `test_fr081_*`, `test_wrong_size_*` |
 | BR-006 | FR-082 | UC-013 | — | WP-12 | `test_fr082_*`, `test_rule008_*`, `test_nfr007_*`, `test_tampered_*`, `models.test.tsx` |
-| BR-007 | FR-040 | — | — | WP-04 | `test_fr040_*`, `test_claim_*` |
-| BR-007 | FR-041 | — | AC-005 | WP-04 | `test_nfr003_*`, `test_failure_requeues_*` |
+| BR-007 | FR-040 | — | — | WP-04, WP-08 (Queue screen) | `test_fr040_*`, `test_claim_*`, `generation.test.tsx` |
+| BR-007 | FR-041 | — | AC-005 | WP-04, WP-08 (retry and resume in Queue) | `test_nfr003_*`, `test_failure_requeues_*`, `generation.test.tsx` |
 | BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
 | BR-007 | FR-051 | — | — | WP-03 | `test_fr051_*` |
-| BR-007 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*` |
+| BR-007 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*`, `generation.test.tsx` |
 | BR-007 | FR-053 | UC-017 | — | WP-03 | `test_fr053_*` |
 | BR-007 | FR-054 | UC-017 | AC-013 | WP-03 | `test_fr054_*`, `test_rule019_*` |
 | BR-007 | FR-092 | UC-011 | AC-001 | — | — |
