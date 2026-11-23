@@ -20,9 +20,10 @@ from asset_studio.logging import configure_logging
 from asset_studio.models import load_all
 from asset_studio.modules.jobs.runner import Handler, Runner
 from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
+from asset_studio.modules.poses.service import handle_detect_pose
 from asset_studio.modules.providers.engine import get_engine_monitor
 
-HANDLERS: dict[str, Handler] = {}
+HANDLERS: dict[str, Handler] = {"detect_pose": handle_detect_pose}
 POLL_SECONDS = 2.0
 
 

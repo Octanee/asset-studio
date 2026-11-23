@@ -3,7 +3,7 @@ title: Data Model
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - architecture
   - data
@@ -19,11 +19,11 @@ tags:
 |---|---|---|
 | `project` | id, slug, name, type, intended_use (`commercial`/`non_commercial`), mcp_can_decide bool default false, current_config_version_id, archived_at | |
 | `project_config_version` | id, project_id, version int, schema_version, config jsonb, created_by_actor, note | unique (project_id, version) |
-| `style` | id, project_id, name, attributes jsonb, version int | |
-| `character` | id, project_id, name, description, attributes jsonb | |
-| `reference` | id, project_id, role, storage_key, sha256, mime, width, height, bytes | role enum: style, character, pose, composition, colour, anatomy, equipment, background, other |
-| `reference_link` | reference_id, target_type, target_id, weight | style/character/job links |
-| `pose` | id, project_id null (built-in), name, view, keypoints jsonb (COCO-18), source (`library`/`editor`/`detected`), source_reference_id | |
+| `style` | id, project_id, name, attributes jsonb, version int, archived_at | unique (project_id, name); `version` is bumped on every change (WP-07) |
+| `character` | id, project_id, name, description, attributes jsonb, version int, archived_at | unique (project_id, name) (WP-07) |
+| `reference` | id, project_id, role, name, storage_key, sha256, mime, width, height, bytes, archived_at | role enum: style, character, pose, composition, colour, anatomy, equipment, background, other (check constraint); `name` is the original file name, shown only (WP-07) |
+| `reference_link` | id, reference_id, target_type, target_id, weight | target_type: style, character, job, asset_version; weight 0–2; unique (reference_id, target_type, target_id) (WP-07) |
+| `pose` | id, project_id null (built-in), name, view, aspect, keypoints jsonb (COCO-18), source (`library`/`editor`/`detected`), source_reference_id, archived_at | keypoints: 18 × `[x, y, confidence]` normalised to the canvas (`aspect` = width / height) or null; built-in rows have no project and fixed ids, seeded by migration 0004 (WP-07) |
 | `model_family` | id (`sdxl`, `sd15`, …) | |
 | `model` | id, name, kind (checkpoint, lora, controlnet, ip_adapter, clip_vision, vae, segmentation, pose), family_id, licence_id, vram_mb, file_name, sha256, bytes, source_url, status (`installed`/`available`/`missing`/`downloading`) | |
 | `licence` | id, spdx_or_name, commercial_use (`allowed`/`forbidden`/`unknown`), url | |

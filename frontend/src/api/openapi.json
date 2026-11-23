@@ -276,6 +276,162 @@
         "title": "Category",
         "type": "object"
       },
+      "CharacterAttributes": {
+        "additionalProperties": false,
+        "properties": {
+          "avoid": {
+            "items": {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Avoid",
+            "type": "array"
+          },
+          "traits": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 30,
+            "title": "Traits",
+            "type": "object"
+          }
+        },
+        "title": "CharacterAttributes",
+        "type": "object"
+      },
+      "CharacterCreate": {
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/CharacterAttributes"
+          },
+          "description": {
+            "default": "",
+            "maxLength": 4000,
+            "title": "Description",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CharacterCreate",
+        "type": "object"
+      },
+      "CharacterOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/CharacterAttributes"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "name",
+          "description",
+          "attributes",
+          "version",
+          "archived_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "CharacterOut",
+        "type": "object"
+      },
+      "CharacterUpdate": {
+        "properties": {
+          "attributes": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CharacterAttributes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 4000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "CharacterUpdate",
+        "type": "object"
+      },
       "CloneRequest": {
         "properties": {
           "name": {
@@ -346,6 +502,55 @@
           "created_at"
         ],
         "title": "ConfigVersionOut",
+        "type": "object"
+      },
+      "DetectRequest": {
+        "properties": {
+          "box": {
+            "anyOf": [
+              {
+                "maxItems": 4,
+                "minItems": 4,
+                "prefixItems": [
+                  {
+                    "maximum": 1.0,
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "maximum": 1.0,
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "maximum": 1.0,
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "maximum": 1.0,
+                    "minimum": 0.0,
+                    "type": "number"
+                  }
+                ],
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Box"
+          },
+          "reference_id": {
+            "format": "uuid",
+            "title": "Reference Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference_id"
+        ],
+        "title": "DetectRequest",
         "type": "object"
       },
       "DeviceOut": {
@@ -953,6 +1158,55 @@
         "title": "JobOut",
         "type": "object"
       },
+      "LinkOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "reference_id": {
+            "format": "uuid",
+            "title": "Reference Id",
+            "type": "string"
+          },
+          "target_id": {
+            "format": "uuid",
+            "title": "Target Id",
+            "type": "string"
+          },
+          "target_type": {
+            "title": "Target Type",
+            "type": "string"
+          },
+          "weight": {
+            "title": "Weight",
+            "type": "number"
+          }
+        },
+        "required": [
+          "reference_id",
+          "target_type",
+          "target_id",
+          "weight",
+          "created_at"
+        ],
+        "title": "LinkOut",
+        "type": "object"
+      },
+      "LinkRequest": {
+        "properties": {
+          "weight": {
+            "default": 1.0,
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Weight",
+            "type": "number"
+          }
+        },
+        "title": "LinkRequest",
+        "type": "object"
+      },
       "OutputDefaults": {
         "additionalProperties": false,
         "properties": {
@@ -992,6 +1246,297 @@
           }
         },
         "title": "OutputDefaults",
+        "type": "object"
+      },
+      "PoseCreate": {
+        "properties": {
+          "aspect": {
+            "default": 0.75,
+            "exclusiveMaximum": 5.0,
+            "exclusiveMinimum": 0.2,
+            "title": "Aspect",
+            "type": "number"
+          },
+          "keypoints": {
+            "items": {
+              "anyOf": [
+                {
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "prefixItems": [
+                    {
+                      "maximum": 1.0,
+                      "minimum": 0.0,
+                      "type": "number"
+                    },
+                    {
+                      "maximum": 1.0,
+                      "minimum": 0.0,
+                      "type": "number"
+                    },
+                    {
+                      "maximum": 1.0,
+                      "minimum": 0.0,
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "maxItems": 18,
+            "minItems": 18,
+            "title": "Keypoints",
+            "type": "array"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name",
+            "type": "string"
+          },
+          "source_reference_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Reference Id"
+          },
+          "view": {
+            "default": "front",
+            "enum": [
+              "front",
+              "back",
+              "left",
+              "right",
+              "three_quarter",
+              "other"
+            ],
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "keypoints"
+        ],
+        "title": "PoseCreate",
+        "type": "object"
+      },
+      "PoseOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "aspect": {
+            "title": "Aspect",
+            "type": "number"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "keypoints": {
+            "items": {
+              "anyOf": [
+                {
+                  "maxItems": 3,
+                  "minItems": 3,
+                  "prefixItems": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "number"
+                    }
+                  ],
+                  "type": "array"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "title": "Keypoints",
+            "type": "array"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Project Id"
+          },
+          "source": {
+            "title": "Source",
+            "type": "string"
+          },
+          "source_reference_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Reference Id"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "view": {
+            "title": "View",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "name",
+          "view",
+          "aspect",
+          "keypoints",
+          "source",
+          "source_reference_id",
+          "archived_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "PoseOut",
+        "type": "object"
+      },
+      "PoseUpdate": {
+        "properties": {
+          "aspect": {
+            "anyOf": [
+              {
+                "exclusiveMaximum": 5.0,
+                "exclusiveMinimum": 0.2,
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Aspect"
+          },
+          "keypoints": {
+            "anyOf": [
+              {
+                "items": {
+                  "anyOf": [
+                    {
+                      "maxItems": 3,
+                      "minItems": 3,
+                      "prefixItems": [
+                        {
+                          "maximum": 1.0,
+                          "minimum": 0.0,
+                          "type": "number"
+                        },
+                        {
+                          "maximum": 1.0,
+                          "minimum": 0.0,
+                          "type": "number"
+                        },
+                        {
+                          "maximum": 1.0,
+                          "minimum": 0.0,
+                          "type": "number"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "maxItems": 18,
+                "minItems": 18,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Keypoints"
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "view": {
+            "anyOf": [
+              {
+                "enum": [
+                  "front",
+                  "back",
+                  "left",
+                  "right",
+                  "three_quarter",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "View"
+          }
+        },
+        "title": "PoseUpdate",
         "type": "object"
       },
       "ProjectConfig": {
@@ -1234,6 +1779,121 @@
         "title": "QueueSummary",
         "type": "object"
       },
+      "ReferenceOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "bytes": {
+            "title": "Bytes",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "height": {
+            "title": "Height",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "mime": {
+            "title": "Mime",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "role": {
+            "title": "Role",
+            "type": "string"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "width": {
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "role",
+          "name",
+          "sha256",
+          "mime",
+          "width",
+          "height",
+          "bytes",
+          "archived_at",
+          "created_at"
+        ],
+        "title": "ReferenceOut",
+        "type": "object"
+      },
+      "ReferenceUpdate": {
+        "properties": {
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          },
+          "role": {
+            "anyOf": [
+              {
+                "enum": [
+                  "style",
+                  "character",
+                  "pose",
+                  "composition",
+                  "colour",
+                  "anatomy",
+                  "equipment",
+                  "background",
+                  "other"
+                ],
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Role"
+          }
+        },
+        "title": "ReferenceUpdate",
+        "type": "object"
+      },
       "SessionInfo": {
         "properties": {
           "actor": {
@@ -1258,6 +1918,172 @@
           "mcp_can_decide"
         ],
         "title": "SettingsUpdate",
+        "type": "object"
+      },
+      "StyleAttributes": {
+        "additionalProperties": false,
+        "properties": {
+          "avoid": {
+            "items": {
+              "maxLength": 200,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Avoid",
+            "type": "array"
+          },
+          "background": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Background",
+            "type": "string"
+          },
+          "description": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Description",
+            "type": "string"
+          },
+          "extra": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "maxProperties": 30,
+            "title": "Extra",
+            "type": "object"
+          },
+          "lighting": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Lighting",
+            "type": "string"
+          },
+          "palette": {
+            "items": {
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "type": "string"
+            },
+            "maxItems": 16,
+            "title": "Palette",
+            "type": "array"
+          },
+          "rendering": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Rendering",
+            "type": "string"
+          }
+        },
+        "title": "StyleAttributes",
+        "type": "object"
+      },
+      "StyleCreate": {
+        "properties": {
+          "attributes": {
+            "$ref": "#/components/schemas/StyleAttributes"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 1,
+            "pattern": "\\S",
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "StyleCreate",
+        "type": "object"
+      },
+      "StyleOut": {
+        "properties": {
+          "archived_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Archived At"
+          },
+          "attributes": {
+            "$ref": "#/components/schemas/StyleAttributes"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "project_id",
+          "name",
+          "attributes",
+          "version",
+          "archived_at",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "StyleOut",
+        "type": "object"
+      },
+      "StyleUpdate": {
+        "properties": {
+          "attributes": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/StyleAttributes"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "pattern": "\\S",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Name"
+          }
+        },
+        "title": "StyleUpdate",
         "type": "object"
       },
       "TransitionOut": {
@@ -2098,6 +2924,186 @@
         ]
       }
     },
+    "/api/v1/characters/{character_id}": {
+      "get": {
+        "operationId": "get_character_api_v1_characters__character_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharacterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Character",
+        "tags": [
+          "styles"
+        ]
+      },
+      "patch": {
+        "operationId": "update_character_api_v1_characters__character_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CharacterUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharacterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Character",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/characters/{character_id}/archive": {
+      "post": {
+        "operationId": "archive_character_api_v1_characters__character_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharacterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Character",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/characters/{character_id}/restore": {
+      "post": {
+        "operationId": "restore_character_api_v1_characters__character_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharacterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Character",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
     "/api/v1/events": {
       "get": {
         "description": "Server-Sent Events. A reconnecting client sends ``Last-Event-ID`` and receives what it\nmissed, because events are stored (NFR-003). ``follow=false`` returns the backlog only.",
@@ -2468,6 +3474,315 @@
         ]
       }
     },
+    "/api/v1/poses": {
+      "get": {
+        "operationId": "list_poses_api_v1_poses_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "view",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "front",
+                    "back",
+                    "left",
+                    "right",
+                    "three_quarter",
+                    "other"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "View"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/PoseOut"
+                  },
+                  "title": "Response List Poses Api V1 Poses Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Poses",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
+    "/api/v1/poses/{pose_id}": {
+      "get": {
+        "operationId": "get_pose_api_v1_poses__pose_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pose_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Pose Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Pose",
+        "tags": [
+          "poses"
+        ]
+      },
+      "patch": {
+        "operationId": "update_pose_api_v1_poses__pose_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pose_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Pose Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoseUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Pose",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
+    "/api/v1/poses/{pose_id}/archive": {
+      "post": {
+        "operationId": "archive_pose_api_v1_poses__pose_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pose_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Pose Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Pose",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
+    "/api/v1/poses/{pose_id}/restore": {
+      "post": {
+        "operationId": "restore_pose_api_v1_poses__pose_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pose_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Pose Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Pose",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
+    "/api/v1/poses:detect": {
+      "post": {
+        "operationId": "detect_pose_api_v1_poses_detect_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DetectRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Detect Pose",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
     "/api/v1/projects": {
       "get": {
         "operationId": "list_projects_api_v1_projects_get",
@@ -2820,6 +4135,114 @@
         ]
       }
     },
+    "/api/v1/projects/{project_id}/characters": {
+      "get": {
+        "operationId": "list_characters_api_v1_projects__project_id__characters_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CharacterOut"
+                  },
+                  "title": "Response List Characters Api V1 Projects  Project Id  Characters Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Characters",
+        "tags": [
+          "styles"
+        ]
+      },
+      "post": {
+        "operationId": "create_character_api_v1_projects__project_id__characters_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CharacterCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CharacterOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Character",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
     "/api/v1/projects/{project_id}/clone": {
       "post": {
         "operationId": "clone_api_v1_projects__project_id__clone_post",
@@ -3018,6 +4441,275 @@
         ]
       }
     },
+    "/api/v1/projects/{project_id}/poses": {
+      "post": {
+        "operationId": "create_pose_api_v1_projects__project_id__poses_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PoseCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PoseOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Pose",
+        "tags": [
+          "poses"
+        ]
+      }
+    },
+    "/api/v1/projects/{project_id}/references": {
+      "get": {
+        "operationId": "list_references_api_v1_projects__project_id__references_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "style",
+                    "character",
+                    "pose",
+                    "composition",
+                    "colour",
+                    "anatomy",
+                    "equipment",
+                    "background",
+                    "other"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Role"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "style",
+                    "character"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "target_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Target Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ReferenceOut"
+                  },
+                  "title": "Response List References Api V1 Projects  Project Id  References Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List References",
+        "tags": [
+          "references"
+        ]
+      },
+      "post": {
+        "operationId": "upload_reference_api_v1_projects__project_id__references_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "role",
+            "required": true,
+            "schema": {
+              "enum": [
+                "style",
+                "character",
+                "pose",
+                "composition",
+                "colour",
+                "anatomy",
+                "equipment",
+                "background",
+                "other"
+              ],
+              "title": "Role",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "required": false,
+            "schema": {
+              "default": "reference",
+              "maxLength": 255,
+              "title": "Name",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "image/jpeg": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "image/png": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            },
+            "image/webp": {
+              "schema": {
+                "format": "binary",
+                "type": "string"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Reference",
+        "tags": [
+          "references"
+        ]
+      }
+    },
     "/api/v1/projects/{project_id}/restore": {
       "post": {
         "operationId": "restore_api_v1_projects__project_id__restore_post",
@@ -3114,6 +4806,515 @@
         ]
       }
     },
+    "/api/v1/projects/{project_id}/styles": {
+      "get": {
+        "operationId": "list_styles_api_v1_projects__project_id__styles_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "include_archived",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Include Archived",
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StyleOut"
+                  },
+                  "title": "Response List Styles Api V1 Projects  Project Id  Styles Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Styles",
+        "tags": [
+          "styles"
+        ]
+      },
+      "post": {
+        "operationId": "create_style_api_v1_projects__project_id__styles_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StyleCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StyleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Style",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}": {
+      "get": {
+        "operationId": "get_reference_api_v1_references__reference_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Reference",
+        "tags": [
+          "references"
+        ]
+      },
+      "patch": {
+        "operationId": "update_reference_api_v1_references__reference_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReferenceUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Reference",
+        "tags": [
+          "references"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}/archive": {
+      "post": {
+        "operationId": "archive_reference_api_v1_references__reference_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Reference",
+        "tags": [
+          "references"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}/file": {
+      "get": {
+        "operationId": "reference_file_api_v1_references__reference_id__file_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reference File",
+        "tags": [
+          "references"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}/links": {
+      "get": {
+        "operationId": "list_links_api_v1_references__reference_id__links_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LinkOut"
+                  },
+                  "title": "Response List Links Api V1 References  Reference Id  Links Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Links",
+        "tags": [
+          "references"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}/links/{target_type}/{target_id}": {
+      "delete": {
+        "operationId": "unlink_reference_api_v1_references__reference_id__links__target_type___target_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "target_type",
+            "required": true,
+            "schema": {
+              "enum": [
+                "style",
+                "character"
+              ],
+              "title": "Target Type",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "target_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Target Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Unlink Reference",
+        "tags": [
+          "references"
+        ]
+      },
+      "put": {
+        "operationId": "link_reference_api_v1_references__reference_id__links__target_type___target_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "target_type",
+            "required": true,
+            "schema": {
+              "enum": [
+                "style",
+                "character"
+              ],
+              "title": "Target Type",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "target_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Target Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LinkRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LinkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Link Reference",
+        "tags": [
+          "references"
+        ]
+      }
+    },
+    "/api/v1/references/{reference_id}/restore": {
+      "post": {
+        "operationId": "restore_reference_api_v1_references__reference_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Reference Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Reference",
+        "tags": [
+          "references"
+        ]
+      }
+    },
     "/api/v1/session": {
       "get": {
         "description": "Sets the session cookie. Reachable only through an allowed Host (loopback).",
@@ -3133,6 +5334,186 @@
         "summary": "Start Session",
         "tags": [
           "session"
+        ]
+      }
+    },
+    "/api/v1/styles/{style_id}": {
+      "get": {
+        "operationId": "get_style_api_v1_styles__style_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StyleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Style",
+        "tags": [
+          "styles"
+        ]
+      },
+      "patch": {
+        "operationId": "update_style_api_v1_styles__style_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StyleUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StyleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Style",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/styles/{style_id}/archive": {
+      "post": {
+        "operationId": "archive_style_api_v1_styles__style_id__archive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StyleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Archive Style",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/styles/{style_id}/restore": {
+      "post": {
+        "operationId": "restore_style_api_v1_styles__style_id__restore_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StyleOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Style",
+        "tags": [
+          "styles"
         ]
       }
     },

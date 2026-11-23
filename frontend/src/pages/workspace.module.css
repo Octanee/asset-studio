@@ -1,0 +1,206 @@
+/* Layout shared by Style Studio, References and Poses (WP-07): a list, the editor, and on
+   wide screens a side panel. Below 960 px the columns stack. */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(200px, 260px) minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+.workspace.three {
+  grid-template-columns: minmax(200px, 240px) minmax(0, 1fr) minmax(240px, 300px);
+}
+@media (max-width: 960px) {
+  .workspace,
+  .workspace.three {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.column {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 36px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  background: none;
+  text-align: left;
+  cursor: pointer;
+}
+.item:hover {
+  background: var(--surface-2);
+}
+.item[aria-current="true"] {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+.itemMeta {
+  margin-left: auto;
+}
+
+.tabs {
+  display: flex;
+  gap: var(--space-1);
+}
+
+.form {
+  display: grid;
+  gap: var(--space-4);
+}
+.field {
+  display: grid;
+  gap: var(--space-1);
+}
+.row {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.grow {
+  flex: 1 1 160px;
+  min-width: 0;
+}
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  align-items: center;
+}
+textarea.input {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.swatch {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: none;
+  cursor: pointer;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-3);
+}
+.tiles.small {
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+}
+.tile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  text-align: left;
+  cursor: pointer;
+  min-width: 0;
+}
+.tile[aria-pressed="true"],
+.tile[aria-current="true"] {
+  border-color: var(--accent);
+}
+.thumb {
+  aspect-ratio: 1;
+  width: 100%;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 16px
+    16px;
+}
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preview {
+  width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+  background: repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 16px
+    16px;
+}
+
+.drop {
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  flex-wrap: wrap;
+}
+.drop[data-over="true"] {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+
+.canvas {
+  width: 100%;
+  max-height: 70vh;
+  touch-action: none;
+  user-select: none;
+  border-radius: var(--radius-sm);
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+}
+.joint {
+  cursor: grab;
+}
+.joint:focus-visible {
+  outline: none;
+}
+.joint:focus-visible circle,
+.joint[data-selected="true"] circle {
+  stroke: var(--accent);
+  stroke-width: 0.8;
+}
+.joints {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 2px var(--space-2);
+  font-size: 12px;
+}
+.joints label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 28px;
+}
+.error {
+  margin: 0;
+  color: var(--st-rejected);
+}
