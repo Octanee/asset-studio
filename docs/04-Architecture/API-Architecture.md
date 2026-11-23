@@ -34,7 +34,7 @@ tags:
 | Training | `/projects/{id}/datasets`, `POST /training-runs` (returns estimate; needs `acknowledged_estimate` for SDXL on weak hardware) |
 | Models | `GET /models`, `POST /models:rescan`, `POST /models/{id}:download` (needs `confirm` with file, source, size), `POST /models/{id}/licence-acknowledgements` |
 | Workflows | `GET/POST /workflows`, `POST /workflows:validate` |
-| System | `GET /system/status`, `GET/PATCH /settings`, `POST /backups`, `POST /backups:restore` |
+| System | `GET /system/engine` (WP-05, implemented: provider, availability and reason, engine version, devices with VRAM, host agent view with engine process and nvidia-smi GPU), `POST /system/engine/{start|stop|restart}` (WP-05, implemented: user only, audited, through the host agent); `GET /system/status`, `GET/PATCH /settings`, `POST /backups`, `POST /backups:restore` (WP-16) |
 | Audit (WP-02, implemented) | `GET /audit?project_id&actor&action&before&limit` (cursor = entry id, newest first) |
 
 ## Confirmations as data

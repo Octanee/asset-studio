@@ -1,7 +1,7 @@
 """Application settings, read from environment variables prefixed with ``ASSET_STUDIO_``."""
 
 from functools import lru_cache
-from typing import Annotated
+from typing import Annotated, Literal
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
@@ -24,6 +24,14 @@ class Settings(BaseSettings):
     session_secret: str = ""
     mcp_token: str = ""
     worker_token: str = ""
+
+    # Generation engine (ADR-005, ADR-006). ComfyUI and the host agent run natively on the
+    # host; containers reach them as host.docker.internal. "fake" serves CI and UI work.
+    engine_provider: Literal["comfyui", "fake"] = "comfyui"
+    comfyui_url: str = "http://127.0.0.1:8188"
+    host_agent_url: str = "http://127.0.0.1:8410"
+    host_agent_token: str = ""
+    engine_health_ttl_seconds: float = 5.0
 
     @field_validator("allowed_hosts", mode="before")
     @classmethod

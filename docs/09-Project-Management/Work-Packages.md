@@ -44,7 +44,8 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-02 | ✅ done — projects, configuration versions, audit, actors, Host/Origin checks | #16 |
 | WP-03 | ✅ done — storage, assets, versions, lifecycle and transitions API; regeneration (FR-052) moves to WP-08 with the job pipeline | #17 |
 | WP-04 | ✅ done — job queue, worker lanes, SSE events, recovery after restart | #18 |
-| WP-06 | 🟡 in review — app shell (rail, top bar, phone bar), Ctrl K palette, design tokens and base styles, PL/EN at runtime, theme switch, client generated from OpenAPI | WP-06 PR |
+| WP-06 | ✅ done — app shell (rail, top bar, phone bar), Ctrl K palette, design tokens and base styles, PL/EN at runtime, theme switch, client generated from OpenAPI | #19 |
+| WP-05 | 🟡 in review — provider layer (Fake, ComfyUI adapter, workflow templates), engine status and GPU-lane gate, host agent engine control and GPU info | WP-05 PR |
 
 ## Order and parallelism
 

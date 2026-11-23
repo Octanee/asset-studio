@@ -48,11 +48,27 @@
   },
   "engine": {
     "label": "Engine status",
-    "notConnected": "Engine not connected",
-    "apiDown": "API not reachable"
+    "apiDown": "API not reachable",
+    "checking": "Checking engine…",
+    "stopped": "Engine stopped",
+    "start": "Start engine",
+    "stop": "Stop engine",
+    "restart": "Restart engine",
+    "heldJobs": "GPU jobs wait in the queue until the engine runs; you can still queue new ones.",
+    "agentNotConfigured": "The host agent is not set up, so the engine cannot be started from here. Run the setup script.",
+    "agentDown": "The host agent is not running on this computer. Start it with the start script."
   },
-  "language": { "label": "Language", "pl": "PL", "en": "EN" },
-  "status": { "api": "API", "checking": "Checking…", "ok": "Running", "down": "Not reachable" },
+  "language": {
+    "label": "Language",
+    "pl": "PL",
+    "en": "EN"
+  },
+  "status": {
+    "api": "API",
+    "checking": "Checking…",
+    "ok": "Running",
+    "down": "Not reachable"
+  },
   "session": {
     "connecting": "Connecting to the local API…",
     "failed": "Asset Studio cannot reach its API",
@@ -64,7 +80,10 @@
     "title": "{{module}} is not built yet",
     "body": "This screen arrives in {{wp}}. The navigation, queue indicator and language switch already work."
   },
-  "notFound": { "title": "Page not found", "back": "Back to the dashboard" },
+  "notFound": {
+    "title": "Page not found",
+    "back": "Back to the dashboard"
+  },
   "settings": {
     "appearance": "Appearance",
     "theme": "Theme",
@@ -74,5 +93,13 @@
     "languagePl": "Polski",
     "languageEn": "English",
     "rest": "Data locations, model folders, backup and restore arrive in WP-16."
+  },
+  "problems": {
+    "ENGINE_NOT_CONFIGURED": "No ComfyUI folder is configured for the host agent. Run the setup script.",
+    "ENGINE_NOT_INSTALLED": "ComfyUI is not installed in the configured folder. Run the setup script.",
+    "HOST_AGENT_UNAVAILABLE": "The host agent is not running on this computer.",
+    "HOST_AGENT_NOT_CONFIGURED": "The host agent token is not set. Run the setup script.",
+    "HOST_AGENT_REJECTED": "The host agent rejected the token. Check that both use the same token.",
+    "ACTOR_NOT_ALLOWED": "Only you can do this, not Claude (MCP)."
   }
 }

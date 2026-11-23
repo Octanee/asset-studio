@@ -454,6 +454,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/system/engine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Engine Status
+         * @description Is the engine reachable, which version, which GPU (FR-043).
+         */
+        get: operations["engine_status_api_v1_system_engine_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/system/engine/{action}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Engine Control
+         * @description Start, stop or restart the engine through the host agent. User only: Claude (MCP)
+         *     and the system cannot switch the engine.
+         */
+        post: operations["engine_control_api_v1_system_engine__action__post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/system/health": {
         parameters: {
             query?: never;
@@ -682,6 +723,15 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** DeviceOut */
+        DeviceOut: {
+            /** Name */
+            name: string;
+            /** Vram Free Mb */
+            vram_free_mb: number | null;
+            /** Vram Total Mb */
+            vram_total_mb: number | null;
+        };
         /** DraftConfirm */
         DraftConfirm: {
             config: components["schemas"]["ProjectConfig"];
@@ -737,6 +787,29 @@ export interface components {
             project_id: string | null;
             /** Status */
             status: string;
+        };
+        /** EngineOut */
+        EngineOut: {
+            /** Agent */
+            agent: {
+                [key: string]: unknown;
+            };
+            /** Available */
+            available: boolean;
+            /** Detail */
+            detail: string | null;
+            /** Devices */
+            devices: components["schemas"]["DeviceOut"][];
+            /** Engine */
+            engine: string;
+            /** Features */
+            features: string[];
+            /** Provider */
+            provider: string;
+            /** Reason */
+            reason: string | null;
+            /** Version */
+            version: string | null;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -2024,6 +2097,57 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionInfo"];
+                };
+            };
+        };
+    };
+    engine_status_api_v1_system_engine_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EngineOut"];
+                };
+            };
+        };
+    };
+    engine_control_api_v1_system_engine__action__post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                action: "start" | "stop" | "restart";
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EngineOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };

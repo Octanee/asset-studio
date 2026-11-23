@@ -20,7 +20,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 
 | BR | FR | UC | AC | Implementation | Tests |
 |---|---|---|---|---|---|
-| BR-001 | FR-030 | UC-007 | AC-001 | — | — |
+| BR-001 | FR-030 | UC-007 | AC-001 | WP-05 (provider), WP-08 (studio) | `test_fr030_*` |
 | BR-001 | FR-031 | UC-007 | AC-001 | — | — |
 | BR-001 | FR-034 | UC-007, UC-008 | AC-001 | — | — |
 | BR-001 | FR-038 | UC-007 | AC-001 | WP-04 | `test_fr038_*`, `test_jobs_api_*` |
@@ -55,7 +55,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-005 | FR-006 | UC-003 | AC-010 | WP-02 | `test_fr006_*, test_ac010_*` |
 | BR-005 | FR-010 | UC-004 | — | — | — |
 | BR-006 | FR-042 | — | — | WP-04 | `test_rule012_*` (training hand-off in WP-13) |
-| BR-006 | FR-043 | — | AC-006 | WP-04 | `test_rule013_*` (engine and GPU status in WP-05) |
+| BR-006 | FR-043 | — | AC-006 | WP-04, WP-05 | `test_rule013_*`, `test_fr043_*`, host agent `test_gpu_*` |
 | BR-006 | FR-081 | UC-013 | — | — | — |
 | BR-006 | FR-082 | UC-013 | — | — | — |
 | BR-007 | FR-040 | — | — | WP-04 | `test_fr040_*`, `test_claim_*` |

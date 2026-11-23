@@ -1,8 +1,10 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router";
 
-import { useHealth } from "../api/queries";
+import { ApiError } from "../api/client";
+import { useEngine, useEngineControl, useHealth } from "../api/queries";
 import type { Module } from "../app/modules";
+import { engineLabel } from "../app/Shell";
 import { useUi, type Language, type Theme } from "../app/store";
 
 function EmptyState({ title, children }: { title: string; children: React.ReactNode }) {
@@ -27,18 +29,97 @@ export function Placeholder({ module }: { module: { id: Module["id"] | "projects
   );
 }
 
+function EnginePanel() {
+  const { t } = useTranslation();
+  const engine = useEngine();
+  const control = useEngineControl();
+  const e = engine.data;
+  const agent = (e?.agent ?? {}) as { configured?: boolean; reachable?: boolean; reason?: string };
+  // Disabled controls say why (DD-008).
+  const blocked = !agent.configured
+    ? t("engine.agentNotConfigured")
+    : agent.reachable === false
+      ? t("engine.agentDown")
+      : null;
+  const label = engineLabel(t, engine);
+  // Known problem codes are translated; anything else shows the API's own message.
+  const error =
+    control.error instanceof ApiError
+      ? t(`problems.${control.error.code}`, { defaultValue: control.error.message })
+      : null;
+
+  return (
+    <section className="panel" style={{ padding: "var(--space-6)", maxWidth: 720 }}>
+      <h2 className="h-panel">{t("engine.label")}</h2>
+      <p role="status" style={{ margin: "var(--space-2) 0 0" }}>
+        <span className="mono">{label.text}</span>
+        {e?.version && <span className="mono muted"> · v{e.version}</span>}
+      </p>
+      {e && !e.available && (
+        <p className="muted" style={{ margin: "var(--space-2) 0 0" }}>
+          {t("engine.heldJobs")}
+        </p>
+      )}
+      <div style={{ display: "flex", gap: "var(--space-2)", marginTop: "var(--space-4)" }}>
+        {e?.available ? (
+          <>
+            <button
+              type="button"
+              className="btn"
+              disabled={!!blocked || control.isPending}
+              onClick={() => control.mutate("restart")}
+            >
+              {t("engine.restart")}
+            </button>
+            <button
+              type="button"
+              className="btn danger"
+              disabled={!!blocked || control.isPending}
+              onClick={() => control.mutate("stop")}
+            >
+              {t("engine.stop")}
+            </button>
+          </>
+        ) : (
+          <button
+            type="button"
+            className="btn primary"
+            disabled={!!blocked || control.isPending || !e}
+            onClick={() => control.mutate("start")}
+          >
+            {t("engine.start")}
+          </button>
+        )}
+      </div>
+      {blocked && (
+        <p className="muted" style={{ margin: "var(--space-2) 0 0" }}>
+          {blocked}
+        </p>
+      )}
+      {error && (
+        <p role="alert" style={{ margin: "var(--space-2) 0 0", color: "var(--st-rejected)" }}>
+          {error}
+        </p>
+      )}
+    </section>
+  );
+}
+
 export function SystemStatus() {
   const { t } = useTranslation();
   const health = useHealth();
   const state = health.isPending ? "checking" : health.isError ? "down" : "ok";
   return (
-    <EmptyState title={t("nav.system")}>
-      <p role="status" style={{ margin: 0 }}>
-        {t("status.api")}: {t(`status.${state}`)}
-        {health.data && <span className="mono"> · v{health.data.version}</span>}
-      </p>
-      <p style={{ margin: "var(--space-2) 0 0" }}>{t("placeholder.body", { wp: "WP-16" })}</p>
-    </EmptyState>
+    <>
+      <EnginePanel />
+      <EmptyState title={t("status.api")}>
+        <p role="status" style={{ margin: 0 }}>
+          {t("status.api")}: {t(`status.${state}`)}
+          {health.data && <span className="mono"> · v{health.data.version}</span>}
+        </p>
+        <p style={{ margin: "var(--space-2) 0 0" }}>{t("placeholder.body", { wp: "WP-16" })}</p>
+      </EmptyState>
+    </>
   );
 }
 

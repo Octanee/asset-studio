@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, NavLink, Outlet, useLocation } from "react-router";
 
-import { useHealth, useLiveEvents, useProjects, useQueueCounts } from "../api/queries";
+import { useEngine, useLiveEvents, useProjects, useQueueCounts } from "../api/queries";
 import { CommandPalette } from "./CommandPalette";
 import { MODULES, moduleFor } from "./modules";
 import s from "./Shell.module.css";
@@ -145,21 +145,30 @@ function QueueIndicator() {
   );
 }
 
+export function engineLabel(
+  t: (key: string, options?: Record<string, unknown>) => string,
+  engine: ReturnType<typeof useEngine>,
+): { text: string; color: string } {
+  if (engine.isError) return { text: t("engine.apiDown"), color: "var(--st-failed)" };
+  const e = engine.data;
+  if (!e) return { text: t("engine.checking"), color: "var(--st-archived)" };
+  if (!e.available) return { text: t("engine.stopped"), color: "var(--st-failed)" };
+  const name = e.engine === "comfyui" ? "ComfyUI" : e.engine;
+  const gpu = e.devices[0];
+  const vram =
+    gpu?.vram_total_mb != null && gpu.vram_free_mb != null
+      ? ` · GPU ${((gpu.vram_total_mb - gpu.vram_free_mb) / 1024).toFixed(1)}/${(gpu.vram_total_mb / 1024).toFixed(0)} GB`
+      : "";
+  return { text: `${name}${vram}`, color: "var(--st-approved)" };
+}
+
 function EngineStatus() {
   const { t } = useTranslation();
-  const health = useHealth();
-  // Engine health arrives with the engine adapter (WP-05); until then only the API is known.
-  const down = health.isError;
+  const label = engineLabel(t, useEngine());
   return (
     <Link to="/system" className="btn ghost" title={t("engine.label")}>
-      <span
-        className={s.dot}
-        aria-hidden="true"
-        style={{ background: down ? "var(--st-failed)" : "var(--st-archived)" }}
-      />
-      <span className={`mono ${s.narrowText}`}>
-        {down ? t("engine.apiDown") : t("engine.notConnected")}
-      </span>
+      <span className={s.dot} aria-hidden="true" style={{ background: label.color }} />
+      <span className={`mono ${s.narrowText}`}>{label.text}</span>
     </Link>
   );
 }

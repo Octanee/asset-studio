@@ -3,7 +3,7 @@ title: Infrastructure
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - architecture
   - infrastructure
@@ -40,9 +40,9 @@ The native installer replaces the script after the MVP (D-19).
 
 ## Local development
 
-- Backend: `uv run` with a hot-reload API; a dev Postgres via compose; `FakeProvider` by default, so no GPU is needed.
+- Backend: `uv run` with a hot-reload API; a dev Postgres via compose; set `ASSET_STUDIO_ENGINE_PROVIDER=fake` to work without a GPU.
 - Frontend: Vite dev server proxying `/api`.
-- Real GPU: point the worker at the host agent with `ASSET_STUDIO_PROVIDER=comfyui`.
+- Real GPU: `ASSET_STUDIO_ENGINE_PROVIDER=comfyui` (the default). ComfyUI and the host agent listen on the host's 127.0.0.1; the `api` and `worker` containers reach them as `host.docker.internal` (`extra_hosts: host-gateway`). Verified in WP-05 on Docker Desktop for Windows: a container reaches a service bound only to the host's loopback, so neither process has to listen on other interfaces. On a Linux Docker engine `host-gateway` is the bridge address, so loopback-only services are not reachable that way (Windows is the MVP target).
 - Seed data: a fixture project "Exerzio illustrations" with generated placeholder images.
 
 ## Observability

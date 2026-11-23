@@ -20,6 +20,7 @@ from asset_studio.logging import configure_logging
 from asset_studio.models import load_all
 from asset_studio.modules.jobs.runner import Handler, Runner
 from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
+from asset_studio.modules.providers.engine import get_engine_monitor
 
 HANDLERS: dict[str, Handler] = {}
 POLL_SECONDS = 2.0
@@ -42,7 +43,9 @@ def main() -> None:
 
     load_all()  # every table, so foreign keys to other modules resolve
     worker_id = f"{socket.gethostname()}-{os.getpid()}-{uuid.uuid4().hex[:6]}"
-    runner = Runner(get_sessionmaker(), worker_id, HANDLERS)
+    # GPU jobs wait in the queue, with the reason shown, while the engine is down (RULE-013).
+    engine = get_engine_monitor()
+    runner = Runner(get_sessionmaker(), worker_id, HANDLERS, gates={"gpu": engine.gate})
     # The API applies migrations on start; wait for them instead of crashing.
     while not _Stop.requested:
         try:
