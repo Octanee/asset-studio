@@ -288,7 +288,7 @@ describe("Poses", () => {
     const panel = await screen.findByRole("region", { name: "Detect from image" });
     await user.click(await within(panel).findByRole("button", { name: "Detect from image" }));
     expect(await within(panel).findByRole("alert")).toHaveTextContent(
-      "Pose detection is not installed yet.",
+      "Pose detection models are not installed. Install them with the command in the setup guide.",
     );
     expect(within(panel).getByText(/set the pose by hand/)).toBeVisible();
   });

@@ -20,6 +20,7 @@ from asset_studio.logging import configure_logging
 from asset_studio.models import load_all
 from asset_studio.modules.jobs.runner import Handler, Runner
 from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
+from asset_studio.modules.poses.detection import load_default_detector, set_detector
 from asset_studio.modules.poses.service import handle_detect_pose
 from asset_studio.modules.providers.engine import get_engine_monitor
 
@@ -46,6 +47,10 @@ def main() -> None:
     worker_id = f"{socket.gethostname()}-{os.getpid()}-{uuid.uuid4().hex[:6]}"
     # GPU jobs wait in the queue, with the reason shown, while the engine is down (RULE-013).
     engine = get_engine_monitor()
+    # Pose detection runs when the DWPose models are installed (ADR-009).
+    detector = load_default_detector()
+    set_detector(detector)
+    log.info("worker.pose_detector", detector=detector.name if detector else None)
     runner = Runner(get_sessionmaker(), worker_id, HANDLERS, gates={"gpu": engine.gate})
     # The API applies migrations on start; wait for them instead of crashing.
     while not _Stop.requested:

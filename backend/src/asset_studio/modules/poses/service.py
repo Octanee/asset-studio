@@ -17,7 +17,12 @@ from asset_studio.modules.audit.service import Actor, record
 from asset_studio.modules.jobs import service as jobs
 from asset_studio.modules.jobs.models import Job
 from asset_studio.modules.jobs.runner import JobContext
-from asset_studio.modules.poses.detection import Box, get_detector
+from asset_studio.modules.poses.detection import (
+    Box,
+    get_detector,
+    load_default_detector,
+    set_detector,
+)
 from asset_studio.modules.poses.models import Pose
 from asset_studio.modules.poses.skeleton import VIEWS, Point, visible
 from asset_studio.modules.projects.service import get_project
@@ -211,6 +216,9 @@ def request_detection(
 def handle_detect_pose(ctx: JobContext) -> dict[str, Any]:
     """Worker handler: run the detector and return the proposed skeleton as the job result."""
     detector = get_detector()
+    if detector is None:  # the models may have been installed after the worker started
+        detector = load_default_detector()
+        set_detector(detector)
     if detector is None:
         raise DomainError(
             409,

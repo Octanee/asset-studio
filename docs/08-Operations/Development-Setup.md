@@ -49,6 +49,16 @@ docker compose up -d --build
 
 The web UI is at `http://127.0.0.1:8480`. Every port binds to 127.0.0.1 only.
 
+### Pose detection models (DWPose, ADR-009)
+
+Pose detection needs two model files (about 350 MB, Apache-2.0) in the library volume. The installer downloads them from `huggingface.co/yzd-v/DWPose`, checks their SHA-256 and keeps nothing that does not match:
+
+```powershell
+docker compose run --rm worker python -m asset_studio.modules.poses.install
+```
+
+To copy files you already have instead, mount their folder and add `--from /src` (`-v <folder>:/src:ro`). Without the models, detection jobs fail with `POSE_DETECTOR_NOT_INSTALLED` and poses are set by hand in the editor.
+
 ## Checks run in CI
 
 These run without a GPU:

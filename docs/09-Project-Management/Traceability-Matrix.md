@@ -42,7 +42,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-003 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
 | BR-003 | FR-020 | UC-006 | — | WP-07 | `test_fr020_*`, `inputs.test.tsx` (Poses) |
 | BR-003 | FR-021 | UC-006 | — | WP-07 | `test_fr021_*`, `test_mirror_*`, `inputs.test.tsx` (Poses) |
-| BR-003 | FR-022 | UC-006 | AC-011 | WP-07 (job and editor); DWPose detector pending approval | `test_ac011_*`, `test_drawn_box_*`, `inputs.test.tsx` (Poses) |
+| BR-003 | FR-022 | UC-006 | AC-011 | WP-07 (job, DWPose, editor) | `test_ac011_*`, `test_drawn_box_*`, `test_dwpose.py`, `inputs.test.tsx` (Poses) |
 | BR-003 | FR-025 | — | — | WP-07 | `test_fr025_*`, `test_sniff_*`, `inputs.test.tsx` (References) |
 | BR-003 | FR-032 | UC-007 | AC-001 | — | — |
 | BR-003 | FR-033 | UC-007 | AC-001 | — | — |

@@ -114,11 +114,12 @@
     "LINK_OTHER_PROJECT": "The reference belongs to another project.",
     "POSE_TOO_FEW_JOINTS": "A pose needs at least 4 visible joints.",
     "POSE_BUILTIN_READONLY": "Built-in poses cannot be changed; save a copy.",
-    "POSE_DETECTOR_NOT_INSTALLED": "Pose detection is not installed yet.",
+    "POSE_DETECTOR_NOT_INSTALLED": "Pose detection models are not installed. Install them with the command in the setup guide.",
     "POSE_NOT_FOUND": "No person was found. Draw a box around the figure and try again.",
     "POSE_BOX_INVALID": "The box has no size.",
     "REQUEST_INVALID": "Some values are not valid. Check the fields and try again.",
-    "NETWORK": "The API cannot be reached."
+    "NETWORK": "The API cannot be reached.",
+    "POSE_MODEL_CORRUPT": "A pose detection model file is damaged. Install the models again."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",

@@ -46,7 +46,7 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-04 | ✅ done — job queue, worker lanes, SSE events, recovery after restart | #18 |
 | WP-06 | ✅ done — app shell (rail, top bar, phone bar), Ctrl K palette, design tokens and base styles, PL/EN at runtime, theme switch, client generated from OpenAPI | #19 |
 | WP-05 | ✅ done — provider layer (Fake, ComfyUI adapter, workflow templates), engine status and GPU-lane gate, host agent engine control and GPU info | #20 |
-| WP-07 | 🟡 in review — styles and characters (attributes, versions, archive), references (validated upload, roles, links), pose library with built-in poses, skeleton editor, `detect_pose` job with a pluggable detector. Open: DWPose detector install (needs approval); FR-016 LoRA moves to WP-12/WP-13 | WP-07 PR |
+| WP-07 | 🟡 in review — styles and characters (attributes, versions, archive), references (validated upload, roles, links), pose library with built-in poses, skeleton editor, `detect_pose` job running DWPose on the CPU (models installed by a checked installer) with a drawn-box fallback. FR-016 LoRA moves to WP-12/WP-13 | WP-07 PR |
 
 ## Order and parallelism
 

@@ -114,11 +114,12 @@
     "LINK_OTHER_PROJECT": "Referencja należy do innego projektu.",
     "POSE_TOO_FEW_JOINTS": "Poza musi mieć co najmniej 4 widoczne stawy.",
     "POSE_BUILTIN_READONLY": "Pozy wbudowanej nie można zmienić; zapisz kopię.",
-    "POSE_DETECTOR_NOT_INSTALLED": "Wykrywanie pozy nie jest jeszcze zainstalowane.",
+    "POSE_DETECTOR_NOT_INSTALLED": "Modele wykrywania pozy nie są zainstalowane. Zainstaluj je poleceniem z instrukcji instalacji.",
     "POSE_NOT_FOUND": "Nie znaleziono postaci. Narysuj ramkę wokół niej i spróbuj ponownie.",
     "POSE_BOX_INVALID": "Ramka nie ma rozmiaru.",
     "REQUEST_INVALID": "Niektóre wartości są niepoprawne. Sprawdź pola i spróbuj ponownie.",
-    "NETWORK": "Nie można połączyć się z API."
+    "NETWORK": "Nie można połączyć się z API.",
+    "POSE_MODEL_CORRUPT": "Plik modelu wykrywania pozy jest uszkodzony. Zainstaluj modele ponownie."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
