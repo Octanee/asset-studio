@@ -13,6 +13,7 @@ export const MODEL_KINDS = [
   "clip_vision",
   "vae",
   "pose",
+  "segmentation",
 ] as const;
 export type ModelKind = (typeof MODEL_KINDS)[number];
 

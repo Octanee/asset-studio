@@ -49,6 +49,9 @@ class AssetVersion(Base):
     height: Mapped[int | None] = mapped_column(Integer, nullable=True)
     generation_job_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
     generation_metadata: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
+    # Post-processing (FR-065): steps, the processed file (its own key next to the original,
+    # written once) and the last error. Empty until processing ran.
+    processing: Mapped[dict[str, Any]] = mapped_column(JSONB, default=dict, nullable=False)
     first_published_at: Mapped[datetime | None] = mapped_column(
         DateTime(timezone=True), nullable=True
     )

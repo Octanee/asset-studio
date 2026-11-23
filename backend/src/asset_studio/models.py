@@ -8,5 +8,6 @@ def load_all() -> None:
     from asset_studio.modules.models import models as _models  # noqa: F401
     from asset_studio.modules.poses import models as _poses  # noqa: F401
     from asset_studio.modules.projects import models as _projects  # noqa: F401
+    from asset_studio.modules.quality import models as _quality  # noqa: F401
     from asset_studio.modules.references import models as _references  # noqa: F401
     from asset_studio.modules.styles import models as _styles  # noqa: F401

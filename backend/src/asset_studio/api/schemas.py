@@ -4,7 +4,7 @@ import uuid
 from datetime import datetime
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from asset_studio.modules.projects.config_schema import ProjectConfig
 
@@ -61,6 +61,31 @@ class AuditOut(BaseModel):
     data: dict[str, Any]
 
 
+class ProcessedFile(BaseModel):
+    sha256: str
+    mime: str
+    bytes: int
+    width: int
+    height: int
+
+
+class ProcessingFailure(BaseModel):
+    code: str
+    message: str
+    step: str | None = None
+    job_id: str | None = None
+
+
+class ProcessingOut(BaseModel):
+    """Post-processing of a version (FR-065); storage keys stay on the server."""
+
+    steps: list[dict[str, Any]] = Field(default_factory=list)
+    output: ProcessedFile | None = None
+    error: ProcessingFailure | None = None
+    background_removed: bool = False
+    finished_at: str | None = None
+
+
 class VersionOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: uuid.UUID
@@ -78,6 +103,30 @@ class VersionOut(BaseModel):
     first_published_at: datetime | None
     deleted_at: datetime | None
     created_at: datetime
+    processing: ProcessingOut = Field(default_factory=ProcessingOut)
+
+    @field_validator("processing", mode="before")
+    @classmethod
+    def _processing(cls, value: Any) -> Any:
+        if isinstance(value, dict) and "cutout" in value:  # the stored record, not a dump
+            return {**value, "background_removed": bool(value["cutout"])}
+        return value
+
+
+class RuleResultOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    rule: str
+    status: str
+    details: dict[str, Any]
+
+
+class ValidationOut(BaseModel):
+    """The newest technical validation run of a version (FR-060). Informative (RULE-009)."""
+
+    run_id: uuid.UUID | None
+    checked_at: datetime | None
+    summary: dict[str, int]
+    results: list[RuleResultOut]
 
 
 class TransitionOut(BaseModel):

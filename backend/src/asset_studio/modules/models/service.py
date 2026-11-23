@@ -48,6 +48,7 @@ KIND_FOLDERS = {
     "ip_adapter": "ipadapter",
     "clip_vision": "clip_vision",
     "vae": "vae",
+    "segmentation": "background_removal",
 }
 SUFFIXES = {".safetensors", ".ckpt", ".pt", ".pth", ".bin", ".onnx"}
 # Kinds that must share the checkpoint's family (RULE-015).

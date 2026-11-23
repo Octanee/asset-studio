@@ -75,6 +75,7 @@ It sets `PYTHONUTF8=1` (prototype S-3) and keeps kohya in its own Python 3.11 ve
 
 - **Pose detection** runs on CPU: 2–4 s per image in WP-01, so it is usable while ComfyUI is stopped.
 - **Background removal** runs on the GPU. On CPU it took 22–141 s and ~19 GB RAM in WP-01, so it waits for the engine like diffusion (D-48).
+- **Implemented (WP-09):** the `remove_background` workflow template (v1) uses ComfyUI's native nodes (`LoadBackgroundRemovalModel`, `RemoveBackground`, `MaskToImage`) and returns the foreground mask; `modules/processing` builds the cut-out from the untouched original and the mask, then `process` fills the background, resizes, converts and optimises, and `modules/quality` validates the result (D-54). The model is the catalogue entry `birefnet-comfy` (kind `segmentation`).
 
 ## Reproducibility metadata (RULE-011)
 
@@ -102,7 +103,7 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - **The job:** renders the pose as an OpenPose image fitted to the output size, uploads images through `/upload/image`, runs the engine with step progress from `/ws` (`progress` messages; polling stays the fallback), and stores each output as a new `generated` version with metadata: workflow, engine, models with hashes, prompts, seed and sampling parameters, size, style and character versions, pose, references, hardware (RULE-011). References are linked to the job and the version (FR-026).
 - **Regeneration (FR-052, AC-002):** replays the stored request for the same asset with changes; the earlier version is untouched.
 - **Verified on the GPU:** SDXL + OpenPose ControlNet + IP-Adapter at 1024², 25 steps, with step progress, then regenerated with another seed.
-- **Not yet:** one reference image per generation; LoRAs (WP-13); post-processing and validation (WP-09).
+- **Not yet:** one reference image per generation; LoRAs (WP-13). Post-processing and validation start on their own after each generated version (WP-09).
 
 ### Implementation notes (WP-08, screens)
 

@@ -1086,6 +1086,43 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/versions/{version_id}/validation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Validation */
+        get: operations["get_validation_api_v1_versions__version_id__validation_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/versions/{version_id}:process": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Process Version
+         * @description Process a ``generated`` version (T-02) or retry a failed one (T-04R) (FR-065).
+         */
+        post: operations["process_version_api_v1_versions__version_id__process_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/versions/{version_id}:regenerate": {
         parameters: {
             query?: never;
@@ -1097,6 +1134,26 @@ export interface paths {
         put?: never;
         /** Regenerate */
         post: operations["regenerate_api_v1_versions__version_id__regenerate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/versions/{version_id}:validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validate Version
+         * @description Validate again, e.g. after the project's rules changed (FR-060).
+         */
+        post: operations["validate_version_api_v1_versions__version_id__validate_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1977,6 +2034,77 @@ export interface components {
             /** Model Id */
             model_id: string | null;
         };
+        /** ProcessedFile */
+        ProcessedFile: {
+            /** Bytes */
+            bytes: number;
+            /** Height */
+            height: number;
+            /** Mime */
+            mime: string;
+            /** Sha256 */
+            sha256: string;
+            /** Width */
+            width: number;
+        };
+        /**
+         * Processing
+         * @description Post-processing after generation (FR-065). Size, format and background come from
+         *     ``output``; these settings say how to get there.
+         */
+        Processing: {
+            /**
+             * Optimize
+             * @default true
+             */
+            optimize: boolean;
+            /**
+             * Quality
+             * @default 90
+             */
+            quality: number;
+            /**
+             * Remove Background
+             * @default false
+             */
+            remove_background: boolean;
+            /**
+             * Resize
+             * @default contain
+             * @enum {string}
+             */
+            resize: "contain" | "cover" | "none";
+        };
+        /** ProcessingFailure */
+        ProcessingFailure: {
+            /** Code */
+            code: string;
+            /** Job Id */
+            job_id?: string | null;
+            /** Message */
+            message: string;
+            /** Step */
+            step?: string | null;
+        };
+        /**
+         * ProcessingOut
+         * @description Post-processing of a version (FR-065); storage keys stay on the server.
+         */
+        ProcessingOut: {
+            /**
+             * Background Removed
+             * @default false
+             */
+            background_removed: boolean;
+            error?: components["schemas"]["ProcessingFailure"] | null;
+            /** Finished At */
+            finished_at?: string | null;
+            output?: components["schemas"]["ProcessedFile"] | null;
+            /** Steps */
+            steps?: {
+                [key: string]: unknown;
+            }[];
+        };
         /** ProjectConfig */
         ProjectConfig: {
             /** Categories */
@@ -2005,6 +2133,7 @@ export interface components {
              */
             naming: string;
             output?: components["schemas"]["OutputDefaults"];
+            processing?: components["schemas"]["Processing"];
             /**
              * Schema Version
              * @default 1
@@ -2013,6 +2142,7 @@ export interface components {
             schema_version: 1;
             /** Type */
             type: string;
+            validation?: components["schemas"]["Validation"];
         };
         /** ProjectDetail */
         ProjectDetail: {
@@ -2152,6 +2282,17 @@ export interface components {
             /** Role */
             role?: ("style" | "character" | "pose" | "composition" | "colour" | "anatomy" | "equipment" | "background" | "other") | null;
         };
+        /** RuleResultOut */
+        RuleResultOut: {
+            /** Details */
+            details: {
+                [key: string]: unknown;
+            };
+            /** Rule */
+            rule: string;
+            /** Status */
+            status: string;
+        };
         /** ScanOut */
         ScanOut: {
             /** Added */
@@ -2275,6 +2416,19 @@ export interface components {
              */
             reason: string;
         };
+        /**
+         * Validation
+         * @description Technical validation rules (FR-060); results are informative (RULE-009).
+         */
+        Validation: {
+            /**
+             * Aspect Tolerance
+             * @default 0.01
+             */
+            aspect_tolerance: number;
+            /** Max File Kb */
+            max_file_kb?: number | null;
+        };
         /** ValidationError */
         ValidationError: {
             /** Context */
@@ -2287,6 +2441,22 @@ export interface components {
             msg: string;
             /** Error Type */
             type: string;
+        };
+        /**
+         * ValidationOut
+         * @description The newest technical validation run of a version (FR-060). Informative (RULE-009).
+         */
+        ValidationOut: {
+            /** Checked At */
+            checked_at: string | null;
+            /** Results */
+            results: components["schemas"]["RuleResultOut"][];
+            /** Run Id */
+            run_id: string | null;
+            /** Summary */
+            summary: {
+                [key: string]: number;
+            };
         };
         /** VersionDetail */
         VersionDetail: {
@@ -2327,6 +2497,7 @@ export interface components {
             number: number;
             /** Previous State */
             previous_state: string | null;
+            processing?: components["schemas"]["ProcessingOut"];
             /** Sha256 */
             sha256: string;
             /** State */
@@ -2371,6 +2542,7 @@ export interface components {
             number: number;
             /** Previous State */
             previous_state: string | null;
+            processing?: components["schemas"]["ProcessingOut"];
             /** Sha256 */
             sha256: string;
             /** State */
@@ -4667,7 +4839,7 @@ export interface operations {
     download_file_api_v1_versions__version_id__file_get: {
         parameters: {
             query?: {
-                size?: "original" | "thumb" | "preview";
+                size?: "original" | "processed" | "thumb" | "preview";
                 download?: boolean;
             };
             header?: never;
@@ -4733,6 +4905,68 @@ export interface operations {
             };
         };
     };
+    get_validation_api_v1_versions__version_id__validation_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    process_version_api_v1_versions__version_id__process_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     regenerate_api_v1_versions__version_id__regenerate_post: {
         parameters: {
             query?: never;
@@ -4757,6 +4991,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["QueuedOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    validate_version_api_v1_versions__version_id__validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidationOut"];
                 };
             };
             /** @description Validation Error */

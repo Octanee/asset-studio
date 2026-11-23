@@ -176,3 +176,35 @@ ALL = tuple(
     for c in (False, True)
     for d in (False, True)
 )
+
+
+BACKGROUND_VERSION = 1
+
+
+@cache
+def remove_background() -> WorkflowTemplate:
+    """BiRefNet through ComfyUI's native nodes (ADR-010): the foreground mask as an image.
+    The cut-out is made from the original and this mask outside the engine."""
+    g: dict[str, dict[str, Any]] = {
+        "1": {"class_type": "LoadImage", "inputs": {"image": ""}},
+        "2": {"class_type": "LoadBackgroundRemovalModel", "inputs": {"bg_removal_name": ""}},
+        "3": {
+            "class_type": "RemoveBackground",
+            "inputs": {"bg_removal_model": ["2", 0], "image": ["1", 0]},
+        },
+        "4": {"class_type": "MaskToImage", "inputs": {"mask": ["3", 0]}},
+        "5": {
+            "class_type": "SaveImage",
+            "inputs": {"filename_prefix": "asset_studio", "images": ["4", 0]},
+        },
+    }
+    return WorkflowTemplate(
+        id="remove_background",
+        version=BACKGROUND_VERSION,
+        graph=g,
+        inputs={
+            "image": _s(("1", "image")),
+            "model": _s(("2", "bg_removal_name")),
+            "prefix": _s(("5", "filename_prefix"), required=False, default="asset_studio"),
+        },
+    )

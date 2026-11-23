@@ -12,7 +12,10 @@ from asset_studio.api.schemas import (
     AssetDetail,
     AssetOut,
     AssetSummary,
+    JobOut,
+    RuleResultOut,
     TransitionOut,
+    ValidationOut,
     VersionDetail,
     VersionOut,
 )
@@ -20,6 +23,8 @@ from asset_studio.api.security import CurrentActor
 from asset_studio.db import get_session
 from asset_studio.modules.assets import service
 from asset_studio.modules.assets.lifecycle import ClientAction, StateName
+from asset_studio.modules.processing import service as processing
+from asset_studio.modules.quality import service as quality
 from asset_studio.modules.storage.local import LocalStorage, get_storage
 
 assets_router = APIRouter()
@@ -106,8 +111,40 @@ def get_version(db: Db, _: CurrentActor, version_id: uuid.UUID) -> VersionDetail
 def run_transition(
     db: Db, actor: CurrentActor, version_id: uuid.UUID, body: TransitionRequest
 ) -> VersionDetail:
-    service.transition(db, version_id, body.action, actor, reason=body.reason)
+    if body.action == "retry_processing":  # T-04R starts the pipeline again
+        processing.start(db, version_id, actor)
+    else:
+        service.transition(db, version_id, body.action, actor, reason=body.reason)
     return _version_detail(db, version_id)
+
+
+@versions_router.post("/{version_id}:process", response_model=JobOut, status_code=202)
+def process_version(db: Db, actor: CurrentActor, version_id: uuid.UUID) -> Any:
+    """Process a ``generated`` version (T-02) or retry a failed one (T-04R) (FR-065)."""
+    return processing.start(db, version_id, actor)
+
+
+def _validation(report: quality.Report) -> ValidationOut:
+    return ValidationOut(
+        run_id=report.run_id,
+        checked_at=report.results[0].created_at if report.results else None,
+        summary=report.summary,
+        results=[RuleResultOut.model_validate(r) for r in report.results],
+    )
+
+
+@versions_router.get("/{version_id}/validation", response_model=ValidationOut)
+def get_validation(db: Db, _: CurrentActor, version_id: uuid.UUID) -> ValidationOut:
+    service.get_version(db, version_id)
+    return _validation(quality.latest(db, version_id))
+
+
+@versions_router.post("/{version_id}:validate", response_model=ValidationOut)
+def validate_version(
+    db: Db, files: Files, actor: CurrentActor, version_id: uuid.UUID
+) -> ValidationOut:
+    """Validate again, e.g. after the project's rules changed (FR-060)."""
+    return _validation(quality.run(db, files, service.get_version(db, version_id), actor))
 
 
 @versions_router.delete("/{version_id}", response_model=VersionDetail)
@@ -128,7 +165,7 @@ def download_file(
     files: Files,
     _: CurrentActor,
     version_id: uuid.UUID,
-    size: Literal["original", "thumb", "preview"] = "original",
+    size: Literal["original", "processed", "thumb", "preview"] = "original",
     download: bool = False,
 ) -> FileResponse:
     f = service.version_file(db, files, version_id, size)

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "version": 1,
+  "version": 2,
   "families": [
     { "id": "sdxl", "name": "Stable Diffusion XL" },
     { "id": "sd15", "name": "Stable Diffusion 1.5" }
@@ -150,6 +150,18 @@
       "bytes": 134399116,
       "licence": "apache-2.0",
       "notes": "Pose detection (ADR-009)."
+    },
+    {
+      "id": "birefnet-comfy",
+      "name": "BiRefNet background removal",
+      "kind": "segmentation",
+      "family": null,
+      "file_name": "birefnet.safetensors",
+      "source_url": "https://huggingface.co/Comfy-Org/BiRefNet/resolve/main/background_removal/birefnet.safetensors",
+      "sha256": "9ab37426bf4de0567af6b5d21b16151357149139362e6e8992021b8ce356a154",
+      "bytes": 444473596,
+      "licence": "mit",
+      "notes": "Background removal on the GPU through ComfyUI (ADR-010)."
     }
   ]
 }

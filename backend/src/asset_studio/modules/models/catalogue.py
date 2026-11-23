@@ -13,7 +13,9 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints, model_validator
 
 PATH = Path(__file__).with_name("catalogue.json")
-Kind = Literal["checkpoint", "lora", "controlnet", "ip_adapter", "clip_vision", "vae", "pose"]
+Kind = Literal[
+    "checkpoint", "lora", "controlnet", "ip_adapter", "clip_vision", "vae", "pose", "segmentation"
+]
 Slug = Annotated[str, StringConstraints(pattern=r"^[a-z0-9][a-z0-9.+-]{0,79}$")]
 FileName = Annotated[str, StringConstraints(pattern=r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,200}$")]
 

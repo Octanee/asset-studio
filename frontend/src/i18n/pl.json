@@ -152,7 +152,16 @@
     "CHARACTER_OTHER_PROJECT": "Postać należy do innego projektu.",
     "POSE_OTHER_PROJECT": "Poza należy do innego projektu.",
     "REFERENCE_OTHER_PROJECT": "Referencja należy do innego projektu.",
-    "VERSION_OTHER_PROJECT": "Wersja należy do innego projektu."
+    "VERSION_OTHER_PROJECT": "Wersja należy do innego projektu.",
+    "PROCESSING_MODEL_MISSING": "Usuwanie tła wymaga modelu segmentacji (BiRefNet). Zainstaluj go w Modelach.",
+    "PROCESSING_NOT_ALLOWED": "Tej wersji nie można teraz obrabiać.",
+    "VERSION_NOT_PROCESSING": "Wersja nie jest już w obróbce.",
+    "VERSION_NOT_PROCESSED": "Wersja nie ma jeszcze obrobionego pliku.",
+    "BACKGROUND_NOT_REMOVED": "Usuwanie tła nie zostało wykonane dla tej wersji.",
+    "IMAGE_UNREADABLE": "Obrazu nie da się odczytać.",
+    "IMAGE_TOO_LARGE": "Obraz ma za dużo pikseli.",
+    "MASK_INVALID": "Silnik zwrócił niepoprawną maskę.",
+    "CANCELLED": "Zadanie anulowano."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -310,7 +319,8 @@
       "ip_adapter": "IP-Adapter",
       "clip_vision": "CLIP vision",
       "vae": "VAE",
-      "pose": "Wykrywanie pozy"
+      "pose": "Wykrywanie pozy",
+      "segmentation": "Usuwanie tła"
     },
     "name": "Model",
     "family": "Rodzina",
@@ -446,7 +456,9 @@
     "noVersions": "Ten asset nie ma jeszcze wersji.",
     "versionAlt": "Wersja {{n}}",
     "regenerate": "Nowa wersja (inny seed)",
-    "none": "— brak —"
+    "none": "— brak —",
+    "retryProcessing": "Ponów obróbkę",
+    "processingFailed": "Obróbka się nie powiodła"
   },
   "queuePage": {
     "filter": "Filtr stanu",

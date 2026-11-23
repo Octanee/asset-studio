@@ -152,7 +152,16 @@
     "CHARACTER_OTHER_PROJECT": "The character belongs to another project.",
     "POSE_OTHER_PROJECT": "The pose belongs to another project.",
     "REFERENCE_OTHER_PROJECT": "The reference belongs to another project.",
-    "VERSION_OTHER_PROJECT": "The version belongs to another project."
+    "VERSION_OTHER_PROJECT": "The version belongs to another project.",
+    "PROCESSING_MODEL_MISSING": "Background removal needs a segmentation model (BiRefNet). Install it in Models.",
+    "PROCESSING_NOT_ALLOWED": "This version cannot be processed now.",
+    "VERSION_NOT_PROCESSING": "The version is no longer being processed.",
+    "VERSION_NOT_PROCESSED": "The version has no processed file yet.",
+    "BACKGROUND_NOT_REMOVED": "Background removal has not run for this version.",
+    "IMAGE_UNREADABLE": "The image cannot be read.",
+    "IMAGE_TOO_LARGE": "The image has too many pixels.",
+    "MASK_INVALID": "The engine returned an invalid mask.",
+    "CANCELLED": "The job was cancelled."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -310,7 +319,8 @@
       "ip_adapter": "IP-Adapter",
       "clip_vision": "CLIP vision",
       "vae": "VAE",
-      "pose": "Pose detection"
+      "pose": "Pose detection",
+      "segmentation": "Background removal"
     },
     "name": "Model",
     "family": "Family",
@@ -446,7 +456,9 @@
     "noVersions": "This asset has no versions yet.",
     "versionAlt": "Version {{n}}",
     "regenerate": "New version (new seed)",
-    "none": "— none —"
+    "none": "— none —",
+    "retryProcessing": "Retry processing",
+    "processingFailed": "Processing failed"
   },
   "queuePage": {
     "filter": "State filter",

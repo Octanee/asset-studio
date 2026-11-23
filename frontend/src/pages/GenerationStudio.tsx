@@ -17,6 +17,7 @@ import {
   useJobAction,
   useJobSet,
   useProject,
+  useProcessVersion,
   useQueueGeneration,
   useRegenerate,
   useVersions,
@@ -900,6 +901,7 @@ function Versions({
   const { t } = useTranslation();
   const versions = useVersions(assetId);
   const regenerate = useRegenerate();
+  const process = useProcessVersion();
   const rows = (versions.data ?? [])
     .filter((v) => !v.deleted_at)
     .sort((a, b) => b.number - a.number);
@@ -923,7 +925,8 @@ function Versions({
           <VersionTile
             key={v.id}
             version={v}
-            busy={regenerate.isPending}
+            busy={regenerate.isPending || process.isPending}
+            onRetry={() => process.mutate(v.id)}
             onRegenerate={() =>
               regenerate.mutate(
                 { versionId: v.id, changes: { seed: randomSeed() } },
@@ -933,12 +936,12 @@ function Versions({
           />
         ))}
       </div>
-      <ProblemText error={regenerate.error ?? versions.error} />
+      <ProblemText error={regenerate.error ?? process.error ?? versions.error} />
     </section>
   );
 }
 
-/** The version's thumbnail; until processing (WP-09) makes one, the original file. */
+/** The version's thumbnail (made by processing, WP-09); before that, the original file. */
 export function VersionImage({
   id,
   className,
@@ -964,13 +967,16 @@ function VersionTile({
   version,
   busy,
   onRegenerate,
+  onRetry,
 }: {
   version: VersionRow;
   busy: boolean;
   onRegenerate: () => void;
+  onRetry: () => void;
 }) {
   const { t } = useTranslation();
   const seed = (version.generation_metadata as { seed?: number }).seed;
+  const error = version.processing?.error;
   return (
     <figure className={s.tile} style={{ margin: 0, cursor: "default" }}>
       <VersionImage
@@ -989,6 +995,17 @@ function VersionTile({
         <span className="mono muted" style={{ fontSize: 12 }}>
           seed {seed}
         </span>
+      )}
+      {version.state === "processing_failed" && (
+        <>
+          <span role="status" className={s.error} style={{ fontSize: 12 }}>
+            {t("generation.processingFailed")}
+            {error && `: ${t(`problems.${error.code}`, { defaultValue: error.message })}`}
+          </span>
+          <button type="button" className="btn" disabled={busy} onClick={onRetry}>
+            {t("generation.retryProcessing")}
+          </button>
+        </>
       )}
       {version.generation_job_id && (
         <button type="button" className="btn ghost" disabled={busy} onClick={onRegenerate}>

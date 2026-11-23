@@ -408,8 +408,13 @@ def version_file(
     if version.storage_key is None:
         raise DomainError(410, "VERSION_DELETED", "The version file was permanently deleted.")
     asset = get_asset(session, version.asset_id)
+    out = (version.processing or {}).get("output")
     if size == "original":
         key, mime = version.storage_key, version.mime
+    elif size == "processed":
+        if not out:
+            raise DomainError(404, "FILE_NOT_AVAILABLE", "The version has not been processed.")
+        key, mime = out["key"], out["mime"]
     elif size in DERIVED:
         key, mime = f"{version.storage_key.rsplit('/', 1)[0]}/{DERIVED[size]}", "image/webp"
     else:

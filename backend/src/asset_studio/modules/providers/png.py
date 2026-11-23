@@ -45,3 +45,18 @@ def sample_image(width: int, height: int, seed: int) -> bytes:
             )
         rows.append(bytes(row))
     return encode_rgba(width, height, b"".join(rows))
+
+
+def mask_image(width: int, height: int) -> bytes:
+    """A foreground mask like a segmentation model's: a white ellipse in the middle on black,
+    as an opaque grey-scale image in RGBA."""
+    cx, cy, rx, ry = width / 2, height / 2, width * 0.35, height * 0.4
+    rows = []
+    for y in range(height):
+        row = bytearray()
+        for x in range(width):
+            inside = ((x + 0.5 - cx) / rx) ** 2 + ((y + 0.5 - cy) / ry) ** 2 <= 1
+            v = 255 if inside else 0
+            row += bytes((v, v, v, 255))
+        rows.append(bytes(row))
+    return encode_rgba(width, height, b"".join(rows))

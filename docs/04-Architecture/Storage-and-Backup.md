@@ -3,7 +3,7 @@ title: Storage and Backup
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - architecture
   - storage
@@ -22,6 +22,7 @@ The library root `<data>` is the Docker named volume `asset-data` (ADR-013, D-47
   projects/<project_id>/
     references/<reference_id>.<ext>
     assets/<asset_id>/v<number>/original.<ext>
+    assets/<asset_id>/v<number>/processed.<ext>, cutout.png   # post-processing (WP-09)
     assets/<asset_id>/v<number>/thumb-256.webp, preview-1024.webp
     training/<dataset_id>/...
   staging/            # temp files, cleaned on start
@@ -32,7 +33,7 @@ The library root `<data>` is the Docker named volume `asset-data` (ADR-013, D-47
 
 ## Rules
 
-- A version directory is written once (temp file → fsync → rename) and is never modified afterwards (RULE-003).
+- A version directory is written once (temp file → fsync → rename) and is never modified afterwards (RULE-003). The original never changes; post-processing adds its own files once (processed file, cut-out, thumbnail, preview). A failed attempt's leftovers, which no row points to, are removed before the retry writes them again.
 - Thumbnails and previews are derived and can be regenerated.
 - Permanent deletion removes the version directory and keeps its database rows and audit trail (RULE-019).
 - On start, `staging/` is cleaned. A consistency check (`assets.service.consistency_report`) reports orphan files and missing files; it is exposed in the system status view in WP-16.

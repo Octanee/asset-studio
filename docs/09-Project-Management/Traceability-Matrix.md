@@ -30,7 +30,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-055 | — | — | WP-03 | `test_fr055_*` |
 | BR-001 | FR-056 | — | — | — | — |
 | BR-001 | FR-057 | — | — | — | — |
-| BR-001 | FR-065 | — | — | — | — |
+| BR-001 | FR-065 | — | — | WP-09 | `test_fr065_*`, `test_adr010_*`, `test_t04_*`, `generation.test.tsx` |
 | BR-001 | FR-090 | UC-011 | AC-001 | — | — |
 | BR-001 | FR-091 | UC-011 | AC-001 | — | — |
 | BR-001 | FR-100 | UC-015 | — | — | — |
@@ -73,7 +73,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-007 | FR-115 | — | — | WP-02 | `test_fr115_* (API; UI in WP-16)` |
 | BR-008 | FR-058 | — | — | — | — |
 | BR-008 | FR-059 | — | — | — | — |
-| BR-008 | FR-060 | UC-009 | — | — | — |
+| BR-008 | FR-060 | UC-009 | — | WP-09 | `test_fr060_*`, `test_rule009_*` |
 | BR-008 | FR-061 | UC-009 | — | WP-03 | `test_review_flow_*` (API; UI in WP-10) |
 | BR-008 | FR-062 | UC-009 | AC-012 | WP-03 | `test_rule020_*` |
 | BR-008 | FR-063 | UC-009 | — | WP-03 | `test_fr063_*` |
