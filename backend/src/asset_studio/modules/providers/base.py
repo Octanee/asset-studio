@@ -45,6 +45,9 @@ class GenerationRequest:
 
     workflow: WorkflowTemplate
     inputs: dict[str, Any] = field(default_factory=dict)
+    # Image inputs (PNG bytes) by input name: the provider uploads them and writes the
+    # engine's file name into that input (pose skeleton, reference, init image).
+    images: dict[str, bytes] = field(default_factory=dict)
 
 
 ProgressState = Literal["queued", "running", "completed", "failed"]

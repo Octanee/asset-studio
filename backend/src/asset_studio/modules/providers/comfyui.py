@@ -2,11 +2,16 @@
 
 Endpoints used: ``/system_stats`` (health), ``/prompt`` (submit), ``/history/{id}`` and
 ``/queue`` (progress), ``/queue`` delete and ``/interrupt`` (cancel), ``/view`` (outputs),
-``/free`` (unload models). Step-level progress over the ``/ws`` socket arrives with the
-Generation Studio (WP-08); until then progress is the queue position and completion.
+``/free`` (unload models), ``/upload/image`` (image inputs). Step progress comes from the
+``/ws`` socket (``progress`` messages) on a background thread; without it, progress is the
+queue position and completion.
 """
 
+import contextlib
+import json
 import mimetypes
+import threading
+import time
 import uuid
 from typing import Any
 
@@ -36,10 +41,65 @@ class ComfyUIProvider:
         client: httpx.Client | None = None,
         timeout: float = 30.0,
         health_timeout: float = 2.0,
+        listen_steps: bool = True,
     ) -> None:
         self.http = client or httpx.Client(base_url=base_url, timeout=timeout)
         self.health_timeout = health_timeout
         self.client_id = uuid.uuid4().hex
+        self.base_url = base_url
+        self.listen_steps = listen_steps
+        self._steps: dict[str, tuple[int, int]] = {}
+        self._listener: threading.Thread | None = None
+        self._lock = threading.Lock()
+
+    # --- step progress over /ws -------------------------------------------------------------
+
+    def _ensure_listener(self) -> None:
+        with self._lock:
+            if not self.listen_steps or (self._listener and self._listener.is_alive()):
+                return
+            self._listener = threading.Thread(target=self._listen, name="comfyui-ws", daemon=True)
+            self._listener.start()
+
+    def _listen(self) -> None:
+        from websockets.sync.client import connect
+
+        url = self.base_url.replace("http", "ws", 1).rstrip("/") + f"/ws?clientId={self.client_id}"
+        while True:
+            try:
+                with connect(url, open_timeout=5, max_size=None) as ws:
+                    for message in ws:
+                        if isinstance(message, str):
+                            self.on_message(message)
+            except Exception:
+                time.sleep(2)
+
+    def on_message(self, message: str) -> None:
+        """Record ``progress`` messages ({value, max, prompt_id}) per prompt."""
+        with contextlib.suppress(ValueError, TypeError, KeyError):
+            data = json.loads(message)
+            if data.get("type") == "progress":
+                d = data["data"]
+                if d.get("prompt_id"):
+                    self._steps[str(d["prompt_id"])] = (int(d["value"]), int(d["max"]))
+
+    # --- image inputs ---------------------------------------------------------------------
+
+    def _upload(self, name: str, data: bytes) -> str:
+        response = self._call(
+            "POST",
+            "/upload/image",
+            files={"image": (f"asset_studio_{uuid.uuid4().hex}.png", data, "image/png")},
+            data={"type": "input", "overwrite": "true"},
+        )
+        if response.status_code >= 400:
+            raise ProviderError("ENGINE_ERROR", f"ComfyUI did not accept the {name} image.")
+        body = _safe_json(response)
+        stored = str(body.get("name", "")) if isinstance(body, dict) else ""
+        if not stored:
+            raise ProviderError("ENGINE_ERROR", f"ComfyUI did not store the {name} image.")
+        sub = str(body.get("subfolder") or "")
+        return f"{sub}/{stored}" if sub else stored
 
     def _call(self, method: str, path: str, **kwargs: Any) -> httpx.Response:
         try:
@@ -82,7 +142,11 @@ class ComfyUIProvider:
             return EngineHealth(False, "comfyui", reason=ENGINE_UNAVAILABLE, detail=detail)
 
     def submit(self, request: GenerationRequest) -> str:
-        graph = request.workflow.render(request.inputs)
+        inputs = dict(request.inputs)
+        for name, data in request.images.items():
+            inputs[name] = self._upload(name, data)
+        graph = request.workflow.render(inputs)
+        self._ensure_listener()
         response = self._call(
             "POST", "/prompt", json={"prompt": graph, "client_id": self.client_id}
         )
@@ -114,7 +178,8 @@ class ComfyUIProvider:
                 return Progress("completed")
         queue = self._json("GET", "/queue")
         if ref in _ids(queue.get("queue_running", [])):
-            return Progress("running")
+            step = self._steps.get(ref)
+            return Progress("running", step=step[0], of=step[1]) if step else Progress("running")
         if ref in _ids(queue.get("queue_pending", [])):
             return Progress("queued")
         if entry is not None:

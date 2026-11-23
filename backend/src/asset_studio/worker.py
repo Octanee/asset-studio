@@ -18,6 +18,7 @@ from asset_studio.config import get_settings
 from asset_studio.db import get_engine, get_sessionmaker
 from asset_studio.logging import configure_logging
 from asset_studio.models import load_all
+from asset_studio.modules.generation.service import handle_generate
 from asset_studio.modules.jobs.runner import Handler, Runner
 from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
 from asset_studio.modules.models.service import handle_download, handle_verify_model
@@ -27,6 +28,7 @@ from asset_studio.modules.providers.engine import get_engine_monitor
 
 HANDLERS: dict[str, Handler] = {
     "detect_pose": handle_detect_pose,
+    "generate": handle_generate,
     "download": handle_download,
     "verify_model": handle_verify_model,
 }

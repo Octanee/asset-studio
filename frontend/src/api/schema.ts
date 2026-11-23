@@ -179,6 +179,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/generations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generate */
+        post: operations["generate_api_v1_generations_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/generations:check": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Check */
+        post: operations["check_api_v1_generations_check_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/jobs": {
         parameters: {
             query?: never;
@@ -1052,6 +1086,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/versions/{version_id}:regenerate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Regenerate */
+        post: operations["regenerate_api_v1_versions__version_id__regenerate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1172,6 +1223,18 @@ export interface components {
             /** Version Count */
             version_count: number;
         };
+        /**
+         * AssetTarget
+         * @description An existing asset (a new version of it) or a new asset in a category.
+         */
+        AssetTarget: {
+            /** Asset Id */
+            asset_id?: string | null;
+            /** Category */
+            category?: string | null;
+            /** Name */
+            name?: string | null;
+        };
         /** AuditOut */
         AuditOut: {
             /** Action */
@@ -1198,6 +1261,16 @@ export interface components {
             subject_id: string | null;
             /** Subject Type */
             subject_type: string;
+        };
+        /** BatchItem */
+        BatchItem: {
+            /** Name */
+            name: string;
+            /**
+             * Prompt
+             * @default
+             */
+            prompt: string;
         };
         /** Category */
         Category: {
@@ -1265,15 +1338,6 @@ export interface components {
             description?: string | null;
             /** Name */
             name?: string | null;
-        };
-        /** CheckOut */
-        CheckOut: {
-            /** Compatible */
-            compatible: boolean;
-            /** Licence Confirmation Required */
-            licence_confirmation_required: string[];
-            /** Problems */
-            problems: components["schemas"]["Problem"][];
         };
         /** CheckRequest */
         CheckRequest: {
@@ -1432,10 +1496,105 @@ export interface components {
             /** Version */
             version: string | null;
         };
+        /** EngineState */
+        EngineState: {
+            /** Available */
+            available: boolean;
+            /** Reason */
+            reason: string | null;
+        };
         /** FamilyUpdate */
         FamilyUpdate: {
             /** Family Id */
             family_id: string | null;
+        };
+        /** GenerationSpec */
+        GenerationSpec: {
+            asset: components["schemas"]["AssetTarget"];
+            /** Batch */
+            batch?: components["schemas"]["BatchItem"][];
+            /**
+             * Cfg
+             * @default 6.5
+             */
+            cfg: number;
+            /** Character Id */
+            character_id?: string | null;
+            /** Checkpoint Id */
+            checkpoint_id: string;
+            /** Clip Vision Id */
+            clip_vision_id?: string | null;
+            /** Controlnet Id */
+            controlnet_id?: string | null;
+            /**
+             * Height
+             * @default 1024
+             */
+            height: number;
+            init?: components["schemas"]["InitImage"] | null;
+            /** Ip Adapter Id */
+            ip_adapter_id?: string | null;
+            /**
+             * Negative
+             * @default
+             */
+            negative: string;
+            /**
+             * Pose End
+             * @default 1
+             */
+            pose_end: number;
+            /** Pose Id */
+            pose_id?: string | null;
+            /**
+             * Pose Strength
+             * @default 1
+             */
+            pose_strength: number;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /**
+             * Prompt
+             * @default
+             */
+            prompt: string;
+            reference?: components["schemas"]["ReferenceInput"] | null;
+            /**
+             * Sampler
+             * @default dpmpp_2m
+             * @enum {string}
+             */
+            sampler: "euler" | "euler_ancestral" | "dpmpp_2m" | "dpmpp_2m_sde" | "dpmpp_sde" | "ddim" | "uni_pc";
+            /**
+             * Scheduler
+             * @default karras
+             * @enum {string}
+             */
+            scheduler: "normal" | "karras" | "exponential" | "sgm_uniform" | "simple";
+            /** Seed */
+            seed?: number | null;
+            /**
+             * Steps
+             * @default 30
+             */
+            steps: number;
+            /** Style Id */
+            style_id?: string | null;
+            /** Vae Id */
+            vae_id?: string | null;
+            /**
+             * Variants
+             * @default 1
+             */
+            variants: number;
+            /**
+             * Width
+             * @default 1024
+             */
+            width: number;
         };
         /** HTTPValidationError */
         HTTPValidationError: {
@@ -1448,6 +1607,21 @@ export interface components {
             status: string;
             /** Version */
             version: string;
+        };
+        /**
+         * InitImage
+         * @description Image-to-image (FR-031) from a reference or an existing version.
+         */
+        InitImage: {
+            /**
+             * Denoise
+             * @default 0.6
+             */
+            denoise: number;
+            /** Reference Id */
+            reference_id?: string | null;
+            /** Version Id */
+            version_id?: string | null;
         };
         /** JobDetail */
         JobDetail: {
@@ -1882,6 +2056,31 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        /** QueuedOut */
+        QueuedOut: {
+            /** Asset Ids */
+            asset_ids: string[];
+            /** Jobs */
+            jobs: components["schemas"]["JobOut"][];
+        };
+        /** ReferenceInput */
+        ReferenceInput: {
+            /**
+             * End
+             * @default 1
+             */
+            end: number;
+            /**
+             * Reference Id
+             * Format: uuid
+             */
+            reference_id: string;
+            /**
+             * Weight
+             * @default 0.6
+             */
+            weight: number;
+        };
         /** ReferenceOut */
         ReferenceOut: {
             /** Archived At */
@@ -2148,6 +2347,43 @@ export interface components {
             state: string;
             /** Width */
             width: number | null;
+        };
+        /** WorkflowRef */
+        WorkflowRef: {
+            /** Id */
+            id: string;
+            /** Version */
+            version: number;
+        };
+        /** CheckOut */
+        asset_studio__api__generation__CheckOut: {
+            engine: components["schemas"]["EngineState"];
+            /** Jobs */
+            jobs: number;
+            /** Licence Confirmation Required */
+            licence_confirmation_required: string[];
+            /** Models */
+            models: {
+                [key: string]: string;
+            };
+            /** Negative */
+            negative: string;
+            /** Problems */
+            problems: components["schemas"]["Problem"][];
+            /** Prompts */
+            prompts: string[];
+            /** Ready */
+            ready: boolean;
+            workflow: components["schemas"]["WorkflowRef"];
+        };
+        /** CheckOut */
+        asset_studio__api__models__CheckOut: {
+            /** Compatible */
+            compatible: boolean;
+            /** Licence Confirmation Required */
+            licence_confirmation_required: string[];
+            /** Problems */
+            problems: components["schemas"]["Problem"][];
         };
     };
     responses: never;
@@ -2516,6 +2752,72 @@ export interface operations {
             };
         };
     };
+    generate_api_v1_generations_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationSpec"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueuedOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    check_api_v1_generations_check_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerationSpec"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["asset_studio__api__generation__CheckOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_jobs_api_v1_jobs_get: {
         parameters: {
             query?: {
@@ -2850,7 +3152,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["CheckOut"];
+                    "application/json": components["schemas"]["asset_studio__api__models__CheckOut"];
                 };
             };
             /** @description Validation Error */
@@ -4418,6 +4720,43 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["VersionDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    regenerate_api_v1_versions__version_id__regenerate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                version_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": {
+                    [key: string]: unknown;
+                };
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["QueuedOut"];
                 };
             };
             /** @description Validation Error */

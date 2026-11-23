@@ -93,6 +93,17 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - are resumable with HTTP ranges and lock against duplicates;
 - are verified by SHA-256, then moved into the model folder (prototype S-1).
 
+### Implementation notes (WP-08, generation backend)
+
+- **Workflows:** `modules/workflows/builtin.py` builds 16 versioned templates from the graph the WP-01 spike ran: text-to-image or image-to-image, plus optional OpenPose ControlNet, IP-Adapter reference and a separate VAE (id e.g. `txt2img+pose+reference+vae`, version 1). The request chooses features from its inputs; there is no workflow choice in the UI yet.
+- **Requests:** `modules/generation/service.py` resolves the style, character, pose, reference or init image and the models. Add-on models are picked from installed models of the checkpoint's family (the xinsir OpenPose ControlNet first, D-50; the SDXL fp16 VAE). It composes the prompt from the request, the character (description, traits) and the style (description, rendering, lighting, background, project attributes); the negative prompt joins the request with both avoid lists.
+- **Checks before queueing:** model compatibility and install state (FR-084, RULE-015), missing add-ons, an empty prompt, then the licence gate (RULE-007). The engine being down is not a blocker: jobs wait (RULE-013).
+- **Jobs:** one `generate` job on the GPU lane per variant (seed + n) and per batch item (each a new asset, FR-034). Params are frozen: resolved files, prompts, pose keypoints and reference keys, plus the request for regeneration.
+- **The job:** renders the pose as an OpenPose image fitted to the output size, uploads images through `/upload/image`, runs the engine with step progress from `/ws` (`progress` messages; polling stays the fallback), and stores each output as a new `generated` version with metadata: workflow, engine, models with hashes, prompts, seed and sampling parameters, size, style and character versions, pose, references, hardware (RULE-011). References are linked to the job and the version (FR-026).
+- **Regeneration (FR-052, AC-002):** replays the stored request for the same asset with changes; the earlier version is untouched.
+- **Verified on the GPU:** SDXL + OpenPose ControlNet + IP-Adapter at 1024², 25 steps, with step progress, then regenerated with another seed.
+- **Not yet:** one reference image per generation; LoRAs (WP-13); post-processing and validation (WP-09).
+
 ### Implementation notes (WP-12)
 
 - **Catalogue:** `backend/src/asset_studio/modules/models/catalogue.json` (families, licences, models with HTTPS source, SHA-256 and size). Each entry was checked against the source's LFS metadata when added. It is synced into the database when the registry is read.

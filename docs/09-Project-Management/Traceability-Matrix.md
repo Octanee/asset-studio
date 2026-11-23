@@ -20,9 +20,9 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 
 | BR | FR | UC | AC | Implementation | Tests |
 |---|---|---|---|---|---|
-| BR-001 | FR-030 | UC-007 | AC-001 | WP-05 (provider), WP-08 (studio) | `test_fr030_*` |
-| BR-001 | FR-031 | UC-007 | AC-001 | — | — |
-| BR-001 | FR-034 | UC-007, UC-008 | AC-001 | — | — |
+| BR-001 | FR-030 | UC-007 | AC-001 | WP-05 (provider), WP-08 (generation backend; studio screen next) | `test_check_composes_*`, `test_fr033_*` |
+| BR-001 | FR-031 | UC-007 | AC-001 | WP-08 (`img2img` workflows) | `test_every_builtin_workflow_renders` |
+| BR-001 | FR-034 | UC-007, UC-008 | AC-001 | WP-08 | `test_fr034_*` |
 | BR-001 | FR-038 | UC-007 | AC-001 | WP-04 | `test_fr038_*`, `test_jobs_api_*` |
 | BR-001 | FR-046 | UC-014 | — | — | — |
 | BR-001 | FR-047 | UC-014 | — | — | — |
@@ -44,11 +44,11 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-003 | FR-021 | UC-006 | — | WP-07 | `test_fr021_*`, `test_mirror_*`, `inputs.test.tsx` (Poses) |
 | BR-003 | FR-022 | UC-006 | AC-011 | WP-07 (job, DWPose, editor) | `test_ac011_*`, `test_drawn_box_*`, `test_dwpose.py`, `inputs.test.tsx` (Poses) |
 | BR-003 | FR-025 | — | — | WP-07 | `test_fr025_*`, `test_sniff_*`, `inputs.test.tsx` (References) |
-| BR-003 | FR-032 | UC-007 | AC-001 | — | — |
-| BR-003 | FR-033 | UC-007 | AC-001 | — | — |
+| BR-003 | FR-032 | UC-007 | AC-001 | WP-08 (IP-Adapter reference) | `test_fr033_*` |
+| BR-003 | FR-033 | UC-007 | AC-001 | WP-08 (OpenPose ControlNet) | `test_fr033_*`, `test_pose_image_*` |
 | BR-004 | FR-015 | UC-005 | — | WP-07 | `test_fr015_*` |
 | BR-004 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
-| BR-004 | FR-032 | UC-007 | AC-001 | — | — |
+| BR-004 | FR-032 | UC-007 | AC-001 | WP-08 (IP-Adapter reference) | `test_fr033_*` |
 | BR-004 | FR-075 | UC-012 | — | — | — |
 | BR-005 | FR-004 | UC-003 | — | WP-02 | `test_fr004_*` |
 | BR-005 | FR-005 | UC-003 | AC-010, AC-015 | WP-02 | `test_ac010_*` |
@@ -62,7 +62,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-007 | FR-041 | — | AC-005 | WP-04 | `test_nfr003_*`, `test_failure_requeues_*` |
 | BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
 | BR-007 | FR-051 | — | — | WP-03 | `test_fr051_*` |
-| BR-007 | FR-052 | UC-010 | AC-002 | — | — |
+| BR-007 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*` |
 | BR-007 | FR-053 | UC-017 | — | WP-03 | `test_fr053_*` |
 | BR-007 | FR-054 | UC-017 | AC-013 | WP-03 | `test_fr054_*`, `test_rule019_*` |
 | BR-007 | FR-092 | UC-011 | AC-001 | — | — |
@@ -79,10 +79,10 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-008 | FR-063 | UC-009 | — | WP-03 | `test_fr063_*` |
 | BR-008 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
 | BR-009 | FR-026 | — | — | WP-07 | `test_fr026_*`, `test_links_*` |
-| BR-009 | FR-035 | UC-007 | AC-001 | — | — |
-| BR-009 | FR-037 | UC-007 | AC-001 | — | — |
+| BR-009 | FR-035 | UC-007 | AC-001 | WP-08 | `test_check_composes_*` |
+| BR-009 | FR-037 | UC-007 | AC-001 | WP-08 | `test_fr033_*` (metadata) |
 | BR-009 | FR-051 | — | — | WP-03 | `test_fr051_*` |
-| BR-009 | FR-052 | UC-010 | AC-002 | — | — |
+| BR-009 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*` |
 | BR-009 | FR-084 | UC-013 | — | WP-12 (models); WP-08 (workflows) | `test_rule015_*` |
 | BR-010 | FR-002 | — | — | WP-02 | `test_rule005_*` |
 | BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
@@ -102,7 +102,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-013 | FR-073 | UC-012 | AC-007 | — | — |
 | BR-013 | FR-074 | UC-012 | — | — | — |
 | BR-013 | FR-075 | UC-012 | — | — | — |
-| BR-014 | FR-036 | UC-007 | AC-001 | — | — |
+| BR-014 | FR-036 | UC-007 | AC-001 | WP-08 (with WP-12) | `test_rule015_*`, `test_rule007_*` |
 | BR-014 | FR-080 | UC-013 | — | WP-12 | `test_fr080_*`, `test_the_shipped_catalogue_*`, `models.test.tsx` |
 | BR-014 | FR-083 | UC-013 | AC-008 | WP-12 (registry and confirmation); WP-08 (check before queueing) | `test_ac008_*`, `test_licence_gate_*`, `models.test.tsx` |
 | BR-015 | FR-125 | — | AC-014 | WP-06 | `Shell.test.tsx`: language switch, i18n key parity |
