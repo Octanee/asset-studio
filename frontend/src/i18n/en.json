@@ -1,7 +1,78 @@
 {
   "app": {
     "name": "Asset Studio",
-    "tagline": "A local workbench for consistent AI-made visual assets."
+    "tagline": "A local workbench for consistent AI-made visual assets.",
+    "skip": "Skip to content"
   },
-  "status": { "api": "API", "checking": "Checking…", "ok": "Running", "down": "Not reachable" }
+  "nav": {
+    "label": "Modules",
+    "quick": "Quick navigation",
+    "dashboard": "Dashboard",
+    "generate": "Generation Studio",
+    "queue": "Queue",
+    "library": "Asset Library",
+    "review": "Review",
+    "styles": "Style Studio",
+    "references": "References",
+    "poses": "Poses",
+    "training": "Training",
+    "models": "Models",
+    "workflows": "Workflows",
+    "publish": "Export and publish",
+    "settings": "Settings",
+    "projects": "Projects",
+    "system": "System status"
+  },
+  "project": {
+    "switch": "Switch project",
+    "none": "No project",
+    "empty": "No projects yet",
+    "all": "All projects",
+    "error": "Projects could not be loaded"
+  },
+  "search": {
+    "open": "Search",
+    "placeholder": "Go to a module…",
+    "hint": "Ctrl K",
+    "empty": "Nothing matches “{{query}}”.",
+    "note": "Searching assets, styles and poses arrives with the library (WP-10)."
+  },
+  "queue": {
+    "label": "Queue",
+    "running": "{{count}} running",
+    "queued": "{{count}} queued",
+    "idle": "Idle",
+    "failed": "{{count}} need attention",
+    "noWorker": "Worker offline",
+    "unknown": "Queue unknown"
+  },
+  "engine": {
+    "label": "Engine status",
+    "notConnected": "Engine not connected",
+    "apiDown": "API not reachable"
+  },
+  "language": { "label": "Language", "pl": "PL", "en": "EN" },
+  "status": { "api": "API", "checking": "Checking…", "ok": "Running", "down": "Not reachable" },
+  "session": {
+    "connecting": "Connecting to the local API…",
+    "failed": "Asset Studio cannot reach its API",
+    "notConfigured": "Asset Studio is not set up yet",
+    "retry": "Try again",
+    "hint": "Start the stack with the start script, then try again."
+  },
+  "placeholder": {
+    "title": "{{module}} is not built yet",
+    "body": "This screen arrives in {{wp}}. The navigation, queue indicator and language switch already work."
+  },
+  "notFound": { "title": "Page not found", "back": "Back to the dashboard" },
+  "settings": {
+    "appearance": "Appearance",
+    "theme": "Theme",
+    "themeDark": "Studio (dark)",
+    "themeLight": "Daylight (light)",
+    "language": "Language",
+    "languagePl": "Polski",
+    "languageEn": "English",
+    "rest": "Data locations, model folders, backup and restore arrive in WP-16."
+  }
 }

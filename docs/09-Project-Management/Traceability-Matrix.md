@@ -3,7 +3,7 @@ title: Traceability Matrix
 type: traceability
 status: draft
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - traceability
   - requirements
@@ -105,7 +105,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-014 | FR-036 | UC-007 | AC-001 | — | — |
 | BR-014 | FR-080 | UC-013 | — | — | — |
 | BR-014 | FR-083 | UC-013 | AC-008 | — | — |
-| BR-015 | FR-125 | — | AC-014 | — | — |
+| BR-015 | FR-125 | — | AC-014 | WP-06 | `Shell.test.tsx`: language switch, i18n key parity |
 
 ## Business rules → requirements
 

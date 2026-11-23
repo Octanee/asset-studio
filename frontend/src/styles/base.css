@@ -1,0 +1,154 @@
+/* Shared control styles from the approved design system (Components, Design-System).
+   Tokens live in tokens.css; fonts are bundled locally (no CDN). */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:hover {
+  background: var(--surface-2);
+}
+.btn.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: transparent;
+}
+.btn.ghost {
+  background: transparent;
+  border-color: transparent;
+}
+.btn.ghost:hover {
+  background: var(--surface-2);
+}
+.btn.danger {
+  background: transparent;
+  color: var(--st-rejected);
+  border-color: var(--st-rejected);
+}
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn[aria-pressed="true"] {
+  background: var(--surface-2);
+  border-color: var(--accent);
+}
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font: 600 11px/14px var(--font-sans);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.badge i {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--st-generated);
+}
+.s-generated i {
+  background: var(--st-generated);
+}
+.s-processing i {
+  background: var(--st-processing);
+}
+.s-review i {
+  background: var(--st-review);
+}
+.s-approved i {
+  background: var(--st-approved);
+}
+.s-rejected i {
+  background: var(--st-rejected);
+}
+.s-published i {
+  background: var(--st-published);
+}
+.s-failed i {
+  background: var(--st-failed);
+}
+.s-archived i {
+  background: var(--st-archived);
+}
+.panel {
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}
+.label {
+  font: 600 11px/14px var(--font-sans);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+}
+.muted {
+  color: var(--ink-muted);
+}
+.mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  line-height: 16px;
+}
+.input {
+  min-height: 32px;
+  padding: 6px 10px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--ink);
+  width: 100%;
+}
+.h-display {
+  margin: 0;
+  font: 700 40px/44px var(--font-display);
+}
+.h-title {
+  margin: 0;
+  font: 600 20px/28px var(--font-display);
+}
+.h-panel {
+  margin: 0;
+  font: 600 15px/22px var(--font-sans);
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+@media (max-width: 1023px) {
+  .btn {
+    min-height: 44px; /* touch targets on tablet and phone */
+  }
+}
