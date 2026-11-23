@@ -32,6 +32,8 @@ class Settings(BaseSettings):
     host_agent_url: str = "http://127.0.0.1:8410"
     host_agent_token: str = ""
     engine_health_ttl_seconds: float = 5.0
+    # DWPose model files (ADR-009); empty means <data_dir>/models/pose.
+    pose_models_dir: str = ""
 
     @field_validator("allowed_hosts", mode="before")
     @classmethod

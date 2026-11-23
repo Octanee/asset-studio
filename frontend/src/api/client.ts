@@ -54,3 +54,12 @@ export async function unwrap<T>(
   if (!response.ok || data === undefined) throw new ApiError(toProblem(error, response));
   return data;
 }
+
+/** Like unwrap, for endpoints that answer 204 No Content. */
+export async function unwrapEmpty(
+  call: Promise<{ error?: unknown; response: Response }>,
+): Promise<null> {
+  const { error, response } = await call;
+  if (!response.ok) throw new ApiError(toProblem(error, response));
+  return null;
+}

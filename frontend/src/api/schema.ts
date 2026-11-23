@@ -106,6 +106,58 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/characters/{character_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Character */
+        get: operations["get_character_api_v1_characters__character_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Character */
+        patch: operations["update_character_api_v1_characters__character_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/characters/{character_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Character */
+        post: operations["archive_character_api_v1_characters__character_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/characters/{character_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Character */
+        post: operations["restore_character_api_v1_characters__character_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events": {
         parameters: {
             query?: never;
@@ -206,6 +258,92 @@ export interface paths {
         put?: never;
         /** Retry Job */
         post: operations["retry_job_api_v1_jobs__job_id__retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/poses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Poses */
+        get: operations["list_poses_api_v1_poses_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/poses/{pose_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Pose */
+        get: operations["get_pose_api_v1_poses__pose_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Pose */
+        patch: operations["update_pose_api_v1_poses__pose_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/poses/{pose_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Pose */
+        post: operations["archive_pose_api_v1_poses__pose_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/poses/{pose_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Pose */
+        post: operations["restore_pose_api_v1_poses__pose_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/poses:detect": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Detect Pose */
+        post: operations["detect_pose_api_v1_poses_detect_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -332,6 +470,24 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/characters": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Characters */
+        get: operations["list_characters_api_v1_projects__project_id__characters_get"];
+        put?: never;
+        /** Create Character */
+        post: operations["create_character_api_v1_projects__project_id__characters_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/clone": {
         parameters: {
             query?: never;
@@ -400,6 +556,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/poses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create Pose */
+        post: operations["create_pose_api_v1_projects__project_id__poses_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/{project_id}/references": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List References */
+        get: operations["list_references_api_v1_projects__project_id__references_get"];
+        put?: never;
+        /** Upload Reference */
+        post: operations["upload_reference_api_v1_projects__project_id__references_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects/{project_id}/restore": {
         parameters: {
             query?: never;
@@ -434,6 +625,128 @@ export interface paths {
         patch: operations["update_settings_api_v1_projects__project_id__settings_patch"];
         trace?: never;
     };
+    "/api/v1/projects/{project_id}/styles": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Styles */
+        get: operations["list_styles_api_v1_projects__project_id__styles_get"];
+        put?: never;
+        /** Create Style */
+        post: operations["create_style_api_v1_projects__project_id__styles_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Reference */
+        get: operations["get_reference_api_v1_references__reference_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Reference */
+        patch: operations["update_reference_api_v1_references__reference_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Reference */
+        post: operations["archive_reference_api_v1_references__reference_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}/file": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Reference File */
+        get: operations["reference_file_api_v1_references__reference_id__file_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Links */
+        get: operations["list_links_api_v1_references__reference_id__links_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}/links/{target_type}/{target_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Link Reference */
+        put: operations["link_reference_api_v1_references__reference_id__links__target_type___target_id__put"];
+        post?: never;
+        /** Unlink Reference */
+        delete: operations["unlink_reference_api_v1_references__reference_id__links__target_type___target_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/references/{reference_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Reference */
+        post: operations["restore_reference_api_v1_references__reference_id__restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/session": {
         parameters: {
             query?: never;
@@ -448,6 +761,58 @@ export interface paths {
         get: operations["start_session_api_v1_session_get"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/styles/{style_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Style */
+        get: operations["get_style_api_v1_styles__style_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update Style */
+        patch: operations["update_style_api_v1_styles__style_id__patch"];
+        trace?: never;
+    };
+    "/api/v1/styles/{style_id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Archive Style */
+        post: operations["archive_style_api_v1_styles__style_id__archive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/styles/{style_id}/restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Restore Style */
+        post: operations["restore_style_api_v1_styles__style_id__restore_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -688,6 +1053,66 @@ export interface components {
             /** Slug */
             slug: string;
         };
+        /** CharacterAttributes */
+        CharacterAttributes: {
+            /** Avoid */
+            avoid?: string[];
+            /** Traits */
+            traits?: {
+                [key: string]: string;
+            };
+        };
+        /** CharacterCreate */
+        CharacterCreate: {
+            attributes?: components["schemas"]["CharacterAttributes"];
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Name */
+            name: string;
+        };
+        /** CharacterOut */
+        CharacterOut: {
+            /** Archived At */
+            archived_at: string | null;
+            attributes: components["schemas"]["CharacterAttributes"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Description */
+            description: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Version */
+            version: number;
+        };
+        /** CharacterUpdate */
+        CharacterUpdate: {
+            attributes?: components["schemas"]["CharacterAttributes"] | null;
+            /** Description */
+            description?: string | null;
+            /** Name */
+            name?: string | null;
+        };
         /** CloneRequest */
         CloneRequest: {
             /** Name */
@@ -722,6 +1147,21 @@ export interface components {
             schema_version: number;
             /** Version */
             version: number;
+        };
+        /** DetectRequest */
+        DetectRequest: {
+            /** Box */
+            box?: [
+                number,
+                number,
+                number,
+                number
+            ] | null;
+            /**
+             * Reference Id
+             * Format: uuid
+             */
+            reference_id: string;
         };
         /** DeviceOut */
         DeviceOut: {
@@ -955,6 +1395,36 @@ export interface components {
             /** Wait Reason */
             wait_reason: string | null;
         };
+        /** LinkOut */
+        LinkOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Reference Id
+             * Format: uuid
+             */
+            reference_id: string;
+            /**
+             * Target Id
+             * Format: uuid
+             */
+            target_id: string;
+            /** Target Type */
+            target_type: string;
+            /** Weight */
+            weight: number;
+        };
+        /** LinkRequest */
+        LinkRequest: {
+            /**
+             * Weight
+             * @default 1
+             */
+            weight: number;
+        };
         /** OutputDefaults */
         OutputDefaults: {
             /**
@@ -979,6 +1449,83 @@ export interface components {
              * @default 1024
              */
             width: number;
+        };
+        /** PoseCreate */
+        PoseCreate: {
+            /**
+             * Aspect
+             * @default 0.75
+             */
+            aspect: number;
+            /** Keypoints */
+            keypoints: ([
+                number,
+                number,
+                number
+            ] | null)[];
+            /** Name */
+            name: string;
+            /** Source Reference Id */
+            source_reference_id?: string | null;
+            /**
+             * View
+             * @default front
+             * @enum {string}
+             */
+            view: "front" | "back" | "left" | "right" | "three_quarter" | "other";
+        };
+        /** PoseOut */
+        PoseOut: {
+            /** Archived At */
+            archived_at: string | null;
+            /** Aspect */
+            aspect: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Keypoints */
+            keypoints: ([
+                number,
+                number,
+                number
+            ] | null)[];
+            /** Name */
+            name: string;
+            /** Project Id */
+            project_id: string | null;
+            /** Source */
+            source: string;
+            /** Source Reference Id */
+            source_reference_id: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** View */
+            view: string;
+        };
+        /** PoseUpdate */
+        PoseUpdate: {
+            /** Aspect */
+            aspect?: number | null;
+            /** Keypoints */
+            keypoints?: ([
+                number,
+                number,
+                number
+            ] | null)[] | null;
+            /** Name */
+            name?: string | null;
+            /** View */
+            view?: ("front" | "back" | "left" | "right" | "three_quarter" | "other") | null;
         };
         /** ProjectConfig */
         ProjectConfig: {
@@ -1089,6 +1636,47 @@ export interface components {
                 [key: string]: unknown;
             }[];
         };
+        /** ReferenceOut */
+        ReferenceOut: {
+            /** Archived At */
+            archived_at: string | null;
+            /** Bytes */
+            bytes: number;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Height */
+            height: number;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Mime */
+            mime: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Role */
+            role: string;
+            /** Sha256 */
+            sha256: string;
+            /** Width */
+            width: number;
+        };
+        /** ReferenceUpdate */
+        ReferenceUpdate: {
+            /** Name */
+            name?: string | null;
+            /** Role */
+            role?: ("style" | "character" | "pose" | "composition" | "colour" | "anatomy" | "equipment" | "background" | "other") | null;
+        };
         /** SessionInfo */
         SessionInfo: {
             /** Actor */
@@ -1098,6 +1686,79 @@ export interface components {
         SettingsUpdate: {
             /** Mcp Can Decide */
             mcp_can_decide: boolean;
+        };
+        /** StyleAttributes */
+        StyleAttributes: {
+            /** Avoid */
+            avoid?: string[];
+            /**
+             * Background
+             * @default
+             */
+            background: string;
+            /**
+             * Description
+             * @default
+             */
+            description: string;
+            /** Extra */
+            extra?: {
+                [key: string]: string;
+            };
+            /**
+             * Lighting
+             * @default
+             */
+            lighting: string;
+            /** Palette */
+            palette?: string[];
+            /**
+             * Rendering
+             * @default
+             */
+            rendering: string;
+        };
+        /** StyleCreate */
+        StyleCreate: {
+            attributes?: components["schemas"]["StyleAttributes"];
+            /** Name */
+            name: string;
+        };
+        /** StyleOut */
+        StyleOut: {
+            /** Archived At */
+            archived_at: string | null;
+            attributes: components["schemas"]["StyleAttributes"];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Name */
+            name: string;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Version */
+            version: number;
+        };
+        /** StyleUpdate */
+        StyleUpdate: {
+            attributes?: components["schemas"]["StyleAttributes"] | null;
+            /** Name */
+            name?: string | null;
         };
         /** TransitionOut */
         TransitionOut: {
@@ -1438,6 +2099,134 @@ export interface operations {
             };
         };
     };
+    get_character_api_v1_characters__character_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_character_api_v1_characters__character_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CharacterUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_character_api_v1_characters__character_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_character_api_v1_characters__character_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     events_api_v1_events_get: {
         parameters: {
             query?: {
@@ -1608,6 +2397,200 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["JobDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_poses_api_v1_poses_get: {
+        parameters: {
+            query?: {
+                project_id?: string | null;
+                view?: ("front" | "back" | "left" | "right" | "three_quarter" | "other") | null;
+                include_archived?: boolean;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_pose_api_v1_poses__pose_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pose_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_pose_api_v1_poses__pose_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pose_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PoseUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_pose_api_v1_poses__pose_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pose_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_pose_api_v1_poses__pose_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                pose_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    detect_pose_api_v1_poses_detect_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DetectRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobOut"];
                 };
             };
             /** @description Validation Error */
@@ -1881,6 +2864,74 @@ export interface operations {
             };
         };
     };
+    list_characters_api_v1_projects__project_id__characters_get: {
+        parameters: {
+            query?: {
+                include_archived?: boolean;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_character_api_v1_projects__project_id__characters_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CharacterCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     clone_api_v1_projects__project_id__clone_post: {
         parameters: {
             query?: never;
@@ -2015,6 +3066,117 @@ export interface operations {
             };
         };
     };
+    create_pose_api_v1_projects__project_id__poses_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PoseCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PoseOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_references_api_v1_projects__project_id__references_get: {
+        parameters: {
+            query?: {
+                role?: ("style" | "character" | "pose" | "composition" | "colour" | "anatomy" | "equipment" | "background" | "other") | null;
+                target_type?: ("style" | "character") | null;
+                target_id?: string | null;
+                include_archived?: boolean;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    upload_reference_api_v1_projects__project_id__references_post: {
+        parameters: {
+            query: {
+                role: "style" | "character" | "pose" | "composition" | "colour" | "anatomy" | "equipment" | "background" | "other";
+                name?: string;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "image/jpeg": string;
+                "image/png": string;
+                "image/webp": string;
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     restore_api_v1_projects__project_id__restore_post: {
         parameters: {
             query?: never;
@@ -2081,6 +3243,332 @@ export interface operations {
             };
         };
     };
+    list_styles_api_v1_projects__project_id__styles_get: {
+        parameters: {
+            query?: {
+                include_archived?: boolean;
+            };
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_style_api_v1_projects__project_id__styles_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                project_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StyleCreate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_reference_api_v1_references__reference_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_reference_api_v1_references__reference_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReferenceUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_reference_api_v1_references__reference_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reference_file_api_v1_references__reference_id__file_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_links_api_v1_references__reference_id__links_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    link_reference_api_v1_references__reference_id__links__target_type___target_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+                target_type: "style" | "character";
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LinkRequest"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LinkOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlink_reference_api_v1_references__reference_id__links__target_type___target_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+                target_type: "style" | "character";
+                target_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_reference_api_v1_references__reference_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reference_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ReferenceOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     start_session_api_v1_session_get: {
         parameters: {
             query?: never;
@@ -2097,6 +3585,134 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SessionInfo"];
+                };
+            };
+        };
+    };
+    get_style_api_v1_styles__style_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_style_api_v1_styles__style_id__patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["StyleUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    archive_style_api_v1_styles__style_id__archive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_style_api_v1_styles__style_id__restore_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
                 };
             };
         };
