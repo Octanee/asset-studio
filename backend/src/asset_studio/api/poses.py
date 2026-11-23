@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 
+from asset_studio.api.idempotency import Idem
 from asset_studio.api.schemas import JobOut
 from asset_studio.api.security import CurrentActor
 from asset_studio.db import get_session
@@ -71,8 +72,13 @@ def list_poses(
 
 
 @router.post(":detect", response_model=JobOut, status_code=202)
-def detect_pose(db: Db, actor: CurrentActor, body: DetectRequest) -> Any:
-    return service.request_detection(db, body.reference_id, actor, box=body.box)
+def detect_pose(db: Db, actor: CurrentActor, idem: Idem, body: DetectRequest) -> Any:
+    return idem.run(
+        JobOut,
+        202,
+        body,
+        lambda: service.request_detection(db, body.reference_id, actor, box=body.box),
+    )
 
 
 @project_router.post("/{project_id}/poses", response_model=PoseOut, status_code=201)

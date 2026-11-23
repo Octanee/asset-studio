@@ -685,7 +685,8 @@ export interface paths {
         };
         /** Get Draft */
         get: operations["get_draft_api_v1_projects_drafts__draft_id__get"];
-        put?: never;
+        /** Update Draft */
+        put: operations["update_draft_api_v1_projects_drafts__draft_id__put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -999,6 +1000,26 @@ export interface paths {
         put?: never;
         /** Create Target */
         post: operations["create_target_api_v1_projects__project_id__targets_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects:validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Validate Config
+         * @description Check a configuration against the schema without saving it.
+         */
+        post: operations["validate_config_api_v1_projects_validate_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1546,6 +1567,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/workflows": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Workflows */
+        get: operations["list_workflows_api_v1_workflows_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -1887,6 +1925,22 @@ export interface components {
             /** Body */
             body: string;
         };
+        /** ConfigCheck */
+        ConfigCheck: {
+            /** Config */
+            config: {
+                [key: string]: unknown;
+            };
+        };
+        /** ConfigProblems */
+        ConfigProblems: {
+            /** Problems */
+            problems: {
+                [key: string]: unknown;
+            }[];
+            /** Valid */
+            valid: boolean;
+        };
         /** ConfigUpdate */
         ConfigUpdate: {
             /**
@@ -2008,6 +2062,19 @@ export interface components {
             project_id: string | null;
             /** Status */
             status: string;
+        };
+        /** DraftUpdate */
+        DraftUpdate: {
+            /** Assumptions */
+            assumptions?: string[] | null;
+            /** Config */
+            config?: {
+                [key: string]: unknown;
+            } | null;
+            /** Description */
+            description?: string | null;
+            /** Missing */
+            missing?: string[] | null;
         };
         /**
          * DuplicateOut
@@ -3395,6 +3462,19 @@ export interface components {
             /** Width */
             width: number | null;
         };
+        /** WorkflowOut */
+        WorkflowOut: {
+            /** Builtin */
+            builtin: boolean;
+            /** Engine */
+            engine: string;
+            /** Id */
+            id: string;
+            /** Inputs */
+            inputs: string[];
+            /** Version */
+            version: number;
+        };
         /** WorkflowRef */
         WorkflowRef: {
             /** Id */
@@ -3999,7 +4079,9 @@ export interface operations {
     generate_api_v1_generations_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -4594,7 +4676,9 @@ export interface operations {
     detect_pose_api_v1_poses_detect_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -4828,6 +4912,41 @@ export interface operations {
             cookie?: never;
         };
         requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    update_draft_api_v1_projects_drafts__draft_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DraftUpdate"];
+            };
+        };
         responses: {
             /** @description Successful Response */
             200: {
@@ -5665,6 +5784,39 @@ export interface operations {
             };
         };
     };
+    validate_config_api_v1_projects_validate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfigCheck"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConfigProblems"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     list_publications_api_v1_publications_get: {
         parameters: {
             query?: {
@@ -5702,7 +5854,9 @@ export interface operations {
     publish_api_v1_publications_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
             path?: never;
             cookie?: never;
         };
@@ -6665,7 +6819,9 @@ export interface operations {
     process_version_api_v1_versions__version_id__process_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
             path: {
                 version_id: string;
             };
@@ -6696,7 +6852,9 @@ export interface operations {
     regenerate_api_v1_versions__version_id__regenerate_post: {
         parameters: {
             query?: never;
-            header?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
             path: {
                 version_id: string;
             };
@@ -6757,6 +6915,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_workflows_api_v1_workflows_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WorkflowOut"][];
                 };
             };
         };

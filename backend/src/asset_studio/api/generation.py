@@ -7,6 +7,7 @@ from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from asset_studio.api.idempotency import Idem
 from asset_studio.api.schemas import JobOut
 from asset_studio.api.security import CurrentActor
 from asset_studio.db import get_session
@@ -73,17 +74,24 @@ def check(db: Db, _: CurrentActor, engine: Engine, spec: GenerationSpec) -> Gene
 
 
 @router.post("", response_model=QueuedOut, status_code=202)
-def generate(db: Db, actor: CurrentActor, spec: GenerationSpec) -> Any:
-    q = service.queue(db, spec, actor)
-    return QueuedOut(asset_ids=q.asset_ids, jobs=[JobOut.model_validate(j) for j in q.jobs])
+def generate(db: Db, actor: CurrentActor, idem: Idem, spec: GenerationSpec) -> Any:
+    def work() -> QueuedOut:
+        q = service.queue(db, spec, actor)
+        return QueuedOut(asset_ids=q.asset_ids, jobs=[JobOut.model_validate(j) for j in q.jobs])
+
+    return idem.run(QueuedOut, 202, spec, work)
 
 
 @versions_router.post("/{version_id}:regenerate", response_model=QueuedOut, status_code=202)
 def regenerate(
     db: Db,
     actor: CurrentActor,
+    idem: Idem,
     version_id: uuid.UUID,
     changes: Annotated[dict[str, Any], Body(description="Fields of the request to change.")],
 ) -> Any:
-    q = service.regenerate(db, version_id, changes, actor)
-    return QueuedOut(asset_ids=q.asset_ids, jobs=[JobOut.model_validate(j) for j in q.jobs])
+    def work() -> QueuedOut:
+        q = service.regenerate(db, version_id, changes, actor)
+        return QueuedOut(asset_ids=q.asset_ids, jobs=[JobOut.model_validate(j) for j in q.jobs])
+
+    return idem.run(QueuedOut, 202, (str(version_id), sorted(changes.items())), work)

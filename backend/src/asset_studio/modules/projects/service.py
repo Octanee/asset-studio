@@ -263,12 +263,55 @@ def create_draft(
     return draft, draft_problems(draft)
 
 
-def draft_problems(draft: ProjectDraft) -> list[dict[str, Any]]:
+def config_problems(config: dict[str, Any]) -> list[dict[str, Any]]:
+    """What is wrong with a configuration, without saving anything (``project_validate``)."""
     try:
-        ProjectConfig.model_validate(draft.config)
+        ProjectConfig.model_validate(config)
     except ValidationError as exc:
         return _validation_details(exc)
     return []
+
+
+def draft_problems(draft: ProjectDraft) -> list[dict[str, Any]]:
+    return config_problems(draft.config)
+
+
+def update_draft(
+    session: Session,
+    draft_id: uuid.UUID,
+    *,
+    actor: Actor,
+    description: str | None = None,
+    config: dict[str, Any] | None = None,
+    assumptions: list[str] | None = None,
+    missing: list[str] | None = None,
+) -> ProjectDraft:
+    """Revise a pending draft (FR-008). Only its author or the user may change it; creating
+    the project stays the user's confirmation (RULE-010)."""
+    draft = get_draft(session, draft_id)
+    if draft.status != "pending":
+        raise DomainError(409, "DRAFT_NOT_PENDING", "This draft was already handled.")
+    if actor not in ("user", draft.created_by_actor):
+        raise DomainError(
+            403, "ACTOR_NOT_ALLOWED", "Only the draft's author or the user can change it."
+        )
+    if description is not None:
+        draft.description = description[:4000]
+    if config is not None:
+        draft.config = config
+    if assumptions is not None:
+        draft.assumptions = assumptions[:50]
+    if missing is not None:
+        draft.missing = missing[:50]
+    session.flush()
+    record(
+        session,
+        actor=actor,
+        action="project_draft.updated",
+        subject_type="project_draft",
+        subject_id=draft.id,
+    )
+    return draft
 
 
 def get_draft(session: Session, draft_id: uuid.UUID) -> ProjectDraft:

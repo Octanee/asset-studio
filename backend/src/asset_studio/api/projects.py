@@ -50,6 +50,22 @@ class DraftConfirm(BaseModel):
     config: ProjectConfig
 
 
+class DraftUpdate(BaseModel):
+    description: str | None = Field(default=None, max_length=4000)
+    config: dict[str, Any] | None = None
+    assumptions: list[str] | None = Field(default=None, max_length=50)
+    missing: list[str] | None = Field(default=None, max_length=50)
+
+
+class ConfigCheck(BaseModel):
+    config: dict[str, Any]
+
+
+class ConfigProblems(BaseModel):
+    valid: bool
+    problems: list[dict[str, Any]]
+
+
 @router.get("", response_model=list[ProjectOut])
 def list_projects(db: Db, _: CurrentActor, include_archived: bool = False) -> list[Any]:
     return service.list_projects(db, include_archived)
@@ -81,6 +97,30 @@ def create_draft(db: Db, actor: CurrentActor, body: DraftCreate) -> DraftOut:
     )
     return DraftOut(
         **DraftOut.model_validate(draft).model_dump(exclude={"problems"}), problems=problems
+    )
+
+
+@router.post(":validate", response_model=ConfigProblems)
+def validate_config(_: CurrentActor, body: ConfigCheck) -> ConfigProblems:
+    """Check a configuration against the schema without saving it."""
+    problems = service.config_problems(body.config)
+    return ConfigProblems(valid=not problems, problems=problems)
+
+
+@router.put("/drafts/{draft_id}", response_model=DraftOut)
+def update_draft(db: Db, actor: CurrentActor, draft_id: uuid.UUID, body: DraftUpdate) -> DraftOut:
+    draft = service.update_draft(
+        db,
+        draft_id,
+        actor=actor,
+        description=body.description,
+        config=body.config,
+        assumptions=body.assumptions,
+        missing=body.missing,
+    )
+    return DraftOut(
+        **DraftOut.model_validate(draft).model_dump(exclude={"problems"}),
+        problems=service.draft_problems(draft),
     )
 
 

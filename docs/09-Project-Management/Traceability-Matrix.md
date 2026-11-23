@@ -88,8 +88,8 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
 | BR-010 | FR-064 | UC-009 | — | WP-03, WP-10 (comments) | `test_rule005_mcp_decisions_*`, `test_fr064_*`, `review.test.tsx` |
 | BR-010 | FR-095 | UC-011 | AC-001 | WP-11 | `test_rule005_ac004_*` |
-| BR-010 | FR-120 | — | — | — | — |
-| BR-010 | FR-121 | — | AC-004 | — | — |
+| BR-010 | FR-120 | — | — | WP-15 | `test_fr120_*`, `test_mcp.py` |
+| BR-010 | FR-121 | — | AC-004 | WP-15 | `test_ac004_*`, `test_rule005_ac004_*`, `test_rule005_mcp_decisions_*` |
 | BR-011 | FR-007 | UC-001, UC-002 | — | WP-02 | `test_fr007_*, test_rule014_*` |
 | BR-011 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
 | BR-011 | FR-045 | UC-014 | — | — | — |

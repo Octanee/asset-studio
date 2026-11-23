@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from asset_studio.api.idempotency import Idem
 from asset_studio.api.schemas import (
     AssetDetail,
     AssetOut,
@@ -205,9 +206,9 @@ def run_transition(
 
 
 @versions_router.post("/{version_id}:process", response_model=JobOut, status_code=202)
-def process_version(db: Db, actor: CurrentActor, version_id: uuid.UUID) -> Any:
+def process_version(db: Db, actor: CurrentActor, idem: Idem, version_id: uuid.UUID) -> Any:
     """Process a ``generated`` version (T-02) or retry a failed one (T-04R) (FR-065)."""
-    return processing.start(db, version_id, actor)
+    return idem.run(JobOut, 202, str(version_id), lambda: processing.start(db, version_id, actor))
 
 
 def _validation(report: quality.Report) -> ValidationOut:

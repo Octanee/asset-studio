@@ -115,6 +115,8 @@ def _publish(
     confirm: bool = False,
 ) -> Any:
     body = {"plan_id": plan["id"], "confirm_overwrites": plan["overwrites"] if confirm else []}
+    if headers is MCP:  # Claude must send an Idempotency-Key with job-creating requests
+        headers = MCP | {"Idempotency-Key": f"publish-{plan['id']}"}
     return client.post("/api/v1/publications", json=body, headers=headers)
 
 

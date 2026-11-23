@@ -16,6 +16,7 @@ from asset_studio.api import (
     session,
     styles,
     system,
+    workflows,
 )
 
 api_router = APIRouter()
@@ -34,6 +35,7 @@ api_router.include_router(generation.router, prefix="/generations", tags=["gener
 api_router.include_router(generation.versions_router, prefix="/versions", tags=["generation"])
 api_router.include_router(models.project_router, prefix="/projects", tags=["models"])
 api_router.include_router(audit.router, prefix="/audit", tags=["audit"])
+api_router.include_router(workflows.router, prefix="/workflows", tags=["workflows"])
 api_router.include_router(assets.assets_router, prefix="/assets", tags=["assets"])
 api_router.include_router(assets.versions_router, prefix="/versions", tags=["assets"])
 api_router.include_router(collections.project_router, prefix="/projects", tags=["collections"])

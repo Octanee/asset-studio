@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, Query
 from pydantic import BaseModel, Field, model_validator
 from sqlalchemy.orm import Session
 
+from asset_studio.api.idempotency import Idem
 from asset_studio.api.schemas import (
     ExportRootOut,
     JobOut,
@@ -182,10 +183,15 @@ def get_plan(db: Db, _: CurrentActor, plan_id: uuid.UUID) -> PlanOut:
 
 
 @router.post("", response_model=JobOut, status_code=202)
-def publish(db: Db, actor: CurrentActor, body: PublishRequest) -> Any:
+def publish(db: Db, actor: CurrentActor, idem: Idem, body: PublishRequest) -> Any:
     """Publish a plan. Existing files need ``confirm_overwrites`` (RULE-004); Claude may
     publish only where the project allows it and never overwrites (RULE-005)."""
-    return publishing.publish(db, body.plan_id, body.confirm_overwrites, actor)
+    return idem.run(
+        JobOut,
+        202,
+        body,
+        lambda: publishing.publish(db, body.plan_id, body.confirm_overwrites, actor),
+    )
 
 
 def _publications(rows: list[Any]) -> list[PublicationOut]:
