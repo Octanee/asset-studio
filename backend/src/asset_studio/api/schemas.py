@@ -61,6 +61,59 @@ class AuditOut(BaseModel):
     data: dict[str, Any]
 
 
+class VersionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    asset_id: uuid.UUID
+    number: int
+    state: str
+    previous_state: str | None
+    sha256: str
+    mime: str
+    bytes: int
+    width: int | None
+    height: int | None
+    generation_job_id: uuid.UUID | None
+    generation_metadata: dict[str, Any]
+    first_published_at: datetime | None
+    deleted_at: datetime | None
+    created_at: datetime
+
+
+class TransitionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    transition_id: str
+    from_state: str | None
+    to_state: str
+    actor: str
+    reason: str
+    at: datetime
+
+
+class VersionDetail(VersionOut):
+    history: list[TransitionOut]
+
+
+class AssetOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: uuid.UUID
+    project_id: uuid.UUID
+    category: str
+    slug: str
+    name: str
+    archived_at: datetime | None
+    created_at: datetime
+
+
+class AssetSummary(AssetOut):
+    latest_version: VersionOut | None
+    version_count: int
+
+
+class AssetDetail(AssetOut):
+    versions: list[VersionOut]
+
+
 class JobOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
     id: uuid.UUID

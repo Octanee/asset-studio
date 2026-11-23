@@ -33,8 +33,8 @@ tags:
 | `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |
 | `asset` | id, project_id, category, slug, name, archived_at | unique (project_id, slug) |
-| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, created_at | unique (asset_id, number) |
-| `state_transition` | id, asset_version_id, transition_id (`T-05`…), from_state, to_state, actor, reason, at | append-only |
+| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, first_published_at, deleted_at, created_at | unique (asset_id, number); `storage_key` is null after permanent deletion (T-13) and `state` is checked against the lifecycle states (WP-03) |
+| `state_transition` | id, asset_version_id, transition_id (`T-05`…), from_state, to_state, actor, reason, at | append-only, enforced by a trigger (WP-03) |
 | `validation_result` | id, asset_version_id, rule, passed, details jsonb | |
 | `review_comment` | id, asset_version_id, actor, body, at | |
 | `export_preset` | id, project_id, name, definition jsonb (formats, sizes, naming, folders, optimisation, metadata) | |

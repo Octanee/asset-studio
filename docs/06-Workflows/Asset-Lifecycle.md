@@ -47,7 +47,7 @@ stateDiagram-v2
 | T-01 | (job) → `generated` | system | job completed | job id, full generation metadata |
 | T-02 | `generated` → `processing` | system | — | steps planned |
 | T-03 | `processing` → `awaiting_review` | system | all steps succeeded | validation report |
-| T-04 | `processing` → `processing_failed` | system | a step failed | error; retry returns to `processing` |
+| T-04 | `processing` → `processing_failed` | system | a step failed | error; retry returns to `processing` (recorded as T-04R, user or system) |
 | T-05 | `awaiting_review` → `approved` | user; mcp if allowed (RULE-005) | — | actor, time |
 | T-06 | `awaiting_review` → `rejected` | user; mcp if allowed | — | actor, optional reason |
 | T-07 | `rejected` → `awaiting_review` | user | — | actor |

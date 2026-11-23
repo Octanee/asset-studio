@@ -27,7 +27,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-046 | UC-014 | — | — | — |
 | BR-001 | FR-047 | UC-014 | — | — | — |
 | BR-001 | FR-049 | — | — | — | — |
-| BR-001 | FR-055 | — | — | — | — |
+| BR-001 | FR-055 | — | — | WP-03 | `test_fr055_*` |
 | BR-001 | FR-056 | — | — | — | — |
 | BR-001 | FR-057 | — | — | — | — |
 | BR-001 | FR-065 | — | — | — | — |
@@ -60,11 +60,11 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-006 | FR-082 | UC-013 | — | — | — |
 | BR-007 | FR-040 | — | — | WP-04 | `test_fr040_*`, `test_claim_*` |
 | BR-007 | FR-041 | — | AC-005 | WP-04 | `test_nfr003_*`, `test_failure_requeues_*` |
-| BR-007 | FR-050 | — | — | — | — |
-| BR-007 | FR-051 | — | — | — | — |
+| BR-007 | FR-050 | — | — | WP-03 | `test_fr050_*` |
+| BR-007 | FR-051 | — | — | WP-03 | `test_fr051_*` |
 | BR-007 | FR-052 | UC-010 | AC-002 | — | — |
-| BR-007 | FR-053 | UC-017 | — | — | — |
-| BR-007 | FR-054 | UC-017 | AC-013 | — | — |
+| BR-007 | FR-053 | UC-017 | — | WP-03 | `test_fr053_*` |
+| BR-007 | FR-054 | UC-017 | AC-013 | WP-03 | `test_fr054_*`, `test_rule019_*` |
 | BR-007 | FR-092 | UC-011 | AC-001 | — | — |
 | BR-007 | FR-093 | UC-011 | AC-001 | — | — |
 | BR-007 | FR-094 | UC-011 | AC-001, AC-003 | — | — |
@@ -74,19 +74,19 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-008 | FR-058 | — | — | — | — |
 | BR-008 | FR-059 | — | — | — | — |
 | BR-008 | FR-060 | UC-009 | — | — | — |
-| BR-008 | FR-061 | UC-009 | — | — | — |
-| BR-008 | FR-062 | UC-009 | AC-012 | — | — |
-| BR-008 | FR-063 | UC-009 | — | — | — |
-| BR-008 | FR-064 | UC-009 | — | — | — |
+| BR-008 | FR-061 | UC-009 | — | WP-03 | `test_review_flow_*` (API; UI in WP-10) |
+| BR-008 | FR-062 | UC-009 | AC-012 | WP-03 | `test_rule020_*` |
+| BR-008 | FR-063 | UC-009 | — | WP-03 | `test_fr063_*` |
+| BR-008 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
 | BR-009 | FR-026 | — | — | — | — |
 | BR-009 | FR-035 | UC-007 | AC-001 | — | — |
 | BR-009 | FR-037 | UC-007 | AC-001 | — | — |
-| BR-009 | FR-051 | — | — | — | — |
+| BR-009 | FR-051 | — | — | WP-03 | `test_fr051_*` |
 | BR-009 | FR-052 | UC-010 | AC-002 | — | — |
 | BR-009 | FR-084 | UC-013 | — | — | — |
 | BR-010 | FR-002 | — | — | WP-02 | `test_rule005_*` |
 | BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
-| BR-010 | FR-064 | UC-009 | — | — | — |
+| BR-010 | FR-064 | UC-009 | — | WP-03 | `test_rule005_mcp_decisions_*` (decisions; comments in WP-10) |
 | BR-010 | FR-095 | UC-011 | AC-001 | — | — |
 | BR-010 | FR-120 | — | — | — | — |
 | BR-010 | FR-121 | — | AC-004 | — | — |

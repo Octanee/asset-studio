@@ -4,6 +4,7 @@ so tables cannot be cleaned with DELETE)."""
 
 import os
 from collections.abc import Iterator
+from pathlib import Path
 
 import pytest
 from alembic import command
@@ -12,6 +13,8 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Connection
 from sqlalchemy.orm import Session, sessionmaker
+
+from asset_studio.modules.storage.local import LocalStorage, get_storage
 
 TEST_DB = os.environ.get("ASSET_STUDIO_TEST_DATABASE_URL", "")
 os.environ.update(
@@ -22,6 +25,7 @@ os.environ.update(
 )
 if TEST_DB:
     os.environ["ASSET_STUDIO_DATABASE_URL"] = TEST_DB
+os.environ.setdefault("ASSET_STUDIO_DATA_DIR", os.path.join(os.path.dirname(__file__), ".data"))
 
 ORIGIN = {"Origin": "http://127.0.0.1:8480"}
 MCP = {"Authorization": "Bearer test-mcp-token"}
@@ -58,11 +62,17 @@ def db(connection: Connection) -> Iterator[Session]:
 
 
 @pytest.fixture
-def client(connection: Connection) -> Iterator[TestClient]:
+def storage(tmp_path: Path) -> LocalStorage:
+    return LocalStorage(tmp_path / "data")
+
+
+@pytest.fixture
+def client(connection: Connection, storage: LocalStorage) -> Iterator[TestClient]:
     from asset_studio.db import get_session, get_sessionmaker
     from asset_studio.main import create_app
 
     app = create_app()
+    app.dependency_overrides[get_storage] = lambda: storage
     app.dependency_overrides[get_sessionmaker] = lambda: bound_sessions(connection)
 
     def _session() -> Iterator[Session]:

@@ -27,8 +27,8 @@ tags:
 | Poses | `/poses`, `POST /poses:detect` (job) |
 | Generation | `POST /generations` (single or batch → jobs), `POST /generations:check` (compatibility, licence, estimate) |
 | Jobs (WP-04, implemented) | `GET /jobs` (filters `state`, `lane`, `kind`, `project_id`; cursor `before`, `limit`), `GET /jobs/summary` (per-lane counts, wait reasons, live workers), `GET /jobs/{id}` (with events), `POST /jobs/{id}/cancel`, `POST /jobs/{id}/retry`. Jobs are enqueued by the owning modules; there is no generic enqueue endpoint. Pausing the whole queue is deferred to WP-16 |
-| Assets | `GET /assets`, `GET /assets/{id}`, `GET /assets/{id}/versions`, `GET /versions/{id}/file?size=thumb\|preview\|original` |
-| Lifecycle | `POST /versions/{id}/transitions` `{action: approve\|reject\|reopen\|withdraw\|archive\|restore, reason}`, `DELETE /versions/{id}` (permanent, needs confirmation token) |
+| Assets (WP-03, implemented) | `GET /assets` (filters `project_id`, `category`, `state`, `q`, `include_archived`; cursor `before`, `limit`), `GET /assets/{id}`, `GET /assets/{id}/versions`, `POST /assets/{id}/archive` / `restore`, `GET /versions/{id}` (with transition history), `GET /versions/{id}/file?size=original\|thumb\|preview&download=` (served with `nosniff` and a sandbox CSP) |
+| Lifecycle (WP-03, implemented) | `POST /versions/{id}/transitions` `{action: approve\|reject\|reopen\|withdraw\|archive\|restore\|retry_processing, reason}`, `DELETE /versions/{id}?confirm=<version id>` (permanent, user only). System transitions (T-01 to T-04) and publishing (T-09/T-10, WP-11) are service calls, not client actions |
 | Review | `GET/POST /versions/{id}/comments`, `GET /versions/{id}/validation` |
 | Publishing | `/projects/{id}/presets`, `/projects/{id}/targets`, `POST /publications:plan` (returns file plan + overwrites), `POST /publications` (needs plan id + confirmed overwrites) |
 | Training | `/projects/{id}/datasets`, `POST /training-runs` (returns estimate; needs `acknowledged_estimate` for SDXL on weak hardware) |
