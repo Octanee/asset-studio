@@ -3,12 +3,16 @@ import { Outlet, type RouteObject } from "react-router";
 
 import { ApiError } from "../api/client";
 import { useSession } from "../api/queries";
+import { AssetDetails } from "../pages/AssetDetails";
+import { Compare } from "../pages/Compare";
 import { GenerationStudio } from "../pages/GenerationStudio";
+import { Library } from "../pages/Library";
 import { Models } from "../pages/Models";
 import { NotFound, Placeholder, Settings, SystemStatus } from "../pages/pages";
 import { Poses } from "../pages/Poses";
 import { Queue } from "../pages/Queue";
 import { References } from "../pages/References";
+import { Review } from "../pages/Review";
 import { StyleStudio } from "../pages/StyleStudio";
 import { MODULES, type ModuleId } from "./modules";
 
@@ -21,6 +25,8 @@ const BUILT = new Set<ModuleId>([
   "models",
   "generate",
   "queue",
+  "library",
+  "review",
 ]);
 import { AppShell } from "./Shell";
 
@@ -76,6 +82,10 @@ export const routes: RouteObject[] = [
           })),
           { path: "/generate", element: <GenerationStudio /> },
           { path: "/queue", element: <Queue /> },
+          { path: "/library", element: <Library /> },
+          { path: "/library/:assetId", element: <AssetDetails /> },
+          { path: "/review", element: <Review /> },
+          { path: "/review/compare", element: <Compare /> },
           { path: "/styles", element: <StyleStudio /> },
           { path: "/references", element: <References /> },
           { path: "/poses", element: <Poses /> },
