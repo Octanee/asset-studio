@@ -70,6 +70,9 @@ jobs:
           cache: pnpm
           cache-dependency-path: frontend/pnpm-lock.yaml
       - run: pnpm install --frozen-lockfile
+      # The client types must match the committed OpenAPI document (the backend tests check
+      # that the document matches the API code).
+      - run: pnpm gen:api && git diff --exit-code -- src/api/schema.ts
       - run: pnpm format:check
       - run: pnpm lint
       - run: pnpm typecheck

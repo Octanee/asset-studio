@@ -1,7 +1,78 @@
 {
   "app": {
     "name": "Asset Studio",
-    "tagline": "Lokalny warsztat do spójnych grafik tworzonych z AI."
+    "tagline": "Lokalny warsztat do spójnych grafik tworzonych z AI.",
+    "skip": "Przejdź do treści"
   },
-  "status": { "api": "API", "checking": "Sprawdzanie…", "ok": "Działa", "down": "Brak połączenia" }
+  "nav": {
+    "label": "Moduły",
+    "quick": "Szybka nawigacja",
+    "dashboard": "Pulpit",
+    "generate": "Studio generowania",
+    "queue": "Kolejka",
+    "library": "Biblioteka zasobów",
+    "review": "Przegląd",
+    "styles": "Studio stylów",
+    "references": "Referencje",
+    "poses": "Pozy",
+    "training": "Trening",
+    "models": "Modele",
+    "workflows": "Workflowy",
+    "publish": "Eksport i publikacja",
+    "settings": "Ustawienia",
+    "projects": "Projekty",
+    "system": "Stan systemu"
+  },
+  "project": {
+    "switch": "Zmień projekt",
+    "none": "Brak projektu",
+    "empty": "Nie ma jeszcze projektów",
+    "all": "Wszystkie projekty",
+    "error": "Nie udało się wczytać projektów"
+  },
+  "search": {
+    "open": "Szukaj",
+    "placeholder": "Przejdź do modułu…",
+    "hint": "Ctrl K",
+    "empty": "Nic nie pasuje do „{{query}}”.",
+    "note": "Wyszukiwanie zasobów, stylów i póz pojawi się razem z biblioteką (WP-10)."
+  },
+  "queue": {
+    "label": "Kolejka",
+    "running": "W toku: {{count}}",
+    "queued": "W kolejce: {{count}}",
+    "idle": "Bezczynna",
+    "failed": "Wymaga uwagi: {{count}}",
+    "noWorker": "Worker niedostępny",
+    "unknown": "Stan kolejki nieznany"
+  },
+  "engine": {
+    "label": "Stan silnika",
+    "notConnected": "Silnik niepodłączony",
+    "apiDown": "API niedostępne"
+  },
+  "language": { "label": "Język", "pl": "PL", "en": "EN" },
+  "status": { "api": "API", "checking": "Sprawdzanie…", "ok": "Działa", "down": "Brak połączenia" },
+  "session": {
+    "connecting": "Łączenie z lokalnym API…",
+    "failed": "Asset Studio nie może połączyć się ze swoim API",
+    "notConfigured": "Asset Studio nie jest jeszcze skonfigurowane",
+    "retry": "Spróbuj ponownie",
+    "hint": "Uruchom stos skryptem startowym i spróbuj ponownie."
+  },
+  "placeholder": {
+    "title": "{{module}} — ekran jeszcze nie istnieje",
+    "body": "Ten ekran powstanie w {{wp}}. Nawigacja, wskaźnik kolejki i przełącznik języka już działają."
+  },
+  "notFound": { "title": "Nie znaleziono strony", "back": "Wróć do pulpitu" },
+  "settings": {
+    "appearance": "Wygląd",
+    "theme": "Motyw",
+    "themeDark": "Studio (ciemny)",
+    "themeLight": "Daylight (jasny)",
+    "language": "Język",
+    "languagePl": "Polski",
+    "languageEn": "English",
+    "rest": "Lokalizacje danych, foldery modeli, kopia zapasowa i przywracanie pojawią się w WP-16."
+  }
 }

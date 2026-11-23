@@ -3,7 +3,7 @@ title: Work Packages
 type: roadmap
 status: approved
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - roadmap
 ---
@@ -43,7 +43,8 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-01b | ✅ done — 5 correct + 2 partial of 10; R-12 accepted as limitation (D-50) | #15 |
 | WP-02 | ✅ done — projects, configuration versions, audit, actors, Host/Origin checks | #16 |
 | WP-03 | ✅ done — storage, assets, versions, lifecycle and transitions API; regeneration (FR-052) moves to WP-08 with the job pipeline | #17 |
-| WP-04 | 🟡 in review — job queue, worker lanes, SSE events, recovery after restart | WP-04 PR |
+| WP-04 | ✅ done — job queue, worker lanes, SSE events, recovery after restart | #18 |
+| WP-06 | 🟡 in review — app shell (rail, top bar, phone bar), Ctrl K palette, design tokens and base styles, PL/EN at runtime, theme switch, client generated from OpenAPI | WP-06 PR |
 
 ## Order and parallelism
 
