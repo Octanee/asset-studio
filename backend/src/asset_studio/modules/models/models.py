@@ -9,7 +9,16 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from asset_studio.db import Base, utcnow, uuid7
 
-KINDS = ("checkpoint", "lora", "controlnet", "ip_adapter", "clip_vision", "vae", "pose")
+KINDS = (
+    "checkpoint",
+    "lora",
+    "controlnet",
+    "ip_adapter",
+    "clip_vision",
+    "vae",
+    "pose",
+    "segmentation",
+)
 STATUSES = ("installed", "available", "missing", "downloading")
 
 

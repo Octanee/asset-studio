@@ -80,6 +80,9 @@ export function useAssets(projectId: string | null) {
   });
 }
 
+/** Version states that still change on their own (post-processing, WP-09). */
+export const PROCESSING: readonly string[] = ["generated", "processing"];
+
 export function useVersions(assetId: string | null) {
   return useQuery({
     queryKey: generationKeys.versions(assetId ?? ""),
@@ -90,6 +93,9 @@ export function useVersions(assetId: string | null) {
           params: { path: { asset_id: assetId ?? "" } },
         }),
       ),
+    // Processing runs as jobs after generation; follow it until the version is ready.
+    refetchInterval: (q) =>
+      (q.state.data ?? []).some((v) => PROCESSING.includes(v.state)) ? 2000 : false,
   });
 }
 
@@ -130,6 +136,20 @@ export function useRegenerate() {
         api.POST("/api/v1/versions/{version_id}:regenerate", {
           params: { path: { version_id: versionId } },
           body: changes,
+        }),
+      ),
+    onSettled: refresh,
+  });
+}
+
+/** FR-065: process a generated version, or retry failed processing (T-04R). */
+export function useProcessVersion() {
+  const refresh = useRefresh();
+  return useMutation({
+    mutationFn: (versionId: string) =>
+      unwrap(
+        api.POST("/api/v1/versions/{version_id}:process", {
+          params: { path: { version_id: versionId } },
         }),
       ),
     onSettled: refresh,
@@ -198,16 +218,18 @@ export function stepProgress(job: JobRow): { step: number; of: number } | null {
   return p.step != null && p.of ? { step: p.step, of: p.of } : null;
 }
 
-/** What a generation job makes, from its stored plan. */
+/** What a generation or processing job works on, from its stored plan or params. */
 export function generationInfo(job: JobRow): {
   assetId: string | null;
   seed: number | null;
   workflow: string | null;
 } {
-  const plan = (job.params as { plan?: Record<string, unknown> }).plan ?? {};
+  const params = job.params as { plan?: Record<string, unknown>; asset_id?: unknown };
+  const plan = params.plan ?? {};
   const workflow = plan.workflow as { id?: string; version?: number } | undefined;
+  const assetId = plan.asset_id ?? params.asset_id;
   return {
-    assetId: typeof plan.asset_id === "string" ? plan.asset_id : null,
+    assetId: typeof assetId === "string" ? assetId : null,
     seed: typeof plan.seed === "number" ? plan.seed : null,
     workflow: workflow?.id ? `${workflow.id} v${workflow.version ?? 1}` : null,
   };

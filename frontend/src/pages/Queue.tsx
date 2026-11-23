@@ -154,10 +154,7 @@ function JobLine({
   const info = generationInfo(job);
   const versions = (job.result as { versions?: string[] }).versions ?? [];
   const kind = t(`jobKinds.${job.kind}`, { defaultValue: job.kind });
-  const title =
-    job.kind === "generate"
-      ? (info.assetId && names.get(info.assetId)) || t("queuePage.otherAsset")
-      : kind;
+  const title = info.assetId ? names.get(info.assetId) || t("queuePage.otherAsset") : kind;
   const took = duration(job);
   return (
     <tr>

@@ -27,6 +27,26 @@ class OutputDefaults(BaseModel):
     background: Literal["any", "white", "transparent"] = "any"
 
 
+class Processing(BaseModel):
+    """Post-processing after generation (FR-065). Size, format and background come from
+    ``output``; these settings say how to get there."""
+
+    model_config = ConfigDict(extra="forbid")
+    remove_background: bool = False
+    # contain: fit inside and pad; cover: fill and crop the centre; none: keep the size.
+    resize: Literal["contain", "cover", "none"] = "contain"
+    optimize: bool = True
+    quality: int = Field(default=90, ge=50, le=100)  # WebP and JPEG
+
+
+class Validation(BaseModel):
+    """Technical validation rules (FR-060); results are informative (RULE-009)."""
+
+    model_config = ConfigDict(extra="forbid")
+    max_file_kb: int | None = Field(default=None, ge=1, le=200_000)
+    aspect_tolerance: float = Field(default=0.01, ge=0, le=0.5)
+
+
 class ProjectConfig(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -39,6 +59,8 @@ class ProjectConfig(BaseModel):
     categories: list[Category] = Field(default_factory=list, max_length=200)
     naming: str = Field(default="{asset}-{view}", max_length=200)
     output: OutputDefaults = Field(default_factory=OutputDefaults)
+    processing: Processing = Field(default_factory=Processing)
+    validation: Validation = Field(default_factory=Validation)
     extensions: dict[str, Any] = Field(default_factory=dict)
 
     @field_validator("languages")

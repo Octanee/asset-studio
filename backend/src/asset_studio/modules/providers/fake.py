@@ -14,10 +14,20 @@ from asset_studio.modules.providers.base import (
     Progress,
     ProviderError,
 )
+from asset_studio.modules.providers.png import mask_image as mask
 from asset_studio.modules.providers.png import sample_image
 
 MAX_SIDE = 1024
 MAX_BATCH = 8
+PNG_SIGNATURE = bytes.fromhex("89504e470d0a1a0a")
+
+
+def _png_size(data: bytes) -> tuple[int, int]:
+    """Width and height from a PNG header; 64² for anything else."""
+    if data.startswith(PNG_SIGNATURE) and len(data) >= 24:
+        w, h = int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+        return min(w, MAX_SIDE), min(h, MAX_SIDE)
+    return 64, 64
 
 
 @dataclass
@@ -28,6 +38,7 @@ class _Job:
     batch: int
     polls: int = 0
     cancelled: bool = False
+    mask: bool = False
     outputs: list[OutputFile] = field(default_factory=list)
 
 
@@ -47,7 +58,9 @@ class FakeProvider:
         self._lock = threading.Lock()
 
     def capabilities(self) -> Capabilities:
-        return Capabilities("fake", frozenset({"text_to_image", "image_to_image", "pose"}))
+        return Capabilities(
+            "fake", frozenset({"text_to_image", "image_to_image", "pose", "background_removal"})
+        )
 
     def health(self) -> EngineHealth:
         if not self.available:
@@ -76,7 +89,10 @@ class FakeProvider:
             height=size("height", 64),
             seed=int(values.get("seed") or 0),
             batch=min(size("batch_size", 1), MAX_BATCH),
+            mask=request.workflow.id == "remove_background",
         )
+        if job.mask:  # the mask has the input image's size
+            job.width, job.height = _png_size(request.images.get("image", b""))
         ref = uuid.uuid4().hex
         with self._lock:
             self._jobs[ref] = job
@@ -99,14 +115,18 @@ class FakeProvider:
         if self.fail_with:
             return Progress("failed", error=self.fail_with)
         if not job.outputs:
-            job.outputs = [
-                OutputFile(
-                    f"fake_{ref[:8]}_{i:02d}.png",
-                    "image/png",
-                    sample_image(job.width, job.height, job.seed + i),
-                )
-                for i in range(job.batch)
-            ]
+            job.outputs = (
+                [OutputFile(f"fake_{ref[:8]}_mask.png", "image/png", mask(job.width, job.height))]
+                if job.mask
+                else [
+                    OutputFile(
+                        f"fake_{ref[:8]}_{i:02d}.png",
+                        "image/png",
+                        sample_image(job.width, job.height, job.seed + i),
+                    )
+                    for i in range(job.batch)
+                ]
+            )
         return Progress("completed", step=self.steps, of=self.steps)
 
     def cancel(self, ref: str) -> None:

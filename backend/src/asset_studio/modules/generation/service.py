@@ -31,6 +31,7 @@ from asset_studio.modules.models import service as registry
 from asset_studio.modules.models.models import Model
 from asset_studio.modules.poses.render import openpose_png
 from asset_studio.modules.poses.service import get_pose
+from asset_studio.modules.processing import service as processing
 from asset_studio.modules.projects.service import get_project
 from asset_studio.modules.providers.base import GenerationRequest
 from asset_studio.modules.providers.engine import get_engine_monitor, run_generation
@@ -604,5 +605,7 @@ def handle_generate(ctx: JobContext) -> dict[str, Any]:
                     version.id,
                     params["reference_weight"],
                 )
+            # Post-processing and validation run next (FR-065, FR-060).
+            processing.start(s, version.id, "system")
             created.append(str(version.id))
     return {"asset_id": p["asset_id"], "versions": created}

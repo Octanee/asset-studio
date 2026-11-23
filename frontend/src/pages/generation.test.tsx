@@ -70,7 +70,7 @@ const version = {
   id: "v1",
   asset_id: "a1",
   number: 1,
-  state: "generated",
+  state: "awaiting_review",
   previous_state: null,
   sha256: "0".repeat(64),
   mime: "image/png",
@@ -263,6 +263,48 @@ describe("Generation Studio", () => {
     const before = versionReads;
     expect(await within(running).findByText("Done", {}, { timeout: 4000 })).toBeVisible();
     await waitFor(() => expect(versionReads).toBeGreaterThan(before));
+  });
+
+  it("shows why processing failed and retries it (FR-065, T-04R)", async () => {
+    const user = userEvent.setup();
+    let retried = 0;
+    let state = "processing_failed";
+    stub({
+      "GET /api/v1/assets/a1/versions": () => [
+        {
+          ...version,
+          state,
+          processing: {
+            steps: [],
+            output: null,
+            background_removed: false,
+            finished_at: null,
+            error: {
+              code: "PROCESSING_MODEL_MISSING",
+              message: "no model",
+              step: "remove_background",
+            },
+          },
+        },
+      ],
+      "POST /api/v1/versions/v1:process": () => {
+        retried += 1;
+        state = "processing";
+        return job({ id: "j4", kind: "remove_background" });
+      },
+    });
+    open("/generate");
+    await user.click(await screen.findByRole("radio", { name: "New version of an asset" }));
+    await user.selectOptions(await screen.findByRole("combobox", { name: "Asset" }), "a1");
+    const versions = await screen.findByRole("region", { name: "Versions: Squat" });
+    expect(
+      await within(versions).findByText(
+        /Processing failed: Background removal needs a segmentation model/,
+      ),
+    ).toBeVisible();
+    await user.click(within(versions).getByRole("button", { name: "Retry processing" }));
+    await waitFor(() => expect(retried).toBe(1));
+    expect(await within(versions).findByText("Processing", {}, { timeout: 3000 })).toBeVisible();
   });
 });
 

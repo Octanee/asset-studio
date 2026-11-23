@@ -1,7 +1,8 @@
 """Worker process entry point: runs the persistent job queue (ADR-004, WP-04).
 
 Modules that own work register job handlers in ``HANDLERS`` (generation in WP-08,
-processing in WP-09, ...). A NOTIFY on enqueue wakes the worker; it also polls.
+processing in WP-09: remove_background and process, ...). A NOTIFY on enqueue wakes the
+worker; it also polls.
 """
 
 import os
@@ -24,6 +25,7 @@ from asset_studio.modules.jobs.service import NOTIFY_CHANNEL
 from asset_studio.modules.models.service import handle_download, handle_verify_model
 from asset_studio.modules.poses.detection import load_default_detector, set_detector
 from asset_studio.modules.poses.service import handle_detect_pose
+from asset_studio.modules.processing.service import HANDLERS as PROCESSING_HANDLERS
 from asset_studio.modules.providers.engine import get_engine_monitor
 
 HANDLERS: dict[str, Handler] = {
@@ -31,6 +33,7 @@ HANDLERS: dict[str, Handler] = {
     "generate": handle_generate,
     "download": handle_download,
     "verify_model": handle_verify_model,
+    **PROCESSING_HANDLERS,
 }
 POLL_SECONDS = 2.0
 

@@ -330,7 +330,10 @@ def test_fr033_pose_and_reference_job_stores_versions_with_metadata(
     assert Image.open(io.BytesIO(sent["pose_image"])).size == (512, 512)
     assert sent["reference_image"] == sample_image(96, 128, seed=7)
     version = api.get(f"/api/v1/versions/{version_id}").json()
-    assert (version["state"], version["width"], version["height"]) == ("generated", 512, 512)
+    assert (version["state"], version["width"], version["height"]) == ("processing", 512, 512)
+    # Post-processing follows on its own (FR-065, T-02).
+    queued = api.get("/api/v1/jobs", params={"kind": "process"}).json()
+    assert [j["params"]["version_id"] for j in queued] == [version_id]
     meta = db.scalar(select(AuditEntry.data).where(AuditEntry.action == "asset_version.generated"))
     assert meta is not None
     from asset_studio.modules.assets.models import AssetVersion
@@ -368,7 +371,7 @@ def test_ac002_regenerate_makes_a_new_version(
     _run(connection)
     versions = api.get(f"/api/v1/assets/{q['asset_ids'][0]}/versions").json()
     assert [v["number"] for v in versions] == [1, 2] or [v["number"] for v in versions] == [2, 1]
-    assert api.get(f"/api/v1/versions/{first}").json()["state"] == "generated"
+    assert api.get(f"/api/v1/versions/{first}").json()["state"] == "processing"
     bad = api.post(f"/api/v1/versions/{first}:regenerate", json={"project_id": pid}, headers=ORIGIN)
     assert bad.json()["code"] == "REGENERATE_FIELD_FIXED"
 

@@ -25,7 +25,7 @@ tags:
 | `reference_link` | id, reference_id, target_type, target_id, weight | target_type: style, character, job, asset_version; weight 0–2; unique (reference_id, target_type, target_id) (WP-07) |
 | `pose` | id, project_id null (built-in), name, view, aspect, keypoints jsonb (COCO-18), source (`library`/`editor`/`detected`), source_reference_id, archived_at | keypoints: 18 × `[x, y, confidence]` normalised to the canvas (`aspect` = width / height) or null; built-in rows have no project and fixed ids, seeded by migration 0004 (WP-07) |
 | `model_family` | id (`sdxl`, `sd15`, …), name | synced from the catalogue (WP-12) |
-| `model` | id (catalogue slug or `local-…`), name, kind (checkpoint, lora, controlnet, ip_adapter, clip_vision, vae, pose), family_id, licence_id, file_name, source_url, sha256, bytes, origin (`catalogue`/`local`), notes, status (`installed`/`available`/`missing`/`downloading`), file_bytes, verification (`unverified`/`ok`/`mismatch`), verified_at | VRAM need is reported as the weights size (a lower bound); segmentation models come with WP-09 (WP-12) |
+| `model` | id (catalogue slug or `local-…`), name, kind (checkpoint, lora, controlnet, ip_adapter, clip_vision, vae, pose, segmentation), family_id, licence_id, file_name, source_url, sha256, bytes, origin (`catalogue`/`local`), notes, status (`installed`/`available`/`missing`/`downloading`), file_bytes, verification (`unverified`/`ok`/`mismatch`), verified_at | VRAM need is reported as the weights size (a lower bound); kind `segmentation` (background removal, ComfyUI folder `background_removal`) added in WP-09 (WP-12) |
 | `licence` | id, name, commercial_use (`allowed`/`forbidden`/`unknown`), url, notes | synced from the catalogue; `unknown` is used for files found on disk (WP-12) |
 | `licence_acknowledgement` | id, project_id, model_id, licence_id, intended_use, actor, note, at | RULE-007: valid while the licence and the project's intended use are unchanged (WP-12) |
 | `lora` | id, model_id, project_id, character_id null, style_id null, trigger_word, training_run_id | |
@@ -34,9 +34,9 @@ tags:
 | `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |
 | `asset` | id, project_id, category, slug, name, archived_at | unique (project_id, slug) |
-| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, first_published_at, deleted_at, created_at | unique (asset_id, number); `storage_key` is null after permanent deletion (T-13) and `state` is checked against the lifecycle states (WP-03) |
+| `asset_version` | id, asset_id, number, state, previous_state (for archive), storage_key, sha256, width, height, mime, bytes, generation_job_id, generation_metadata jsonb, first_published_at, deleted_at, processing jsonb, created_at | unique (asset_id, number); `processing` holds the steps, the processed file (key, SHA-256, size), the cut-out and the last error (WP-09); `storage_key` is null after permanent deletion (T-13) and `state` is checked against the lifecycle states (WP-03) |
 | `state_transition` | id, asset_version_id, transition_id (`T-05`…), from_state, to_state, actor, reason, at | append-only, enforced by a trigger (WP-03) |
-| `validation_result` | id, asset_version_id, rule, passed, details jsonb | |
+| `validation_result` | id, asset_version_id, run_id, rule, status (`passed`/`failed`/`skipped`), details jsonb, created_at | one row per rule per run; the newest run is the report (WP-09) |
 | `review_comment` | id, asset_version_id, actor, body, at | |
 | `export_preset` | id, project_id, name, definition jsonb (formats, sizes, naming, folders, optimisation, metadata) | |
 | `export_target` | id, project_id, name, path | the path is validated against allowed roots |

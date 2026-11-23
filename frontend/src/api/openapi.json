@@ -2360,6 +2360,165 @@
         "title": "Problem",
         "type": "object"
       },
+      "ProcessedFile": {
+        "properties": {
+          "bytes": {
+            "title": "Bytes",
+            "type": "integer"
+          },
+          "height": {
+            "title": "Height",
+            "type": "integer"
+          },
+          "mime": {
+            "title": "Mime",
+            "type": "string"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "width": {
+            "title": "Width",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "sha256",
+          "mime",
+          "bytes",
+          "width",
+          "height"
+        ],
+        "title": "ProcessedFile",
+        "type": "object"
+      },
+      "Processing": {
+        "additionalProperties": false,
+        "description": "Post-processing after generation (FR-065). Size, format and background come from\n``output``; these settings say how to get there.",
+        "properties": {
+          "optimize": {
+            "default": true,
+            "title": "Optimize",
+            "type": "boolean"
+          },
+          "quality": {
+            "default": 90,
+            "maximum": 100.0,
+            "minimum": 50.0,
+            "title": "Quality",
+            "type": "integer"
+          },
+          "remove_background": {
+            "default": false,
+            "title": "Remove Background",
+            "type": "boolean"
+          },
+          "resize": {
+            "default": "contain",
+            "enum": [
+              "contain",
+              "cover",
+              "none"
+            ],
+            "title": "Resize",
+            "type": "string"
+          }
+        },
+        "title": "Processing",
+        "type": "object"
+      },
+      "ProcessingFailure": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "job_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Job Id"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "step": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Step"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ],
+        "title": "ProcessingFailure",
+        "type": "object"
+      },
+      "ProcessingOut": {
+        "description": "Post-processing of a version (FR-065); storage keys stay on the server.",
+        "properties": {
+          "background_removed": {
+            "default": false,
+            "title": "Background Removed",
+            "type": "boolean"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProcessingFailure"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "output": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ProcessedFile"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "steps": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "title": "Steps",
+            "type": "array"
+          }
+        },
+        "title": "ProcessingOut",
+        "type": "object"
+      },
       "ProjectConfig": {
         "additionalProperties": false,
         "properties": {
@@ -2413,6 +2572,9 @@
           "output": {
             "$ref": "#/components/schemas/OutputDefaults"
           },
+          "processing": {
+            "$ref": "#/components/schemas/Processing"
+          },
           "schema_version": {
             "const": 1,
             "default": 1,
@@ -2424,6 +2586,9 @@
             "minLength": 1,
             "title": "Type",
             "type": "string"
+          },
+          "validation": {
+            "$ref": "#/components/schemas/Validation"
           }
         },
         "required": [
@@ -2769,6 +2934,30 @@
         "title": "ReferenceUpdate",
         "type": "object"
       },
+      "RuleResultOut": {
+        "properties": {
+          "details": {
+            "additionalProperties": true,
+            "title": "Details",
+            "type": "object"
+          },
+          "rule": {
+            "title": "Rule",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rule",
+          "status",
+          "details"
+        ],
+        "title": "RuleResultOut",
+        "type": "object"
+      },
       "ScanOut": {
         "properties": {
           "added": {
@@ -3064,6 +3253,34 @@
         "title": "TransitionRequest",
         "type": "object"
       },
+      "Validation": {
+        "additionalProperties": false,
+        "description": "Technical validation rules (FR-060); results are informative (RULE-009).",
+        "properties": {
+          "aspect_tolerance": {
+            "default": 0.01,
+            "maximum": 0.5,
+            "minimum": 0.0,
+            "title": "Aspect Tolerance",
+            "type": "number"
+          },
+          "max_file_kb": {
+            "anyOf": [
+              {
+                "maximum": 200000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max File Kb"
+          }
+        },
+        "title": "Validation",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -3102,6 +3319,57 @@
           "type"
         ],
         "title": "ValidationError",
+        "type": "object"
+      },
+      "ValidationOut": {
+        "description": "The newest technical validation run of a version (FR-060). Informative (RULE-009).",
+        "properties": {
+          "checked_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Checked At"
+          },
+          "results": {
+            "items": {
+              "$ref": "#/components/schemas/RuleResultOut"
+            },
+            "title": "Results",
+            "type": "array"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "summary": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Summary",
+            "type": "object"
+          }
+        },
+        "required": [
+          "run_id",
+          "checked_at",
+          "summary",
+          "results"
+        ],
+        "title": "ValidationOut",
         "type": "object"
       },
       "VersionDetail": {
@@ -3202,6 +3470,9 @@
               }
             ],
             "title": "Previous State"
+          },
+          "processing": {
+            "$ref": "#/components/schemas/ProcessingOut"
           },
           "sha256": {
             "title": "Sha256",
@@ -3335,6 +3606,9 @@
               }
             ],
             "title": "Previous State"
+          },
+          "processing": {
+            "$ref": "#/components/schemas/ProcessingOut"
           },
           "sha256": {
             "title": "Sha256",
@@ -7128,6 +7402,7 @@
               "default": "original",
               "enum": [
                 "original",
+                "processed",
                 "thumb",
                 "preview"
               ],
@@ -7225,6 +7500,93 @@
         ]
       }
     },
+    "/api/v1/versions/{version_id}/validation": {
+      "get": {
+        "operationId": "get_validation_api_v1_versions__version_id__validation_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Validation",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
+    "/api/v1/versions/{version_id}:process": {
+      "post": {
+        "description": "Process a ``generated`` version (T-02) or retry a failed one (T-04R) (FR-065).",
+        "operationId": "process_version_api_v1_versions__version_id__process_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Process Version",
+        "tags": [
+          "assets"
+        ]
+      }
+    },
     "/api/v1/versions/{version_id}:regenerate": {
       "post": {
         "operationId": "regenerate_api_v1_versions__version_id__regenerate_post",
@@ -7278,6 +7640,50 @@
         "summary": "Regenerate",
         "tags": [
           "generation"
+        ]
+      }
+    },
+    "/api/v1/versions/{version_id}:validate": {
+      "post": {
+        "description": "Validate again, e.g. after the project's rules changed (FR-060).",
+        "operationId": "validate_version_api_v1_versions__version_id__validate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "version_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Version Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Validate Version",
+        "tags": [
+          "assets"
         ]
       }
     }
