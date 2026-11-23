@@ -175,7 +175,24 @@
     "CONFIRMATION_REQUIRED": "Confirm the permanent deletion.",
     "ASSET_NOT_FOUND": "The asset no longer exists.",
     "VERSION_NOT_FOUND": "The version no longer exists.",
-    "FILE_NOT_AVAILABLE": "The file is not available."
+    "FILE_NOT_AVAILABLE": "The file is not available.",
+    "OVERWRITE_NOT_CONFIRMED": "Some files already exist in the target. Confirm each overwrite.",
+    "MCP_OVERWRITE_NOT_ALLOWED": "Claude never overwrites files; publish this yourself.",
+    "PLAN_USED": "This plan was already published. Plan again.",
+    "PLAN_EXPIRED": "The plan is too old. Plan again.",
+    "PLAN_OTHER_ACTOR": "The plan was made by someone else.",
+    "PLAN_PATH_COLLISION": "Two versions would write the same file. Change the naming or the choice.",
+    "PLAN_TOO_LARGE": "Too many versions at once.",
+    "NOTHING_TO_PUBLISH": "There is no approved version to publish.",
+    "EXPORT_ROOT_UNKNOWN": "Choose one of the configured export folders.",
+    "EXPORT_ROOT_UNAVAILABLE": "The target's export folder is not configured any more.",
+    "TARGET_PATH_INVALID": "The folder must stay inside the export folder.",
+    "NAME_TAKEN": "This name is already used in the project.",
+    "PRESET_NOT_FOUND": "The preset no longer exists.",
+    "TARGET_NOT_FOUND": "The target no longer exists.",
+    "NOT_APPROVED": "The version is not approved any more.",
+    "ARCHIVED": "The preset or the target is archived.",
+    "OTHER_PROJECT": "The preset and the target must belong to the project."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -578,7 +595,9 @@
     "select": "Select {{name}}",
     "thumbAlt": "{{name}}, version {{n}}",
     "noImage": "No image",
-    "versions": "versions: {{count}}"
+    "versions": "versions: {{count}}",
+    "publish": "Publish",
+    "publishHint": "Choose assets whose newest version is approved."
   },
   "asset": {
     "back": "Back to the library",
@@ -623,8 +642,12 @@
       "asset_version_archive": "archived",
       "asset_version_restore": "restored",
       "asset_version_deleted": "permanently deleted",
-      "review_comment_created": "comment added"
-    }
+      "review_comment_created": "comment added",
+      "publication_created": "published to a target",
+      "publication_file_overwritten": "file overwritten"
+    },
+    "publications": "Publications",
+    "notPublished": "Not published yet."
   },
   "review": {
     "emptyTitle": "Nothing to review",
@@ -715,5 +738,79 @@
     "onlyChanges": "Only differences",
     "noChanges": "The parameters are the same.",
     "parameter": "Parameter"
+  },
+  "publish": {
+    "what": "What to publish",
+    "sources": {
+      "versions": "Chosen versions",
+      "collection": "Collection",
+      "project": "Whole project"
+    },
+    "newestApproved": "Each asset contributes its newest approved or published version.",
+    "noneApproved": "No approved version yet.",
+    "all": "All ({{count}})",
+    "chooseSource": "Choose what to publish.",
+    "needPreset": "Create an export preset first.",
+    "needTarget": "Create a target folder first.",
+    "targetUnavailable": "The target's export folder is not configured any more.",
+    "planFiles": "Plan files",
+    "planFirst": "Plan the files first: you will see every file and each overwrite.",
+    "publish": "Publish",
+    "publishN": "Publish versions: {{count}}",
+    "confirmFirst": "Confirm each overwrite first (left: {{count}}).",
+    "preset": "Export preset",
+    "edit": "Edit",
+    "new": "New",
+    "noPresets": "No presets yet.",
+    "presetName": "Preset name",
+    "format": "Format",
+    "quality": "Quality",
+    "sizes": "Sizes",
+    "suffix": "suffix",
+    "suffixN": "Suffix of size {{n}}",
+    "widthN": "Width of size {{n}}",
+    "heightN": "Height of size {{n}}",
+    "removeSize": "Remove size {{n}}",
+    "addSize": "Add size",
+    "naming": "File name",
+    "namingHint": "Placeholders: {asset} {view} {category} {version} {size} {suffix} {project}",
+    "folders": "Folders",
+    "background": "Background",
+    "backgrounds": {
+      "keep": "As processed",
+      "white": "White"
+    },
+    "resize": "Fit",
+    "resizes": {
+      "contain": "Whole image (contain)",
+      "cover": "Fill and crop (cover)"
+    },
+    "optimize": "Optimise files",
+    "sidecar": "Metadata file (.json) next to each image",
+    "savePreset": "Save preset",
+    "target": "Target folder",
+    "noRoots": "No export folder is configured. Set ASSET_STUDIO_EXPORTS_HOST_DIR and restart.",
+    "targetName": "Target name",
+    "root": "Export folder",
+    "subdir": "Subfolder",
+    "addTarget": "Add target",
+    "plan": "Planned files: {{files}} (versions: {{versions}})",
+    "confirmAll": "Confirm all overwrites ({{count}})",
+    "overwriteWarning": "Files that already exist will be replaced: {{count}}. Confirm each one.",
+    "version": "Version",
+    "file": "File",
+    "status": "Status",
+    "overwrites": "overwrites",
+    "confirmPath": "Confirm overwriting {{path}}",
+    "newFile": "new",
+    "skipped": "Left out: {{count}}",
+    "reasons": {
+      "NOT_APPROVED": "not approved",
+      "NO_APPROVED_VERSION": "no approved version",
+      "REPUBLISH_USER_ONLY": "publishing again is the user's decision"
+    },
+    "done": "Published versions: {{count}}.",
+    "history": "Recent publications",
+    "overwrote": "overwrote files"
   }
 }

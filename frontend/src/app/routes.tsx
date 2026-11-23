@@ -10,6 +10,7 @@ import { Library } from "../pages/Library";
 import { Models } from "../pages/Models";
 import { NotFound, Placeholder, Settings, SystemStatus } from "../pages/pages";
 import { Poses } from "../pages/Poses";
+import { Publish } from "../pages/Publish";
 import { Queue } from "../pages/Queue";
 import { References } from "../pages/References";
 import { Review } from "../pages/Review";
@@ -27,6 +28,7 @@ const BUILT = new Set<ModuleId>([
   "queue",
   "library",
   "review",
+  "publish",
 ]);
 import { AppShell } from "./Shell";
 
@@ -86,6 +88,7 @@ export const routes: RouteObject[] = [
           { path: "/library/:assetId", element: <AssetDetails /> },
           { path: "/review", element: <Review /> },
           { path: "/review/compare", element: <Compare /> },
+          { path: "/publish", element: <Publish /> },
           { path: "/styles", element: <StyleStudio /> },
           { path: "/references", element: <References /> },
           { path: "/poses", element: <Poses /> },

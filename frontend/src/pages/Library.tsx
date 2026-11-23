@@ -67,6 +67,11 @@ function LibraryScreen({ projectId }: { projectId: string }) {
   const chosen = rows.filter((a) => selected.includes(a.id));
   const pair = chosen.length === 2 ? chosen.map((a) => a.latest_version?.id) : [];
   const comparable = pair.length === 2 && pair.every(Boolean);
+  // The newest version of each chosen asset, when it is approved or published (FR-092).
+  const publishable = chosen
+    .map((a) => a.latest_version)
+    .filter((v) => v && ["approved", "published"].includes(v.state))
+    .map((v) => v?.id ?? "");
   const allArchived = chosen.length > 0 && chosen.every((a) => a.archived_at);
   const current = (collections.data ?? []).find((c) => c.id === filters.collectionId);
 
@@ -301,6 +306,15 @@ function LibraryScreen({ projectId }: { projectId: string }) {
             onClick={() => navigate(`/review/compare?a=${pair[0] ?? ""}&b=${pair[1] ?? ""}`)}
           >
             {t("library.compare")}
+          </button>
+          <button
+            type="button"
+            className="btn"
+            disabled={!publishable.length}
+            title={publishable.length ? undefined : t("library.publishHint")}
+            onClick={() => navigate(`/publish?versions=${publishable.join(",")}`)}
+          >
+            {t("library.publish")}
           </button>
           <button
             type="button"

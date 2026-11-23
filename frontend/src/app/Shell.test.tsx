@@ -87,16 +87,14 @@ describe("app shell", () => {
 
   it("marks the active module and titles the top bar", async () => {
     stubApi();
-    renderAt("/publish");
+    renderAt("/training");
     const rail = await screen.findByRole("navigation", { name: "Modules" });
-    expect(within(rail).getByRole("link", { name: "Export and publish" })).toHaveAttribute(
+    expect(within(rail).getByRole("link", { name: "Training" })).toHaveAttribute(
       "aria-current",
       "page",
     );
-    expect(
-      screen.getByRole("heading", { level: 1, name: "Export and publish" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText(/arrives in WP-11/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { level: 1, name: "Training" })).toBeInTheDocument();
+    expect(screen.getByText(/arrives in WP-13/)).toBeInTheDocument();
   });
 
   it("shows live queue counts in the top bar (FR-041)", async () => {

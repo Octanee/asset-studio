@@ -40,9 +40,10 @@ tags:
 | `state_transition` | id, asset_version_id, transition_id (`T-05`…), from_state, to_state, actor, reason, at | append-only, enforced by a trigger (WP-03) |
 | `validation_result` | id, asset_version_id, run_id, rule, status (`passed`/`failed`/`skipped`), details jsonb, created_at | one row per rule per run; the newest run is the report (WP-09) |
 | `review_comment` | id, asset_version_id, actor (`user`/`mcp`), body ≤ 4000, at | append-only, enforced by a trigger (WP-10) |
-| `export_preset` | id, project_id, name, definition jsonb (formats, sizes, naming, folders, optimisation, metadata) | |
-| `export_target` | id, project_id, name, path | the path is validated against allowed roots |
-| `publication` | id, asset_version_id, target_id, preset_id, actor, at | |
+| `export_preset` | id, project_id, name, definition jsonb (format, sizes with suffixes, naming and folder patterns, background, fit, optimisation, quality, metadata sidecar), archived_at | unique (project_id, name); the definition is validated by `PresetDefinition` (WP-11) |
+| `export_target` | id, project_id, name, root, subdir, archived_at | unique (project_id, name); `root` must be a configured export root and `subdir` must stay inside it (WP-11) |
+| `publication_plan` | id, project_id, preset_id, target_id, actor, items jsonb (versions and planned files with `exists` and the existing file's SHA-256), skipped jsonb, created_at, used_at, job_id | used once, valid for one hour (WP-11) |
+| `publication` | id, asset_version_id, target_id, preset_id, plan_id, job_id, actor, at | (WP-11) |
 | `publication_file` | id, publication_id, relative_path, sha256, overwrote_sha256 null, confirmed_overwrite bool | |
 | `current_publication` | asset_id, target_id, publication_id | the pointer (D-41) |
 | `training_dataset` / `training_item` | dataset: id, project_id, name, trigger_word; item: dataset_id, source (`asset_version`/`upload`), ref id, caption | |

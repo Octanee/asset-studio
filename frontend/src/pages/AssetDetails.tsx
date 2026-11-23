@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useParams } from "react-router";
 
 import { randomSeed, useRegenerate } from "../api/generation";
+import { usePublications, useTargets } from "../api/publishing";
 import {
   fileUrl,
   shownVersion,
@@ -200,6 +201,7 @@ function Details({ asset }: { asset: AssetDetail }) {
             </ul>
             {version && <CompareLink versions={versions} current={version.id} />}
           </div>
+          <PublicationsPanel asset={asset} />
           <TagsPanel asset={asset} />
           <CollectionsPanel asset={asset} />
           <TrailPanel asset={asset} />
@@ -373,6 +375,48 @@ function TrailPanel({ asset }: { asset: AssetDetail }) {
           );
         })}
       </ul>
+    </div>
+  );
+}
+
+/** FR-093: where the asset is published, which version and which files. */
+function PublicationsPanel({ asset }: { asset: AssetDetail }) {
+  const { t, i18n } = useTranslation();
+  const publications = usePublications({ assetId: asset.id });
+  const targets = useTargets(asset.project_id);
+  const names = new Map((targets.data ?? []).map((x) => [x.id, x.name]));
+  const number = new Map(asset.versions.map((v) => [v.id, v.number]));
+  const time = new Intl.DateTimeFormat(i18n.language, { dateStyle: "short", timeStyle: "short" });
+  const rows = publications.data ?? [];
+  return (
+    <div className={`panel ${s.column}`}>
+      <div className={s.header}>
+        <h2 className="h-panel" style={{ margin: 0 }}>
+          {t("asset.publications")}
+        </h2>
+        <Link className="btn ghost" to="/publish">
+          {t("library.publish")}
+        </Link>
+      </div>
+      {!rows.length ? (
+        <p className="muted" style={{ margin: 0 }}>
+          {t("asset.notPublished")}
+        </p>
+      ) : (
+        <ul className={r.trail}>
+          {rows.map((p) => (
+            <li key={p.id}>
+              <span className="mono">v{number.get(p.asset_version_id) ?? "?"}</span> →{" "}
+              {names.get(p.target_id) ?? "?"}{" "}
+              <span className="mono muted">{time.format(new Date(p.at))}</span>
+              <br />
+              <span className="mono muted">
+                {(p.files ?? []).map((f) => f.relative_path).join(", ")}
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
