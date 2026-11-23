@@ -11,6 +11,7 @@ from typing import Any
 import pytest
 from fastapi.testclient import TestClient
 from PIL import Image
+from sqlalchemy import text
 from sqlalchemy.engine import Connection
 from sqlalchemy.orm import Session
 
@@ -305,6 +306,10 @@ def test_fr065_process_validate_and_review(
     assert [s["step"] for s in p["steps"]] == ["resize", "convert", "optimize"]
     assert "key" not in out and p["background_removed"] is False
     assert [h["transition_id"] for h in version["history"]] == ["T-01", "T-02", "T-03"]
+    stored = connection.execute(
+        text("SELECT processing->>'dhash' FROM asset_version WHERE id = :id"), {"id": vid}
+    ).scalar_one()
+    assert len(stored) == 16  # the fingerprint for duplicate detection (FR-059)
 
     # The original is untouched (RULE-003); the processed and derived files are served.
     assert client.get(f"/api/v1/versions/{vid}/file").content == original

@@ -237,6 +237,7 @@ def _process(ctx: JobContext) -> dict[str, Any]:
         )
         thumb = imaging.derived(result.data, THUMB)
         preview = imaging.derived(result.data, PREVIEW)
+        fingerprint = imaging.dhash(result.data)  # duplicate detection (FR-059)
     except imaging.ProcessingError as exc:
         raise DomainError(422, exc.code, str(exc)) from exc
     steps = ([{"step": "remove_background", "model": cut["model"]}] if cut else []) + result.steps
@@ -257,6 +258,7 @@ def _process(ctx: JobContext) -> dict[str, Any]:
                 "width": result.width,
                 "height": result.height,
             },
+            "dhash": fingerprint,
             "finished_at": utcnow().isoformat(),
             "job_id": str(ctx.job_id),
         }

@@ -1,4 +1,5 @@
-"""Audit log API (FR-115, read-only)."""
+"""Audit log API (FR-115, read-only). ``subject_id`` may repeat: an asset's trail is the
+asset and its versions (FR-051)."""
 
 import uuid
 from typing import Annotated, Any
@@ -21,9 +22,16 @@ def list_audit(
     project_id: uuid.UUID | None = None,
     actor: str | None = None,
     action: str | None = None,
+    subject_id: Annotated[list[uuid.UUID] | None, Query(max_length=500)] = None,
     before: uuid.UUID | None = None,
     limit: Annotated[int, Query(ge=1, le=200)] = 50,
 ) -> list[Any]:
     return list_entries(
-        db, project_id=project_id, actor=actor, action=action, before=before, limit=limit
+        db,
+        project_id=project_id,
+        actor=actor,
+        action=action,
+        subject_ids=subject_id,
+        before=before,
+        limit=limit,
     )

@@ -148,3 +148,24 @@ def derived(data: bytes, side: int) -> bytes:
     out = io.BytesIO()
     image.save(out, "WEBP", quality=82, method=4)
     return out.getvalue()
+
+
+def dhash(data: bytes, size: int = 8) -> str:
+    """64-bit difference hash for duplicate detection (FR-059), as 16 hex digits.
+
+    Transparent pixels count as white, so a cut-out and its white-filled copy match.
+    """
+    image = open_image(data)
+    if has_alpha(image):
+        rgba = image.convert("RGBA")
+        flat = Image.new("RGB", rgba.size, (255, 255, 255))
+        flat.paste(rgba, mask=rgba.getchannel("A"))
+        image = flat
+    small = image.convert("L").resize((size + 1, size), Image.Resampling.LANCZOS)
+    px = small.tobytes()  # one byte per pixel in mode L
+    bits = 0
+    for row in range(size):
+        for col in range(size):
+            left, right = px[row * (size + 1) + col], px[row * (size + 1) + col + 1]
+            bits = (bits << 1) | (1 if left > right else 0)
+    return f"{bits:0{size * size // 4}x}"

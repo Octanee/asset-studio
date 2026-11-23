@@ -40,6 +40,7 @@ def list_entries(
     project_id: uuid.UUID | None = None,
     actor: str | None = None,
     action: str | None = None,
+    subject_ids: list[uuid.UUID] | None = None,
     before: uuid.UUID | None = None,
     limit: int = 50,
 ) -> list[AuditEntry]:
@@ -51,6 +52,8 @@ def list_entries(
         q = q.where(AuditEntry.actor == actor)
     if action:
         q = q.where(AuditEntry.action == action)
+    if subject_ids:
+        q = q.where(AuditEntry.subject_id.in_(subject_ids))
     if before:
         q = q.where(AuditEntry.id < before)
     return list(session.scalars(q))
