@@ -31,6 +31,13 @@ services:
       ASSET_STUDIO_SESSION_SECRET: ${ASSET_STUDIO_SESSION_SECRET:?set ASSET_STUDIO_SESSION_SECRET in .env}
       ASSET_STUDIO_MCP_TOKEN: ${ASSET_STUDIO_MCP_TOKEN:-}
       ASSET_STUDIO_WORKER_TOKEN: ${ASSET_STUDIO_WORKER_TOKEN:-}
+      # ComfyUI and the host agent run natively on the host's loopback (ADR-005).
+      ASSET_STUDIO_ENGINE_PROVIDER: ${ASSET_STUDIO_ENGINE_PROVIDER:-comfyui}
+      ASSET_STUDIO_COMFYUI_URL: http://host.docker.internal:${ASSET_STUDIO_COMFYUI_PORT:-8188}
+      ASSET_STUDIO_HOST_AGENT_URL: http://host.docker.internal:${ASSET_STUDIO_AGENT_PORT:-8410}
+      ASSET_STUDIO_HOST_AGENT_TOKEN: ${ASSET_STUDIO_AGENT_TOKEN:-}
+    extra_hosts: &host-gateway
+      - "host.docker.internal:host-gateway"
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
     depends_on:
@@ -43,6 +50,7 @@ services:
     build: ./backend
     command: ["python", "-m", "asset_studio.worker"]
     environment: *backend-env
+    extra_hosts: *host-gateway
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
     depends_on:

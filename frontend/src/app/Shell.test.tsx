@@ -209,6 +209,56 @@ describe("live events", () => {
   });
 });
 
+const ENGINE_UP = {
+  provider: "comfyui",
+  engine: "comfyui",
+  available: true,
+  version: "0.46.0",
+  reason: null,
+  detail: null,
+  devices: [{ name: "cuda:0", vram_total_mb: 6144, vram_free_mb: 3072 }],
+  features: [],
+  agent: { configured: true, reachable: true },
+};
+const ENGINE_DOWN = {
+  ...ENGINE_UP,
+  available: false,
+  version: null,
+  reason: "ENGINE_UNAVAILABLE",
+  devices: [],
+};
+
+describe("engine (FR-043)", () => {
+  it("shows the engine and GPU memory in the top bar", async () => {
+    stubApi({ "/api/v1/system/engine": { body: ENGINE_UP } });
+    renderAt("/");
+    expect(await screen.findByText("ComfyUI · GPU 3.0/6 GB")).toBeInTheDocument();
+  });
+
+  it("starts a stopped engine from the system page", async () => {
+    const fetchMock = stubApi({
+      "/api/v1/system/engine": { body: ENGINE_DOWN },
+      "/api/v1/system/engine/start": { body: ENGINE_UP },
+    });
+    renderAt("/system");
+    expect(await screen.findByText(/GPU jobs wait in the queue/)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "Start engine" }));
+    const post = fetchMock.mock.calls.map(([r]) => r as Request).find((r) => r.method === "POST");
+    expect(post && new URL(post.url).pathname).toBe("/api/v1/system/engine/start");
+    expect(await screen.findByRole("button", { name: "Stop engine" })).toBeInTheDocument();
+  });
+
+  it("explains why the engine cannot be started without the host agent (DD-008)", async () => {
+    stubApi({
+      "/api/v1/system/engine": { body: { ...ENGINE_DOWN, agent: { configured: false } } },
+    });
+    renderAt("/system");
+    const start = await screen.findByRole("button", { name: "Start engine" });
+    await vi.waitFor(() => expect(start).toBeDisabled());
+    expect(screen.getByText(/host agent is not set up/)).toBeInTheDocument();
+  });
+});
+
 describe("i18n", () => {
   it("has the same keys in Polish and English (FR-125)", () => {
     expect(keys(pl).sort()).toEqual(keys(en).sort());

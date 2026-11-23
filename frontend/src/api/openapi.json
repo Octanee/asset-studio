@@ -348,6 +348,43 @@
         "title": "ConfigVersionOut",
         "type": "object"
       },
+      "DeviceOut": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "vram_free_mb": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vram Free Mb"
+          },
+          "vram_total_mb": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Vram Total Mb"
+          }
+        },
+        "required": [
+          "name",
+          "vram_total_mb",
+          "vram_free_mb"
+        ],
+        "title": "DeviceOut",
+        "type": "object"
+      },
       "DraftConfirm": {
         "properties": {
           "config": {
@@ -473,6 +510,87 @@
           "created_at"
         ],
         "title": "DraftOut",
+        "type": "object"
+      },
+      "EngineOut": {
+        "properties": {
+          "agent": {
+            "additionalProperties": true,
+            "title": "Agent",
+            "type": "object"
+          },
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "detail": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Detail"
+          },
+          "devices": {
+            "items": {
+              "$ref": "#/components/schemas/DeviceOut"
+            },
+            "title": "Devices",
+            "type": "array"
+          },
+          "engine": {
+            "title": "Engine",
+            "type": "string"
+          },
+          "features": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Features",
+            "type": "array"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          }
+        },
+        "required": [
+          "provider",
+          "engine",
+          "available",
+          "version",
+          "reason",
+          "detail",
+          "devices",
+          "features",
+          "agent"
+        ],
+        "title": "EngineOut",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -3015,6 +3133,76 @@
         "summary": "Start Session",
         "tags": [
           "session"
+        ]
+      }
+    },
+    "/api/v1/system/engine": {
+      "get": {
+        "description": "Is the engine reachable, which version, which GPU (FR-043).",
+        "operationId": "engine_status_api_v1_system_engine_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Engine Status",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/v1/system/engine/{action}": {
+      "post": {
+        "description": "Start, stop or restart the engine through the host agent. User only: Claude (MCP)\nand the system cannot switch the engine.",
+        "operationId": "engine_control_api_v1_system_engine__action__post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "action",
+            "required": true,
+            "schema": {
+              "enum": [
+                "start",
+                "stop",
+                "restart"
+              ],
+              "title": "Action",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EngineOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Engine Control",
+        "tags": [
+          "system"
         ]
       }
     },

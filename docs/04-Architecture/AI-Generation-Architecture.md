@@ -3,7 +3,7 @@ title: AI Generation Architecture
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-23
 tags:
   - architecture
   - ai
@@ -92,3 +92,22 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - go to a temp file;
 - are resumable with HTTP ranges and lock against duplicates;
 - are verified by SHA-256, then moved into the model folder (prototype S-1).
+
+## Implementation notes (WP-05)
+
+- **Code:** `backend/src/asset_studio/modules/providers/`:
+  - `base.py`: the `GenerationProvider` protocol and its value types;
+  - `workflows.py`: workflow templates whose declared inputs target `(node, field)` pairs, so the domain never sees node ids; inputs are type- and range-checked and fail with `WORKFLOW_INPUT_INVALID`;
+  - `fake.py`: deterministic PNGs per seed, configurable steps and failures, no imaging library;
+  - `comfyui.py`: `/system_stats`, `/prompt`, `/history`, `/queue`, `/interrupt`, `/view` and `/free`;
+  - `engine.py`: `EngineMonitor` (health cached for 5 s) and `run_generation` (submit, follow, collect; cancels the engine job when the user cancels or the worker stops).
+- **GPU lane:** the worker registers `EngineMonitor.gate` for the `gpu` lane. While the engine is down, GPU jobs stay `queued` with `wait_reason = ENGINE_UNAVAILABLE` (RULE-013) and CPU jobs keep running. The gate takes effect once GPU job handlers exist (generation in WP-08).
+- **Step progress:** the adapter reports queue position and completion. Per-step progress over ComfyUI's `/ws` socket arrives with the Generation Studio (WP-08).
+- **Problem codes:** `ENGINE_UNAVAILABLE` (503), `ENGINE_REJECTED` (ComfyUI refused the graph; lists the node ids), `ENGINE_ERROR`, `GENERATION_FAILED` (with the engine's message).
+- **Host agent:**
+  - `GET /gpu` runs `nvidia-smi` with fixed arguments;
+  - `GET /engine` and `POST /engine:start|stop|restart` supervise the portable build: `python_embeded/python.exe -s ComfyUI/main.py --windows-standalone-build --listen 127.0.0.1 --port <port> --disable-auto-launch`, with `PYTHONUTF8=1`, output to `comfyui.log`, no shell and no request-supplied arguments;
+  - stop terminates the process and kills it after 20 s; the agent stops the engine when it shuts down;
+  - errors: `ENGINE_NOT_CONFIGURED`, `ENGINE_NOT_INSTALLED`.
+- **Engine API:** `GET /api/v1/system/engine` and `POST /api/v1/system/engine/{start|stop|restart}` (user only, audited as `engine.<action>`). The top bar and the System status screen show this and explain disabled controls (DD-008).
+- **Not yet:** installing the pinned ComfyUI build (WP-17), SVG templates (WP-14), training providers (WP-13).

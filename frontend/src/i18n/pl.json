@@ -48,11 +48,27 @@
   },
   "engine": {
     "label": "Stan silnika",
-    "notConnected": "Silnik niepodłączony",
-    "apiDown": "API niedostępne"
+    "apiDown": "API niedostępne",
+    "checking": "Sprawdzanie silnika…",
+    "stopped": "Silnik zatrzymany",
+    "start": "Uruchom silnik",
+    "stop": "Zatrzymaj silnik",
+    "restart": "Uruchom ponownie",
+    "heldJobs": "Zadania GPU czekają w kolejce, aż silnik zacznie działać; nowe nadal można kolejkować.",
+    "agentNotConfigured": "Host agent nie jest skonfigurowany, więc nie da się stąd uruchomić silnika. Uruchom skrypt instalacyjny.",
+    "agentDown": "Host agent nie działa na tym komputerze. Uruchom go skryptem startowym."
   },
-  "language": { "label": "Język", "pl": "PL", "en": "EN" },
-  "status": { "api": "API", "checking": "Sprawdzanie…", "ok": "Działa", "down": "Brak połączenia" },
+  "language": {
+    "label": "Język",
+    "pl": "PL",
+    "en": "EN"
+  },
+  "status": {
+    "api": "API",
+    "checking": "Sprawdzanie…",
+    "ok": "Działa",
+    "down": "Brak połączenia"
+  },
   "session": {
     "connecting": "Łączenie z lokalnym API…",
     "failed": "Asset Studio nie może połączyć się ze swoim API",
@@ -64,7 +80,10 @@
     "title": "{{module}} — ekran jeszcze nie istnieje",
     "body": "Ten ekran powstanie w {{wp}}. Nawigacja, wskaźnik kolejki i przełącznik języka już działają."
   },
-  "notFound": { "title": "Nie znaleziono strony", "back": "Wróć do pulpitu" },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "back": "Wróć do pulpitu"
+  },
   "settings": {
     "appearance": "Wygląd",
     "theme": "Motyw",
@@ -74,5 +93,13 @@
     "languagePl": "Polski",
     "languageEn": "English",
     "rest": "Lokalizacje danych, foldery modeli, kopia zapasowa i przywracanie pojawią się w WP-16."
+  },
+  "problems": {
+    "ENGINE_NOT_CONFIGURED": "Host agent nie ma skonfigurowanego folderu ComfyUI. Uruchom skrypt instalacyjny.",
+    "ENGINE_NOT_INSTALLED": "ComfyUI nie jest zainstalowane we wskazanym folderze. Uruchom skrypt instalacyjny.",
+    "HOST_AGENT_UNAVAILABLE": "Host agent nie działa na tym komputerze.",
+    "HOST_AGENT_NOT_CONFIGURED": "Token host agenta nie jest ustawiony. Uruchom skrypt instalacyjny.",
+    "HOST_AGENT_REJECTED": "Host agent odrzucił token. Sprawdź, czy obie strony używają tego samego tokenu.",
+    "ACTOR_NOT_ALLOWED": "Tylko Ty możesz to zrobić, nie Claude (MCP)."
   }
 }

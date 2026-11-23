@@ -1,4 +1,4 @@
-import { QueryClient, useQuery, useQueryClient } from "@tanstack/react-query";
+import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
 
 import { ApiError, api, unwrap } from "./client";
@@ -6,6 +6,7 @@ import { ApiError, api, unwrap } from "./client";
 export const queryKeys = {
   session: ["session"] as const,
   health: ["system", "health"] as const,
+  engine: ["system", "engine"] as const,
   projects: ["projects"] as const,
   queueSummary: ["jobs", "summary"] as const,
 };
@@ -38,6 +39,28 @@ export function useHealth() {
     queryKey: queryKeys.health,
     queryFn: () => unwrap(api.GET("/api/v1/system/health")),
     refetchInterval: 30_000,
+  });
+}
+
+/** Engine reachability, version and GPU (FR-043). The worker holds GPU jobs while it is
+ * down (RULE-013), so the UI explains instead of failing. */
+export function useEngine() {
+  return useQuery({
+    queryKey: queryKeys.engine,
+    queryFn: () => unwrap(api.GET("/api/v1/system/engine")),
+    refetchInterval: 15_000,
+  });
+}
+
+export type EngineAction = "start" | "stop" | "restart";
+
+export function useEngineControl() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (action: EngineAction) =>
+      unwrap(api.POST("/api/v1/system/engine/{action}", { params: { path: { action } } })),
+    onSuccess: (status) => client.setQueryData(queryKeys.engine, status),
+    onSettled: () => void client.invalidateQueries({ queryKey: ["jobs"] }),
   });
 }
 
