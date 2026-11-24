@@ -279,6 +279,58 @@ def build(api_for: Callable[[Ctx], Api], *, host: str = "127.0.0.1", port: int =
         body["variants"] = variants
         return await api_for(ctx).post("/generations", body, idempotency_key=request_id)
 
+    # --- SVG (FR-045-FR-047, UC-014) ------------------------------------------------------
+
+    @mcp.tool()
+    async def svg_templates(ctx: Ctx) -> Any:
+        """The built-in SVG templates (icon, badge, pattern) with their parameters, defaults
+        and limits. SVG needs no GPU and renders the same file for the same parameters."""
+        return await api_for(ctx).get("/svg/templates")
+
+    @mcp.tool()
+    async def svg_preview(
+        ctx: Ctx,
+        project_id: str,
+        template_id: str,
+        params: dict[str, Any] | None = None,
+        style_id: str | None = None,
+    ) -> Any:
+        """Render an SVG template without storing anything: the cleaned SVG, its hash and any
+        problems (with a style, colours must come from its palette)."""
+        body: dict[str, Any] = {
+            "project_id": _id(project_id),
+            "template_id": template_id,
+            "params": params or {},
+        }
+        if style_id:
+            body["style_id"] = _id(style_id)
+        return await api_for(ctx).post("/svg:preview", body)
+
+    @mcp.tool()
+    async def svg_create(
+        ctx: Ctx,
+        project_id: str,
+        template_id: str,
+        request_id: str,
+        params: dict[str, Any] | None = None,
+        style_id: str | None = None,
+        asset_id: str | None = None,
+        category: str | None = None,
+        name: str | None = None,
+    ) -> Any:
+        """Queue an SVG version: a new asset (category and name) or a new version of an asset
+        (asset_id). It goes through processing and waits for review like any version.
+        ``request_id``: a fresh unique id; repeating it repeats nothing."""
+        body: dict[str, Any] = {
+            "project_id": _id(project_id),
+            "template_id": template_id,
+            "params": params or {},
+            "asset": target(asset_id, category, name),
+        }
+        if style_id:
+            body["style_id"] = _id(style_id)
+        return await api_for(ctx).post("/svg", body, idempotency_key=request_id)
+
     @mcp.tool()
     async def generate_batch(
         ctx: Ctx,

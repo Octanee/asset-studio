@@ -1,0 +1,101 @@
+/* SVG Studio (WP-14, UXQ-01): template picker, parameters, live preview at several sizes. */
+.templates {
+  display: grid;
+  gap: var(--space-1);
+}
+.template {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+  width: 100%;
+  min-height: 52px;
+  padding: var(--space-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface-0);
+  color: var(--ink);
+  text-align: left;
+  cursor: pointer;
+}
+.template[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--surface-2);
+}
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+.swatch {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.swatch[aria-pressed="true"] {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
+  border-radius: var(--radius-md);
+}
+.stage img {
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+}
+.sizes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: flex-end;
+}
+.size {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+.sizeBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+}
+.transparent {
+  background: repeating-conic-gradient(var(--checker-a) 0 25%, var(--checker-b) 0 50%) 0 0 / 16px
+    16px;
+}
+.light {
+  background: #ffffff;
+}
+.dark {
+  background: #0d0f11;
+}
+.output {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .output {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.source {
+  margin: var(--space-2) 0 0;
+  padding: var(--space-2);
+  max-height: 180px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-all;
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+}

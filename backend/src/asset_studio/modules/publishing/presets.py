@@ -33,7 +33,8 @@ def _placeholders(value: str, allowed: set[str]) -> None:
 
 class PresetDefinition(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    format: Literal["png", "webp", "jpeg"] = "webp"
+    # "svg" copies a vector version as it is; raster formats render it (FR-047).
+    format: Literal["png", "webp", "jpeg", "svg"] = "webp"
     sizes: list[Size] = Field(
         default_factory=lambda: [Size(width=1024, height=1024)], min_length=1, max_length=10
     )
@@ -86,7 +87,7 @@ def render(pattern: str, values: dict[str, str]) -> str:
     return PLACEHOLDER.sub(lambda m: values.get(m.group(1), ""), pattern)
 
 
-EXT = {"png": "png", "webp": "webp", "jpeg": "jpg"}
+EXT = {"png": "png", "webp": "webp", "jpeg": "jpg", "svg": "svg"}
 
 
 def file_paths(d: PresetDefinition, values: dict[str, str]) -> list[tuple[Size, str]]:

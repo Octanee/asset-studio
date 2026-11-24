@@ -250,6 +250,10 @@ def plan(session: Session, spec: GenerationSpec) -> Plan:
             )
             if version.storage_key is None:
                 raise DomainError(410, "VERSION_DELETED", "The version file was deleted.")
+            if version.mime == "image/svg+xml":
+                raise DomainError(
+                    422, "INIT_NOT_RASTER", "Image-to-image starts from a raster version."
+                )
             init_key = version.storage_key
 
     checkpoint = registry.get_model(session, spec.checkpoint_id)

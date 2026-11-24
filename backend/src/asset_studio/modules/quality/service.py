@@ -19,6 +19,8 @@ from asset_studio.modules.projects.service import current_config, get_project
 from asset_studio.modules.quality.models import ValidationResult
 from asset_studio.modules.quality.validation import RULES, Expectations, render_name, validate
 from asset_studio.modules.storage.local import LocalStorage
+from asset_studio.modules.svg.raster import is_svg, render
+from asset_studio.modules.svg.sanitize import SvgError
 
 DEFAULT_VIEW = "main"
 
@@ -79,6 +81,12 @@ def run(session: Session, storage: LocalStorage, version: AssetVersion, actor: A
         )
     )
     collisions = tuple(o.slug for o in others if file_name(o.slug, o.category) == name)
+    picture = None
+    if is_svg(out.get("mime")) and data:
+        try:
+            picture = render(data, config.output.width, config.output.height)
+        except SvgError:
+            picture = b""  # reported as not decodable by the integrity rule
     results = validate(
         data,
         Expectations(
@@ -92,6 +100,7 @@ def run(session: Session, storage: LocalStorage, version: AssetVersion, actor: A
             file_name=name,
             collisions=collisions,
         ),
+        picture=picture,
     )
     run_id, now = uuid7(), utcnow()
     rows = [

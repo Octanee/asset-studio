@@ -42,7 +42,7 @@ classDiagram
 - **ComfyUIProvider** (worker → ComfyUI HTTP `/prompt`, `/history`, `/view`, `/free`, plus WebSocket `/ws` for step progress).
   - It translates a domain `GenerationRequest` into ComfyUI API-format JSON using a **workflow version**: a template with declared inputs, like the prototype's `make_workflows.py`.
   - The domain never sees ComfyUI node ids.
-- **SvgTemplateProvider:** deterministic SVG from versioned templates. It runs in-process with no GPU, is sanitized, and is rasterized with `resvg`.
+- **SvgTemplateProvider:** deterministic SVG from versioned templates. It runs in-process with no GPU, is sanitized, and is rasterized with `resvg`. Built in WP-14 as the `svg` module and CPU job (not a `GenerationProvider` class: it needs no engine, health or progress); see D-62.
 - **FakeProvider:** returns generated test images with configurable delays and failures, for CI and UI development.
 - **KohyaProvider:** runs through the host agent (see below), using presets for 6 GB taken from the prototype:
   - SDXL: UNet-only, Adafactor fused, bf16, gradient checkpointing, cached latents/TE, 768 px;
@@ -151,5 +151,4 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
   - Only the exit code leaves the agent; the log stays in the run's folder.
 - **Not yet:**
   - installing the pinned ComfyUI build and kohya (WP-17);
-  - SVG templates (WP-14);
   - (LoRAs in generation: done in WP-13 part 2, see above.)

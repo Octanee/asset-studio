@@ -19,6 +19,7 @@ import { References } from "../pages/References";
 import { Review } from "../pages/Review";
 import { Settings } from "../pages/Settings";
 import { StyleStudio } from "../pages/StyleStudio";
+import { SvgStudio } from "../pages/SvgStudio";
 import { SystemStatus } from "../pages/System";
 import { Training } from "../pages/Training";
 import { MODULES, type ModuleId } from "./modules";
@@ -33,6 +34,7 @@ const BUILT = new Set<ModuleId>([
   "poses",
   "models",
   "generate",
+  "svg",
   "queue",
   "library",
   "review",
@@ -92,6 +94,7 @@ export const routes: RouteObject[] = [
           })),
           { path: "/", element: <Dashboard /> },
           { path: "/generate", element: <GenerationStudio /> },
+          { path: "/svg", element: <SvgStudio /> },
           { path: "/queue", element: <Queue /> },
           { path: "/library", element: <Library /> },
           { path: "/library/:assetId", element: <AssetDetails /> },

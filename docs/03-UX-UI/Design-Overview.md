@@ -50,7 +50,7 @@ See [[Screen-Specifications]], [[Navigation]], [[Design-System]], [[Components]]
 
 | ID | Item | Proposal |
 |---|---|---|
-| UXQ-01 | No dedicated **SVG generation** screen yet (FR-045–FR-047); SVG templates appear only under Workflows | Add an "SVG Studio" artboard: template picker, parameters, live deterministic preview |
+| UXQ-01 | No dedicated **SVG generation** screen yet (FR-045–FR-047); SVG templates appear only under Workflows | Resolved in WP-14: the SVG Studio artboard (template picker, parameters from the template, live preview at 240/64/48/24/16 px on transparent, light or dark, output checks, versions) was approved on 2026-11-24 (D-62) and built |
 | UXQ-02 | **Audit log** and **MCP connection** pages appear only as settings sections | Resolved in WP-16: Settings has the sections General, Data and backup, MCP connection and Audit log; the audit log is a table filtered by project, actor and action (FR-115) |
 | UXQ-03 | Phone and tablet layouts are designed for Review only | Other screens are desktop-only in the MVP; to be confirmed |
 | UXQ-04 | Light theme (Daylight) is defined in tokens but not drawn on artboards | It can be checked via theme tokens; no separate artboards planned |

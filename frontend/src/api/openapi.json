@@ -3066,6 +3066,85 @@
         "title": "OutputDefaults",
         "type": "object"
       },
+      "ParamOut": {
+        "properties": {
+          "default": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ],
+            "title": "Default"
+          },
+          "kind": {
+            "enum": [
+              "glyph",
+              "color",
+              "number"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "max": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max"
+          },
+          "min": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "step": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Step"
+          }
+        },
+        "required": [
+          "name",
+          "kind",
+          "default",
+          "min",
+          "max",
+          "step",
+          "options"
+        ],
+        "title": "ParamOut",
+        "type": "object"
+      },
       "PlanFileOut": {
         "properties": {
           "existing_sha256": {
@@ -3607,7 +3686,8 @@
             "enum": [
               "png",
               "webp",
-              "jpeg"
+              "jpeg",
+              "svg"
             ],
             "title": "Format",
             "type": "string"
@@ -5174,6 +5254,192 @@
         "title": "StyleUpdate",
         "type": "object"
       },
+      "SvgPreviewOut": {
+        "properties": {
+          "height": {
+            "title": "Height",
+            "type": "number"
+          },
+          "palette": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Palette",
+            "type": "array"
+          },
+          "params": {
+            "additionalProperties": true,
+            "title": "Params",
+            "type": "object"
+          },
+          "params_hash": {
+            "title": "Params Hash",
+            "type": "string"
+          },
+          "problems": {
+            "items": {
+              "$ref": "#/components/schemas/SvgProblem"
+            },
+            "title": "Problems",
+            "type": "array"
+          },
+          "ready": {
+            "title": "Ready",
+            "type": "boolean"
+          },
+          "report": {
+            "$ref": "#/components/schemas/SvgReport"
+          },
+          "sha256": {
+            "title": "Sha256",
+            "type": "string"
+          },
+          "svg": {
+            "title": "Svg",
+            "type": "string"
+          },
+          "template": {
+            "$ref": "#/components/schemas/TemplateRef"
+          },
+          "width": {
+            "title": "Width",
+            "type": "number"
+          }
+        },
+        "required": [
+          "ready",
+          "problems",
+          "template",
+          "params",
+          "params_hash",
+          "svg",
+          "sha256",
+          "width",
+          "height",
+          "report",
+          "palette"
+        ],
+        "title": "SvgPreviewOut",
+        "type": "object"
+      },
+      "SvgProblem": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "detail": {
+            "title": "Detail",
+            "type": "string"
+          },
+          "param": {
+            "title": "Param",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "param",
+          "detail"
+        ],
+        "title": "SvgProblem",
+        "type": "object"
+      },
+      "SvgQueuedOut": {
+        "properties": {
+          "asset_id": {
+            "format": "uuid",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "job": {
+            "$ref": "#/components/schemas/JobOut"
+          }
+        },
+        "required": [
+          "asset_id",
+          "job"
+        ],
+        "title": "SvgQueuedOut",
+        "type": "object"
+      },
+      "SvgReport": {
+        "properties": {
+          "bytes_in": {
+            "title": "Bytes In",
+            "type": "integer"
+          },
+          "bytes_out": {
+            "title": "Bytes Out",
+            "type": "integer"
+          },
+          "removed_attributes": {
+            "title": "Removed Attributes",
+            "type": "integer"
+          },
+          "removed_elements": {
+            "title": "Removed Elements",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "removed_elements",
+          "removed_attributes",
+          "bytes_in",
+          "bytes_out"
+        ],
+        "title": "SvgReport",
+        "type": "object"
+      },
+      "SvgSpec": {
+        "additionalProperties": false,
+        "properties": {
+          "asset": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AssetTarget"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "params": {
+            "additionalProperties": true,
+            "title": "Params",
+            "type": "object"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "style_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Style Id"
+          },
+          "template_id": {
+            "maxLength": 64,
+            "minLength": 1,
+            "title": "Template Id",
+            "type": "string"
+          }
+        },
+        "required": [
+          "project_id",
+          "template_id"
+        ],
+        "title": "SvgSpec",
+        "type": "object"
+      },
       "TagOut": {
         "properties": {
           "count": {
@@ -5283,6 +5549,60 @@
           "root_id"
         ],
         "title": "TargetRequest",
+        "type": "object"
+      },
+      "TemplateOut": {
+        "properties": {
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "params": {
+            "items": {
+              "$ref": "#/components/schemas/ParamOut"
+            },
+            "title": "Params",
+            "type": "array"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "name",
+          "description",
+          "params"
+        ],
+        "title": "TemplateOut",
+        "type": "object"
+      },
+      "TemplateRef": {
+        "properties": {
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "version": {
+            "title": "Version",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "version"
+        ],
+        "title": "TemplateRef",
         "type": "object"
       },
       "TransitionOut": {
@@ -11869,6 +12189,132 @@
         "summary": "Restore Style",
         "tags": [
           "styles"
+        ]
+      }
+    },
+    "/api/v1/svg": {
+      "post": {
+        "operationId": "create_api_v1_svg_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SvgSpec"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SvgQueuedOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create",
+        "tags": [
+          "svg"
+        ]
+      }
+    },
+    "/api/v1/svg/templates": {
+      "get": {
+        "operationId": "templates_api_v1_svg_templates_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/TemplateOut"
+                  },
+                  "title": "Response Templates Api V1 Svg Templates Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Templates",
+        "tags": [
+          "svg"
+        ]
+      }
+    },
+    "/api/v1/svg:preview": {
+      "post": {
+        "operationId": "preview_api_v1_svg_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SvgSpec"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SvgPreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview",
+        "tags": [
+          "svg"
         ]
       }
     },

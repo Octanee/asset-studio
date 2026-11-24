@@ -28,6 +28,8 @@ KIND_LANES: dict[str, Lane] = {
     "train": "gpu",
     "remove_background": "gpu",
     "process": "cpu",
+    # SVG templates (WP-14) render in-process without the engine.
+    "svg": "cpu",
     "validate": "cpu",
     "detect_pose": "cpu",
     "export": "cpu",

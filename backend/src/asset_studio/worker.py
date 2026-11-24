@@ -28,6 +28,7 @@ from asset_studio.modules.poses.service import handle_detect_pose
 from asset_studio.modules.processing.service import HANDLERS as PROCESSING_HANDLERS
 from asset_studio.modules.providers.engine import get_engine_monitor
 from asset_studio.modules.publishing.service import HANDLERS as PUBLISHING_HANDLERS
+from asset_studio.modules.svg.service import HANDLERS as SVG_HANDLERS
 from asset_studio.modules.system.handlers import HANDLERS as SYSTEM_HANDLERS
 from asset_studio.modules.system.settings import queue_paused
 from asset_studio.modules.training.runner import HANDLERS as TRAINING_HANDLERS
@@ -39,6 +40,7 @@ HANDLERS: dict[str, Handler] = {
     "verify_model": handle_verify_model,
     **PROCESSING_HANDLERS,
     **PUBLISHING_HANDLERS,
+    **SVG_HANDLERS,
     **SYSTEM_HANDLERS,
     **TRAINING_HANDLERS,
 }

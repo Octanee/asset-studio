@@ -73,7 +73,7 @@ beforeEach(async () => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe("app shell", () => {
-  it("starts a session, then shows the rail with all 13 modules in order", async () => {
+  it("starts a session, then shows the rail with all 14 modules in order", async () => {
     const fetchMock = stubApi();
     renderAt("/");
     const rail = await screen.findByRole("navigation", { name: "Modules" });

@@ -21,7 +21,8 @@
     "publish": "Export and publish",
     "settings": "Settings",
     "projects": "Projects",
-    "system": "System status"
+    "system": "System status",
+    "svg": "SVG Studio"
   },
   "project": {
     "switch": "Switch project",
@@ -279,7 +280,17 @@
     "TRAINING_INPUT_MISSING": "The dataset or the base model file is missing.",
     "LORA_LIMIT": "At most 2 LoRAs can be used together.",
     "LORA_LINK_NOT_FOUND": "This LoRA is not linked.",
-    "TARGET_ARCHIVED": "It is archived."
+    "TARGET_ARCHIVED": "It is archived.",
+    "SVG_NOT_READY": "Fix the SVG's problems first.",
+    "SVG_TARGET_REQUIRED": "Choose an asset, or a category and name for a new one.",
+    "SVG_PARAM_INVALID": "A template parameter is out of range.",
+    "SVG_PARAM_UNKNOWN": "The template has no such parameter.",
+    "SVG_TEMPLATE_NOT_FOUND": "This SVG template does not exist.",
+    "SVG_TEMPLATE_CHANGED": "The template changed after queueing; create it again.",
+    "PALETTE_MISMATCH": "This colour is not in the style's palette.",
+    "NOT_VECTOR": "An SVG preset publishes SVG versions only.",
+    "VERSION_NOT_RASTER": "Training uses raster images; an SVG version cannot be added.",
+    "INIT_NOT_RASTER": "Image-to-image starts from a raster version, not an SVG."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -634,7 +645,8 @@
     "download": "Model download",
     "verify_model": "Model check",
     "backup": "Backup",
-    "restore": "Restore"
+    "restore": "Restore",
+    "svg": "SVG"
   },
   "versionStates": {
     "generated": "Generated",
@@ -935,7 +947,8 @@
     "reasons": {
       "NOT_APPROVED": "not approved",
       "NO_APPROVED_VERSION": "no approved version",
-      "REPUBLISH_USER_ONLY": "publishing again is the user's decision"
+      "REPUBLISH_USER_ONLY": "publishing again is the user's decision",
+      "NOT_VECTOR": "not a vector (SVG) version"
     },
     "done": "Published versions: {{count}}.",
     "history": "Recent publications",
@@ -1109,5 +1122,68 @@
     "datasetCol": "Dataset",
     "result": "Trained LoRA",
     "cancel": "Cancel"
+  },
+  "svg": {
+    "settings": "SVG settings",
+    "asset": "Asset",
+    "template": "Template",
+    "parameters": "Parameters · from the template",
+    "incomplete": "Choose an asset, or a category for a new one.",
+    "notReady": "Fix the problems shown next to the preview.",
+    "cpu": "CPU · ready in about a second · no GPU needed",
+    "create": "Create for review",
+    "createVersion": "Create v{{n}} for review",
+    "queued": "Queued. The version appears below when it is ready for review.",
+    "preview": "Live preview",
+    "background": "Preview background",
+    "backgrounds": {
+      "transparent": "Transparent",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "previewAlt": "Preview at {{size}} px",
+    "deterministic": "The preview is the real output: the same template version and parameters always give the same file.",
+    "output": "Output",
+    "sanitised": "Sanitised: no scripts, events or external links (removed: {{elements}} elements, {{attributes}} attributes)",
+    "optimised": "Optimised:",
+    "paletteOk": "Colours from the style's palette only",
+    "paletteHint": "Colours come from the palette of “{{name}}”, plus white and black.",
+    "noPalette": "Without a style with a palette, any colour can be chosen.",
+    "fingerprint": "Fingerprint",
+    "size": "viewBox",
+    "exportNote": "Export copies the SVG as it is (SVG preset) or renders it at each size of a PNG, WebP or JPEG preset.",
+    "source": "SVG source",
+    "templates": {
+      "icon-line": {
+        "name": "Icon — rounded line",
+        "description": "One glyph in a rounded line style."
+      },
+      "badge-circle": {
+        "name": "Badge — circle",
+        "description": "A glyph on a filled circle."
+      },
+      "pattern-dots": {
+        "name": "Pattern — dot grid",
+        "description": "A tileable background of dots."
+      }
+    },
+    "params": {
+      "glyph": "Glyph",
+      "color": "Colour",
+      "glyph_color": "Glyph colour",
+      "stroke_width": "Stroke width",
+      "spacing": "Spacing",
+      "dot": "Dot size"
+    },
+    "glyphs": {
+      "dumbbell": "Dumbbell",
+      "heart": "Heart",
+      "timer": "Timer",
+      "play": "Play",
+      "check": "Check",
+      "plus": "Plus",
+      "star": "Star",
+      "flame": "Flame"
+    }
   }
 }

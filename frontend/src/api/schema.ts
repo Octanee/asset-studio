@@ -1568,6 +1568,57 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/svg": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create */
+        post: operations["create_api_v1_svg_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/svg/templates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Templates */
+        get: operations["templates_api_v1_svg_templates_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/svg:preview": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Preview */
+        post: operations["preview_api_v1_svg_preview_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/system/engine": {
         parameters: {
             query?: never;
@@ -3147,6 +3198,26 @@ export interface components {
              */
             width: number;
         };
+        /** ParamOut */
+        ParamOut: {
+            /** Default */
+            default: string | number;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "glyph" | "color" | "number";
+            /** Max */
+            max: number | null;
+            /** Min */
+            min: number | null;
+            /** Name */
+            name: string;
+            /** Options */
+            options: string[];
+            /** Step */
+            step: number | null;
+        };
         /** PlanFileOut */
         PlanFileOut: {
             /** Existing Sha256 */
@@ -3347,7 +3418,7 @@ export interface components {
              * @default webp
              * @enum {string}
              */
-            format: "png" | "webp" | "jpeg";
+            format: "png" | "webp" | "jpeg" | "svg";
             /**
              * Metadata
              * @default none
@@ -4036,6 +4107,77 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /** SvgPreviewOut */
+        SvgPreviewOut: {
+            /** Height */
+            height: number;
+            /** Palette */
+            palette: string[];
+            /** Params */
+            params: {
+                [key: string]: unknown;
+            };
+            /** Params Hash */
+            params_hash: string;
+            /** Problems */
+            problems: components["schemas"]["SvgProblem"][];
+            /** Ready */
+            ready: boolean;
+            report: components["schemas"]["SvgReport"];
+            /** Sha256 */
+            sha256: string;
+            /** Svg */
+            svg: string;
+            template: components["schemas"]["TemplateRef"];
+            /** Width */
+            width: number;
+        };
+        /** SvgProblem */
+        SvgProblem: {
+            /** Code */
+            code: string;
+            /** Detail */
+            detail: string;
+            /** Param */
+            param: string;
+        };
+        /** SvgQueuedOut */
+        SvgQueuedOut: {
+            /**
+             * Asset Id
+             * Format: uuid
+             */
+            asset_id: string;
+            job: components["schemas"]["JobOut"];
+        };
+        /** SvgReport */
+        SvgReport: {
+            /** Bytes In */
+            bytes_in: number;
+            /** Bytes Out */
+            bytes_out: number;
+            /** Removed Attributes */
+            removed_attributes: number;
+            /** Removed Elements */
+            removed_elements: number;
+        };
+        /** SvgSpec */
+        SvgSpec: {
+            asset?: components["schemas"]["AssetTarget"] | null;
+            /** Params */
+            params?: {
+                [key: string]: unknown;
+            };
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Style Id */
+            style_id?: string | null;
+            /** Template Id */
+            template_id: string;
+        };
         /** TagOut */
         TagOut: {
             /** Count */
@@ -4082,6 +4224,26 @@ export interface components {
              * @default
              */
             subdir: string;
+        };
+        /** TemplateOut */
+        TemplateOut: {
+            /** Description */
+            description: string;
+            /** Id */
+            id: string;
+            /** Name */
+            name: string;
+            /** Params */
+            params: components["schemas"]["ParamOut"][];
+            /** Version */
+            version: number;
+        };
+        /** TemplateRef */
+        TemplateRef: {
+            /** Id */
+            id: string;
+            /** Version */
+            version: number;
         };
         /** TransitionOut */
         TransitionOut: {
@@ -7895,6 +8057,94 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    create_api_v1_svg_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SvgSpec"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SvgQueuedOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    templates_api_v1_svg_templates_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TemplateOut"][];
+                };
+            };
+        };
+    };
+    preview_api_v1_svg_preview_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SvgSpec"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SvgPreviewOut"];
                 };
             };
             /** @description Validation Error */
