@@ -13,7 +13,8 @@ tags:
 
 - [[Development-Setup]] — local development and checks
 - [[Install-and-Run]] — setup, start, stop, status, logs, pinned native components and troubleshooting on Windows (WP-17)
-- Backup and restore are in the app (Settings → Data and backup, [[Storage-and-Backup]]); release procedures follow with gate G-9.
+- Backup and restore are in the app (Settings → Data and backup, [[Storage-and-Backup]]).
+- [[Release-Procedure]] — versioning, release checklist, tagging and upgrading (proposed for gate G-9)
 
 ## Pages
 

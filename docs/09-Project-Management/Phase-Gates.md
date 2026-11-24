@@ -21,7 +21,7 @@ Silence is not approval. A general instruction to continue does not approve a sp
 | G-4 | Complete UI/UX design | ✅ approved (D-45) | 2026-11-22 |
 | G-6a | Technical architecture | ✅ approved (D-46) | 2026-11-22 |
 | G-6b | Implementation roadmap | ✅ approved (D-46) | 2026-11-22 |
-| G-9 | Public release | ⏳ | — |
+| G-9 | Public release | 🟡 proposed: v0.1.0, [[Release-Procedure]], `CHANGELOG.md`; awaits approval | — |
 
 ## Standing authorisations (2026-11-21)
 
