@@ -1,7 +1,7 @@
 ---
 title: Release Procedure
 type: operations
-status: proposed
+status: approved
 created: 2026-11-24
 updated: 2026-11-24
 tags:
@@ -11,7 +11,7 @@ tags:
 
 # Release Procedure (gate G-9)
 
-How a version of Universal Asset Studio is numbered, checked and published. Proposed for gate G-9; nothing is tagged or released until the user approves the gate.
+How a version of Universal Asset Studio is numbered, checked and published. Approved at gate G-9 (D-64).
 
 ## Versioning
 

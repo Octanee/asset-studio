@@ -4,7 +4,7 @@ All notable changes to Universal Asset Studio are recorded here, in the [Keep a 
 
 ## [Unreleased]
 
-## [0.1.0] - proposed
+## [0.1.0] - 2026-11-24
 
 The first release: the MVP. It runs on one Windows machine with an NVIDIA GPU, for a single user, on loopback only.
 
