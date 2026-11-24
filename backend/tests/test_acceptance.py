@@ -5,6 +5,8 @@ AC-004 `test_ac004_*`, AC-007 `test_fr072_fr075_*` + `test_fr073_*` + `test_lora
 AC-008 `test_ac008_*`, AC-009 `test_ac009_*`, AC-010 `test_ac010_*`, AC-011 `test_ac011_*`,
 AC-014 `i18n.test.tsx` and `Shell.test.tsx`."""
 
+import json
+import re
 import uuid
 from collections.abc import Iterator
 from contextlib import contextmanager
@@ -17,6 +19,7 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.orm import Session
 
 from asset_studio.config import Settings
+from asset_studio.modules.assets.lifecycle import TRANSITIONS
 from asset_studio.modules.generation import service as generation
 from asset_studio.modules.poses.builtin import BUILTIN_POSES
 from asset_studio.modules.processing import service as processing
@@ -303,3 +306,51 @@ def test_ac015_nothing_listens_outside_loopback(client: TestClient) -> None:
     r = client.post("/api/v1/projects", json={}, headers={"Origin": "http://attacker.example"})
     assert r.status_code == 403
     assert client.get("/api/v1/projects", headers=MCP).status_code == 200
+
+
+# --- AC-014: every audit action has a label in both languages ------------------------------------
+
+# Actions built at run time, and what they expand to. A new f-string action must be added here,
+# so it cannot reach the activity feed without a label.
+DYNAMIC_ACTIONS = {
+    "asset_version.{action}": {f"asset_version.{a}" for a in TRANSITIONS},
+    "engine.{action}": {f"engine.{a}" for a in ("start", "stop", "restart")},
+    "pose.{'archived' if archived else 'restored'}": {"pose.archived", "pose.restored"},
+    "reference.{'archived' if archived else 'restored'}": {
+        "reference.archived",
+        "reference.restored",
+    },
+    "{row.__tablename__}.created": {"style.created", "character.created"},
+    "{row.__tablename__}.updated": {"style.updated", "character.updated"},
+    "{row.__tablename__}.{'archived' if archived else 'restored'}": {
+        f"{t}.{s}" for t in ("style", "character") for s in ("archived", "restored")
+    },
+    "{target_type}.lora_linked": {"style.lora_linked", "character.lora_linked"},
+    "{target_type}.lora_unlinked": {"style.lora_unlinked", "character.lora_unlinked"},
+}
+
+
+def _audit_actions() -> set[str]:
+    source = "\n".join(
+        p.read_text(encoding="utf-8") for p in (ROOT / "backend/src/asset_studio").rglob("*.py")
+    )
+    actions = set(re.findall(r'action="([a-z_]+\.[a-z_]+)"', source))
+    for first, second in re.findall(
+        r'"([a-z_]+\.[a-z_]+)" if [^\n]* else "([a-z_]+\.[a-z_]+)"', source
+    ):
+        actions |= {first, second}
+    dynamic = set(re.findall(r'action=f"([^"]+)"', source))
+    assert dynamic == set(DYNAMIC_ACTIONS), "a new run-time audit action needs a label"
+    for expanded in DYNAMIC_ACTIONS.values():
+        actions |= expanded
+    return actions
+
+
+@pytest.mark.parametrize("lang", ["en", "pl"])
+def test_ac014_every_audit_action_has_a_label(lang: str) -> None:
+    path = ROOT / f"frontend/src/i18n/{lang}.json"
+    labels = json.loads(path.read_text(encoding="utf-8"))["asset"]["actions"]
+    actions = _audit_actions()
+    assert len(actions) > 80
+    missing = sorted(a for a in actions if a.replace(".", "_") not in labels)
+    assert missing == []
