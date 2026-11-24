@@ -55,6 +55,7 @@ ignore = []
 # Shares the generation fixtures by importing them; pytest uses them by parameter name.
 "tests/test_lora_generation.py" = ["F811"]
 "tests/test_svg.py" = ["F811"]
+"tests/test_acceptance.py" = ["F811"]
 
 [tool.mypy]
 python_version = "3.12"

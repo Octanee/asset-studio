@@ -30,3 +30,5 @@ Feature-level criteria are added with each work package in Phase 7.
 | AC-013 | A published version cannot be permanently deleted until it is archived; after deletion the audit entry remains. | RULE-019, FR-054 |
 | AC-014 | The UI can be switched between Polish and English with no untranslated strings on MVP screens. | FR-125 |
 | AC-015 | The backend, engine adapter and MCP server do not accept connections from outside the loopback interface. | NFR-005, RULE-018 |
+
+How each criterion is checked, automated and live: [[Acceptance-Coverage]].
