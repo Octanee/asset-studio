@@ -1,0 +1,47 @@
+{
+  "comment": "Pinned native components (Infrastructure, WP-17). Change a pin only together with a test on the reference machine; sizes and hashes are checked before anything is used. deepestPath: the longest path below the install folder (measured, with a margin), checked against the 260-character limit when Windows long paths are off.",
+  "sevenZip": {
+    "name": "7-Zip console extractor 7zr 26.04",
+    "url": "https://github.com/ip7z/7zip/releases/download/26.04/7zr.exe",
+    "file": "7zr.exe",
+    "bytes": 602624,
+    "sha256": "256feca8e274e5da655e2a284fabafd9f554365eb164862089dacd4e8276d282",
+    "licence": "LGPL-2.1 (7-Zip)"
+  },
+  "comfyui": {
+    "name": "ComfyUI portable for NVIDIA v0.46.0",
+    "url": "https://github.com/Comfy-Org/ComfyUI/releases/download/v0.46.0/ComfyUI_windows_portable_nvidia.7z",
+    "file": "ComfyUI_windows_portable_nvidia.7z",
+    "bytes": 2085169944,
+    "sha256": "6a5255c7ec01fdc54bdbd8e4507073cf6acda2fbeea74ae1829a50681af5fac6",
+    "folder": "ComfyUI_windows_portable",
+    "deepestPath": 190,
+    "licence": "GPL-3.0 (ComfyUI)"
+  },
+  "comfyuiNodes": [
+    {
+      "name": "ComfyUI_IPAdapter_plus",
+      "repo": "https://github.com/cubiq/ComfyUI_IPAdapter_plus.git",
+      "commit": "a0f451a5113cf9becb0847b92884cb10cbdec0ef",
+      "approxBytes": 2000000,
+      "licence": "GPL-3.0"
+    }
+  ],
+  "kohya": {
+    "name": "kohya sd-scripts",
+    "repo": "https://github.com/kohya-ss/sd-scripts.git",
+    "commit": "8c088eba9cd5d10a5d00dd58f0d83063fa9d57ca",
+    "folder": "sd-scripts",
+    "deepestPath": 160,
+    "python": "3.11",
+    "torchIndex": "https://download.pytorch.org/whl/cu124",
+    "torch": ["torch==2.6.0", "torchvision==0.21.0"],
+    "approxBytes": {
+      "source": 20000000,
+      "python": 30000000,
+      "torch": 2700000000,
+      "requirements": 900000000
+    },
+    "licence": "Apache-2.0 (sd-scripts)"
+  }
+}
