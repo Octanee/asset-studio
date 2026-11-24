@@ -20,11 +20,13 @@ import { Review } from "../pages/Review";
 import { Settings } from "../pages/Settings";
 import { StyleStudio } from "../pages/StyleStudio";
 import { SystemStatus } from "../pages/System";
+import { Training } from "../pages/Training";
 import { MODULES, type ModuleId } from "./modules";
 
 /** Modules whose screen exists; the rest show a placeholder naming their work package. */
 const BUILT = new Set<ModuleId>([
   "dashboard",
+  "training",
   "settings",
   "styles",
   "references",
@@ -100,6 +102,7 @@ export const routes: RouteObject[] = [
           { path: "/references", element: <References /> },
           { path: "/poses", element: <Poses /> },
           { path: "/models", element: <Models /> },
+          { path: "/training", element: <Training /> },
           { path: "/settings", element: <Settings section="general" /> },
           { path: "/settings/data", element: <Settings section="data" /> },
           { path: "/settings/mcp", element: <Settings section="mcp" /> },

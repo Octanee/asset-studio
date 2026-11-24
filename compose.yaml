@@ -42,6 +42,8 @@ services:
       ASSET_STUDIO_EXPORT_ROOTS: /exports
       # Backups are written here: a Windows folder, so they live outside Docker (ADR-013).
       ASSET_STUDIO_BACKUPS_DIR: /backups
+      # Each training run's images and captions go here for kohya under the host agent (ADR-011).
+      ASSET_STUDIO_TRAINING_DIR: /training
       # Shown in Settings > MCP connection.
       ASSET_STUDIO_MCP_PORT: ${ASSET_STUDIO_MCP_PORT:-8411}
     extra_hosts: &host-gateway
@@ -67,6 +69,7 @@ services:
       - ${ASSET_STUDIO_MODELS_HOST_DIR:-./models}:/models  # approved downloads (RULE-008)
       - ${ASSET_STUDIO_EXPORTS_HOST_DIR:-./exports}:/exports  # publishing writes here
       - ${ASSET_STUDIO_BACKUPS_HOST_DIR:-./backups}:/backups  # backup writes, restore reads
+      - ${ASSET_STUDIO_TRAINING_HOST_DIR:-./training}:/training  # exchange with kohya
     depends_on:
       db:
         condition: service_healthy

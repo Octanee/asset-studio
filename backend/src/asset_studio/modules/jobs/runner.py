@@ -18,7 +18,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from asset_studio.errors import DomainError
 from asset_studio.modules.jobs import service
-from asset_studio.modules.jobs.service import KIND_LANES, PAUSE_EXEMPT, Lane
+from asset_studio.modules.jobs.service import GATE_EXEMPT, KIND_LANES, PAUSE_EXEMPT, Lane
 
 log = structlog.get_logger("worker")
 
@@ -124,9 +124,11 @@ class Runner:
                 kinds = [k for k in kinds if k in PAUSE_EXEMPT]
             else:
                 reason = self.gates[lane]() if lane in self.gates else None
+                if reason:  # only kinds that do not need the engine may start
+                    kinds = [k for k in kinds if k in GATE_EXEMPT]
             with self.sessions() as s, s.begin():
                 service.set_wait_reason(s, lane, reason)
-            if not kinds or (reason and not paused):
+            if not kinds:
                 continue
             while (
                 not self.stopping.is_set() and self._free(lane) and self._claim_and_run(lane, kinds)

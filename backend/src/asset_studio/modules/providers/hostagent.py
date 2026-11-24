@@ -1,4 +1,5 @@
-"""Client of the native host agent (ADR-005): engine start/stop and GPU information.
+"""Client of the native host agent (ADR-005): engine start/stop, GPU information and LoRA
+training runs (ADR-011).
 
 The agent listens on the host's loopback with a per-install token; containers reach it as
 ``host.docker.internal``. Every failure becomes a stable problem code.
@@ -30,7 +31,13 @@ class HostAgentClient:
     def configured(self) -> bool:
         return bool(self.token)
 
-    def _call(self, method: str, path: str, timeout: float | None = None) -> Any:
+    def _call(
+        self,
+        method: str,
+        path: str,
+        timeout: float | None = None,
+        json: dict[str, Any] | None = None,
+    ) -> Any:
         if not self.configured:
             raise DomainError(
                 409, "HOST_AGENT_NOT_CONFIGURED", "The host agent token is not set (run setup)."
@@ -38,6 +45,8 @@ class HostAgentClient:
         kwargs: dict[str, Any] = {"headers": {"Authorization": f"Bearer {self.token}"}}
         if timeout is not None:
             kwargs["timeout"] = timeout
+        if json is not None:
+            kwargs["json"] = json
         try:
             response = self.http.request(method, path, **kwargs)
         except httpx.TransportError as exc:
@@ -69,6 +78,15 @@ class HostAgentClient:
 
     def engine_action(self, action: EngineAction) -> dict[str, Any]:
         return dict(self._call("POST", f"/engine:{action}", timeout=60.0))
+
+    def training_start(self, spec: dict[str, Any]) -> dict[str, Any]:
+        return dict(self._call("POST", "/training-runs", timeout=30.0, json=spec))
+
+    def training_status(self, run_id: str) -> dict[str, Any]:
+        return dict(self._call("GET", f"/training-runs/{run_id}"))
+
+    def training_cancel(self, run_id: str) -> dict[str, Any]:
+        return dict(self._call("POST", f"/training-runs/{run_id}:cancel", timeout=60.0))
 
 
 def _safe_json(response: httpx.Response) -> Any:

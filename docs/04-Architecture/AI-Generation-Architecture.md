@@ -3,7 +3,7 @@ title: AI Generation Architecture
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - architecture
   - ai
@@ -137,4 +137,18 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
   - stop terminates the process and kills it after 20 s; the agent stops the engine when it shuts down;
   - errors: `ENGINE_NOT_CONFIGURED`, `ENGINE_NOT_INSTALLED`.
 - **Engine API:** `GET /api/v1/system/engine` and `POST /api/v1/system/engine/{start|stop|restart}` (user only, audited as `engine.<action>`). The top bar and the System status screen show this and explain disabled controls (DD-008).
-- **Not yet:** installing the pinned ComfyUI build (WP-17), SVG templates (WP-14), training providers (WP-13).
+- **Training (WP-13, implemented):**
+  - The `train` job writes the run's images and captions to the training exchange folder (`ASSET_STUDIO_TRAINING_HOST_DIR`, the worker's `/training`) in kohya's layout: a class folder `1_<trigger>`, and each caption starts with the trigger word.
+  - It asks ComfyUI to free its VRAM, stops it through the host agent, starts kohya through `POST /training-runs`, polls the step progress and starts ComfyUI again at the end.
+  - `train` is exempt from the engine gate: it does not need ComfyUI.
+  - Cancelling the job cancels kohya.
+  - The LoRA is copied into the shared model folder (`loras/`), never over an existing file, and registered with its family and the base model's licence.
+  - With the fake engine a fake trainer stands in.
+- **Host agent training:**
+  - Settings: `ASSET_STUDIO_AGENT_KOHYA_DIR` (sd-scripts with `.venv`), `_MODELS_DIR`, `_TRAINING_DIR`.
+  - A run spec carries only the run id, family, base model and VAE file names, output name, resolution, steps, rank, alpha, learning rate and seed. The agent builds the command from its presets.
+  - Only the exit code leaves the agent; the log stays in the run's folder.
+- **Not yet:**
+  - installing the pinned ComfyUI build and kohya (WP-17);
+  - SVG templates (WP-14);
+  - linking LoRAs to styles and characters and using them in generation (WP-13 part 2).

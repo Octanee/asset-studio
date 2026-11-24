@@ -30,6 +30,7 @@ from asset_studio.modules.providers.engine import get_engine_monitor
 from asset_studio.modules.publishing.service import HANDLERS as PUBLISHING_HANDLERS
 from asset_studio.modules.system.handlers import HANDLERS as SYSTEM_HANDLERS
 from asset_studio.modules.system.settings import queue_paused
+from asset_studio.modules.training.runner import HANDLERS as TRAINING_HANDLERS
 
 HANDLERS: dict[str, Handler] = {
     "detect_pose": handle_detect_pose,
@@ -39,6 +40,7 @@ HANDLERS: dict[str, Handler] = {
     **PROCESSING_HANDLERS,
     **PUBLISHING_HANDLERS,
     **SYSTEM_HANDLERS,
+    **TRAINING_HANDLERS,
 }
 POLL_SECONDS = 2.0
 

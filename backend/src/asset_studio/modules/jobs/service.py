@@ -39,6 +39,9 @@ KIND_LANES: dict[str, Lane] = {
 # Kinds that still start while the queue is paused (WP-16): a paused queue is the safe
 # moment for a backup.
 PAUSE_EXEMPT = frozenset({"backup", "restore"})
+# GPU kinds that do not need the generation engine: training stops ComfyUI itself and runs
+# kohya through the host agent (ADR-011), so a stopped engine must not hold it back.
+GATE_EXEMPT = frozenset({"train"})
 NOTIFY_CHANNEL = "asset_studio_jobs"
 GPU_LOCK = "asset_studio_gpu_lane"
 DEFAULT_LEASE = timedelta(seconds=60)
