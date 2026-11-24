@@ -64,5 +64,5 @@ Found earlier in WP-18 and WP-17 on the same machine and fixed there:
 
 ## Open before release (gate G-9)
 
-- The release procedure and versioning (G-9).
+- The release procedure and versioning: proposed in [[Release-Procedure]] (G-9).
 - **An SDXL LoRA training run** was not repeated here. On this GPU it takes 8–20 h; WP-01 measured it, and the app shows the estimate and warning first (RULE-016).

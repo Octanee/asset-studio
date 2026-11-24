@@ -3,7 +3,7 @@ title: Phase Gates
 type: governance
 status: draft
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-24
 tags:
   - governance
   - gates
@@ -21,7 +21,7 @@ Silence is not approval. A general instruction to continue does not approve a sp
 | G-4 | Complete UI/UX design | ✅ approved (D-45) | 2026-11-22 |
 | G-6a | Technical architecture | ✅ approved (D-46) | 2026-11-22 |
 | G-6b | Implementation roadmap | ✅ approved (D-46) | 2026-11-22 |
-| G-9 | Public release | ⏳ | — |
+| G-9 | Public release | ✅ approved (D-64): v0.1.0, [[Release-Procedure]], `CHANGELOG.md` | 2026-11-24 |
 
 ## Standing authorisations (2026-11-21)
 
