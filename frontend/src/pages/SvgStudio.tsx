@@ -74,13 +74,14 @@ export function paramsFor(template: SvgTemplate, draft: SvgDraft): SvgParams {
   return { ...defaults, ...(draft.params[template.id] ?? {}) };
 }
 
-/** The request for the API; `asset` only when a version is to be created. */
+/** The request for the API. With `defaultName` it creates a version (`asset` set): a new
+ * asset is named `defaultName` (the template's name in the UI language) unless named. */
 export function toSvgSpec(
   draft: SvgDraft,
   projectId: string,
   template: SvgTemplate,
   category: string,
-  withAsset: boolean,
+  defaultName: string | null,
 ): SvgSpec | null {
   const spec: SvgSpec = {
     project_id: projectId,
@@ -88,12 +89,12 @@ export function toSvgSpec(
     params: paramsFor(template, draft),
     style_id: draft.styleId || null,
   };
-  if (!withAsset) return spec;
+  if (defaultName === null) return spec;
   if (draft.target === "existing") {
     return draft.assetId ? { ...spec, asset: { asset_id: draft.assetId } } : null;
   }
   if (!category) return null;
-  return { ...spec, asset: { category, name: draft.name.trim() || template.name } };
+  return { ...spec, asset: { category, name: draft.name.trim() || defaultName } };
 }
 
 export function SvgStudio() {
@@ -124,10 +125,15 @@ function Studio({ projectId }: { projectId: string }) {
   const palette = (style?.attributes.palette ?? []).map((c) => c.toLowerCase());
   const params = template ? paramsFor(template, draft) : {};
   const previewSpec = useMemo(
-    () => (template ? toSvgSpec(draft, projectId, template, category, false) : null),
+    () => (template ? toSvgSpec(draft, projectId, template, category, null) : null),
     [draft, projectId, template, category],
   );
-  const createSpec = template ? toSvgSpec(draft, projectId, template, category, true) : null;
+  const templateName = template
+    ? t(`svg.templates.${template.id}.name`, { defaultValue: template.name })
+    : "";
+  const createSpec = template
+    ? toSvgSpec(draft, projectId, template, category, templateName)
+    : null;
   const preview = useSvgPreview(useDebounced(previewSpec, 150));
   const shown = preview.data;
   const versionsOf = draft.target === "existing" && draft.assetId ? draft.assetId : null;
@@ -224,7 +230,7 @@ function Studio({ projectId }: { projectId: string }) {
                   className="input"
                   maxLength={200}
                   value={draft.name}
-                  placeholder={template?.name}
+                  placeholder={templateName}
                   onChange={(e) => set("name", e.target.value)}
                 />
               </label>

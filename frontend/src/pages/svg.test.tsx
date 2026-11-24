@@ -5,10 +5,11 @@ import userEvent from "@testing-library/user-event";
 import { createMemoryRouter, RouterProvider } from "react-router";
 
 import { makeQueryClient } from "../api/queries";
-import { svgDataUrl } from "../api/svg";
+import { svgDataUrl, type SvgTemplate } from "../api/svg";
 import { routes } from "../app/routes";
 import { useUi } from "../app/store";
 import i18n from "../i18n";
+import { SVG_START, toSvgSpec } from "./SvgStudio";
 
 type Handler = (request: Request) => unknown;
 type Reply = { status?: number; body: unknown };
@@ -198,6 +199,20 @@ describe("SVG Studio (FR-045-FR-047)", () => {
     expect(await screen.findByText("This colour is not in the style's palette.")).toBeVisible();
     expect(screen.getByRole("button", { name: "Create for review" })).toBeDisabled();
     expect(screen.getByText("Fix the problems shown next to the preview.")).toBeVisible();
+  });
+
+  it("names a new asset after the template in the UI language unless named", () => {
+    const icon = templates[0] as unknown as SvgTemplate;
+    const draft = { ...SVG_START, templateId: "icon-line" };
+    expect(toSvgSpec(draft, "p1", icon, "icons", null)?.asset).toBeUndefined();
+    expect(toSvgSpec(draft, "p1", icon, "icons", "Ikona")?.asset).toEqual({
+      category: "icons",
+      name: "Ikona",
+    });
+    const named = { ...draft, name: " Heart " };
+    expect(toSvgSpec(named, "p1", icon, "icons", "Ikona")?.asset?.name).toBe("Heart");
+    const existing = { ...draft, target: "existing" as const };
+    expect(toSvgSpec(existing, "p1", icon, "icons", "Ikona")).toBeNull();
   });
 
   it("keeps each template's parameters when switching", async () => {
