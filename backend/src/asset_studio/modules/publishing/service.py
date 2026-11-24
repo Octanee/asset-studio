@@ -45,6 +45,8 @@ from asset_studio.modules.publishing.models import (
 )
 from asset_studio.modules.publishing.presets import PresetDefinition, file_paths
 from asset_studio.modules.storage.local import LocalStorage, get_storage
+from asset_studio.modules.svg import raster
+from asset_studio.modules.svg.sanitize import SvgError, clean
 
 PUBLISHABLE = ("approved", "published")
 PLAN_TTL = timedelta(hours=1)
@@ -387,6 +389,9 @@ def plan(
         if actor == "mcp" and v.state == "published":
             skipped.append(_skip(v, a, "REPUBLISH_USER_ONLY"))  # T-10 is the user's call
             continue
+        if definition.format == "svg" and not raster.is_svg(_source_mime(v)):
+            skipped.append(_skip(v, a, "NOT_VECTOR"))  # a raster cannot become a vector
+            continue
         paths = [p for _, p in file_paths(definition, _values(project, a, v))]
         if definition.metadata == "sidecar":
             paths += [_sidecar(p) for p in paths]
@@ -506,6 +511,11 @@ def publish(session: Session, plan_id: uuid.UUID, confirmed: list[str], actor: A
 # --- the export job ---------------------------------------------------------------------------
 
 
+def _source_mime(version: AssetVersion) -> str:
+    out = (version.processing or {}).get("output")
+    return str(out["mime"]) if out else version.mime
+
+
 def _source(storage: LocalStorage, version: AssetVersion) -> bytes:
     """The processed file (FR-065), or the original when the version was not processed."""
     out = (version.processing or {}).get("output")
@@ -544,12 +554,19 @@ def _render(
     background: Background,
     paths: list[str],
     meta: dict[str, Any],
+    *,
+    vector: bool = False,
 ) -> dict[str, bytes]:
     out: dict[str, bytes] = {}
     images = paths[: len(d.sizes)]
     for size, path in zip(d.sizes, images, strict=True):
+        if d.format == "svg":
+            out[path] = clean(data).svg.encode()  # the vector as it is, cleaned again
+            continue
+        # FR-047: a vector is rendered at this size first, then finished like any image.
+        source = raster.render(data, size.width, size.height) if vector else data
         result = imaging.process(
-            data,
+            source,
             imaging.Target(
                 width=size.width,
                 height=size.height,
@@ -589,11 +606,14 @@ def _publish_one(
         background = current_config(s, project).output.background
         meta = _metadata(project, asset, version)
         data = _source(storage, version)
+        vector = raster.is_svg(_source_mime(version))
         base = files.target_dir(target.root, target.subdir)
     paths = [f["path"] for f in item["files"]]
+    if definition.format == "svg" and not vector:
+        raise DomainError(409, "NOT_VECTOR", "An SVG preset publishes vector versions only.")
     try:
-        rendered = _render(data, definition, background, paths, meta)
-    except imaging.ProcessingError as exc:
+        rendered = _render(data, definition, background, paths, meta, vector=vector)
+    except (imaging.ProcessingError, SvgError) as exc:
         raise DomainError(422, exc.code, str(exc)) from exc
     ctx.check()
     # Never overwrite what the user did not confirm, even a file that appeared after planning.

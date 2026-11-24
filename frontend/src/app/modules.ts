@@ -1,4 +1,5 @@
-/** The 13 modules of the navigation rail, in the approved order ([[Navigation]]).
+/** The 14 modules of the navigation rail, in the approved order ([[Navigation]]; SVG Studio
+ * added with UXQ-01).
  * Icon paths are the 20×20 stroke icons from the approved "Navigation rail" artboard. */
 export interface Module {
   id: ModuleId;
@@ -13,6 +14,7 @@ export interface Module {
 export type ModuleId =
   | "dashboard"
   | "generate"
+  | "svg"
   | "queue"
   | "library"
   | "review"
@@ -38,6 +40,12 @@ export const MODULES: readonly Module[] = [
     path: "/generate",
     wp: "WP-08",
     icon: "M10 2v4M10 14v4M2 10h4M14 10h4M4.5 4.5l2.5 2.5M13 13l2.5 2.5M15.5 4.5L13 7M7 13l-2.5 2.5",
+  },
+  {
+    id: "svg",
+    path: "/svg",
+    wp: "WP-14",
+    icon: "M3 15C6 6 14 6 17 15M3 15h.01M17 15h.01M7 5h6M10 5v3",
   },
   { id: "queue", path: "/queue", phone: true, wp: "WP-08", icon: "M3 5h14M3 10h14M3 15h9" },
   {

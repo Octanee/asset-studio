@@ -3,7 +3,7 @@ title: Navigation
 type: ux
 status: approved
 created: 2026-11-22
-updated: 2026-11-22
+updated: 2026-11-24
 tags:
   - ux
   - navigation
@@ -14,13 +14,13 @@ tags:
 ```mermaid
 flowchart LR
   subgraph Rail
-    D[Dashboard] --- G[Generation Studio] --- Q[Queue] --- L[Library] --- R[Review]
+    D[Dashboard] --- G[Generation Studio] --- SV[SVG Studio] --- Q[Queue] --- L[Library] --- R[Review]
     S[Style Studio] --- RF[References] --- P[Poses] --- T[Training] --- M[Models] --- W[Workflows] --- E[Export] --- ST[Settings]
   end
   TB[Top bar: project switcher · search Ctrl K · queue indicator · engine status · PL/EN]
 ```
 
-- **Icon rail** (56 px, left) lists the 13 modules. The active module gets an accent edge.
+- **Icon rail** (56 px, left) lists the 14 modules (SVG Studio was added with UXQ-01, D-62). The active module gets an accent edge.
 - **Top bar**:
   - project switcher;
   - screen title;

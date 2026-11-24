@@ -98,10 +98,12 @@ def _transparency(image: Image.Image, background: str) -> RuleResult:
     )
 
 
-def validate(data: bytes, e: Expectations) -> list[RuleResult]:
+def validate(data: bytes, e: Expectations, *, picture: bytes | None = None) -> list[RuleResult]:
+    """Check ``data``. For a vector, ``picture`` is its render at the output size: the
+    pixel rules look at the render, integrity and file size at the SVG itself."""
     digest = hashlib.sha256(data).hexdigest()
     try:
-        image = Image.open(io.BytesIO(data))
+        image = Image.open(io.BytesIO(picture if picture is not None else data))
         image.load()
     except (OSError, ValueError, Image.DecompressionBombError):
         return [RuleResult("integrity", "failed", {"decoded": False})] + [
@@ -114,14 +116,22 @@ def validate(data: bytes, e: Expectations) -> list[RuleResult]:
             {"decoded": True, "sha256_matches": digest == e.sha256},
         )
     ]
-    actual = FORMATS.get(image.format or "", (image.format or "").lower())
-    results.append(
-        RuleResult(
-            "format",
-            "passed" if actual == e.format else "failed",
-            {"expected": e.format, "actual": actual},
+    if picture is not None:
+        # A vector is rasterised to the preset's format on export (FR-047).
+        results.append(
+            RuleResult(
+                "format", "skipped", {"expected": e.format, "actual": "svg", "reason": "vector"}
+            )
         )
-    )
+    else:
+        actual = FORMATS.get(image.format or "", (image.format or "").lower())
+        results.append(
+            RuleResult(
+                "format",
+                "passed" if actual == e.format else "failed",
+                {"expected": e.format, "actual": actual},
+            )
+        )
     size = [image.width, image.height]
     results.append(
         RuleResult(

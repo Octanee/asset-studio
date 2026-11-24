@@ -842,7 +842,7 @@ export function JobProgress({ job }: { job: JobRow }) {
   return null;
 }
 
-function RunningJobs({ ids }: { ids: string[] }) {
+export function RunningJobs({ ids }: { ids: string[] }) {
   const { t } = useTranslation();
   const jobs = useJobSet(ids);
   const action = useJobAction();
@@ -893,7 +893,7 @@ function RunningJobs({ ids }: { ids: string[] }) {
   );
 }
 
-function Versions({
+export function Versions({
   assetId,
   name,
   onQueued,
@@ -1011,7 +1011,8 @@ function VersionTile({
           </button>
         </>
       )}
-      {version.generation_job_id && (
+      {/* SVG versions are made again from the SVG Studio, not by diffusion. */}
+      {version.generation_job_id && version.mime !== "image/svg+xml" && (
         <button type="button" className="btn ghost" disabled={busy} onClick={onRegenerate}>
           {t("generation.regenerate")}
         </button>

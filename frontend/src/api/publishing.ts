@@ -11,7 +11,8 @@ export type ExportRoot = Schemas["ExportRootOut"];
 export type Plan = Schemas["PlanOut"];
 export type Publication = Schemas["PublicationOut"];
 
-export const FORMATS = ["webp", "png", "jpeg"] as const;
+// "svg" copies vector versions as they are; raster formats render them (FR-047).
+export const FORMATS = ["webp", "png", "jpeg", "svg"] as const;
 export const NEW_PRESET: PresetDefinition = {
   format: "webp",
   sizes: [{ suffix: "", width: 1024, height: 1024 }],

@@ -213,6 +213,13 @@ def add_versions(
                 "Only approved or published versions can be used for training (RULE-017).",
                 {"version_id": str(version.id), "state": version.state},
             )
+        if version.mime == "image/svg+xml":
+            raise DomainError(
+                422,
+                "VERSION_NOT_RASTER",
+                "Training uses raster images; an SVG version cannot be added.",
+                {"version_id": str(version.id)},
+            )
         if version.sha256 in have:
             continue  # already in the dataset
         have.add(version.sha256)

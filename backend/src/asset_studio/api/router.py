@@ -18,6 +18,7 @@ from asset_studio.api import (
     session,
     settings,
     styles,
+    svg,
     system,
     training,
     workflows,
@@ -37,6 +38,7 @@ api_router.include_router(poses.router, prefix="/poses", tags=["poses"])
 api_router.include_router(models.router, prefix="/models", tags=["models"])
 api_router.include_router(generation.router, prefix="/generations", tags=["generation"])
 api_router.include_router(generation.versions_router, prefix="/versions", tags=["generation"])
+api_router.include_router(svg.router, prefix="/svg", tags=["svg"])
 api_router.include_router(models.project_router, prefix="/projects", tags=["models"])
 api_router.include_router(audit.router, prefix="/audit", tags=["audit"])
 api_router.include_router(workflows.router, prefix="/workflows", tags=["workflows"])

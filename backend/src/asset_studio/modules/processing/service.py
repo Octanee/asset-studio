@@ -39,6 +39,8 @@ from asset_studio.modules.providers.base import GenerationRequest
 from asset_studio.modules.providers.engine import get_engine_monitor, run_generation
 from asset_studio.modules.quality import service as quality
 from asset_studio.modules.storage.local import LocalStorage, get_storage
+from asset_studio.modules.svg import raster
+from asset_studio.modules.svg.sanitize import SvgError, clean
 from asset_studio.modules.workflows.builtin import remove_background
 
 PREFERRED_SEGMENTATION = ("birefnet-comfy",)
@@ -82,7 +84,9 @@ def start(session: Session, version_id: uuid.UUID, actor: Actor) -> Job:
     version.processing = {}
     session.flush()
     _, config = _config(session, version)
-    first = "remove_background" if config.processing.remove_background else "process"
+    # A vector has no background to cut out; it goes straight to processing.
+    cut = config.processing.remove_background and not raster.is_svg(version.mime)
+    first = "remove_background" if cut else "process"
     return _enqueue(session, version, first, actor)
 
 
@@ -205,6 +209,23 @@ def _remove_background(ctx: JobContext) -> dict[str, Any]:
         }
 
 
+def _vector(data: bytes, target: imaging.Target) -> tuple[imaging.Result, bytes]:
+    """An SVG stays a vector (FR-046): the processed file is the cleaned, optimised SVG.
+    The thumbnail, preview and duplicate check use a render at the output size."""
+    cleaned = clean(data)
+    picture = raster.render(cleaned.svg, target.width, target.height)
+    size = imaging.open_image(picture).size
+    result = imaging.Result(
+        data=cleaned.svg.encode(),
+        mime=raster.SVG_MIME,
+        ext="svg",
+        width=size[0],
+        height=size[1],
+        steps=[{"step": "sanitize", **cleaned.report}],
+    )
+    return result, picture
+
+
 def _process(ctx: JobContext) -> dict[str, Any]:
     storage = get_storage()
     with ctx.runner.sessions() as s, s.begin():
@@ -213,8 +234,9 @@ def _process(ctx: JobContext) -> dict[str, Any]:
         if version.storage_key is None:
             raise DomainError(410, "VERSION_DELETED", "The version file was deleted.")
         original_key = version.storage_key
+        vector = raster.is_svg(version.mime)
         cut = (version.processing or {}).get("cutout")
-        if config.processing.remove_background and not cut:
+        if config.processing.remove_background and not cut and not vector:
             raise DomainError(
                 409, "BACKGROUND_NOT_REMOVED", "Background removal has not run for this version."
             )
@@ -230,15 +252,21 @@ def _process(ctx: JobContext) -> dict[str, Any]:
     source_key = cut["key"] if cut else original_key
     ctx.progress(state="processing")
     try:
-        result = imaging.process(
-            storage.path(source_key).read_bytes(),
-            target,
-            source_format=SOURCE_FORMATS.get(original_key.rsplit(".", 1)[-1]),
-        )
-        thumb = imaging.derived(result.data, THUMB)
-        preview = imaging.derived(result.data, PREVIEW)
-        fingerprint = imaging.dhash(result.data)  # duplicate detection (FR-059)
+        if vector:
+            result, picture = _vector(storage.path(source_key).read_bytes(), target)
+        else:
+            result = imaging.process(
+                storage.path(source_key).read_bytes(),
+                target,
+                source_format=SOURCE_FORMATS.get(original_key.rsplit(".", 1)[-1]),
+            )
+            picture = result.data
+        thumb = imaging.derived(picture, THUMB)
+        preview = imaging.derived(picture, PREVIEW)
+        fingerprint = imaging.dhash(picture)  # duplicate detection (FR-059)
     except imaging.ProcessingError as exc:
+        raise DomainError(422, exc.code, str(exc)) from exc
+    except SvgError as exc:
         raise DomainError(422, exc.code, str(exc)) from exc
     steps = ([{"step": "remove_background", "model": cut["model"]}] if cut else []) + result.steps
     ctx.check()

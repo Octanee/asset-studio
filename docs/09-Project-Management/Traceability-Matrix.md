@@ -24,8 +24,8 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-031 | UC-007 | AC-001 | WP-08 (`img2img` workflows) | `test_every_builtin_workflow_renders` |
 | BR-001 | FR-034 | UC-007, UC-008 | AC-001 | WP-08 | `test_fr034_*` |
 | BR-001 | FR-038 | UC-007 | AC-001 | WP-04 (jobs), WP-08 (studio jobs and Queue screen) | `test_fr038_*`, `test_jobs_api_*`, `generation.test.tsx` |
-| BR-001 | FR-046 | UC-014 | — | — | — |
-| BR-001 | FR-047 | UC-014 | — | — | — |
+| BR-001 | FR-046 | UC-014 | — | WP-14 | `test_fr046_*`, `test_nfr011_*`, `test_svg.py`, `svg.test.tsx` |
+| BR-001 | FR-047 | UC-014 | — | WP-14 | `test_fr047_*`, `test_svg.py`, `svg.test.tsx` |
 | BR-001 | FR-049 | — | — | WP-10 | `test_fr049_*`, `review.test.tsx` |
 | BR-001 | FR-055 | — | — | WP-03, WP-10 (download buttons) | `test_fr055_*` |
 | BR-001 | FR-056 | — | — | WP-10 | `test_fr056_*`, `review.test.tsx` |
@@ -92,7 +92,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-010 | FR-121 | — | AC-004 | WP-15 | `test_ac004_*`, `test_rule005_ac004_*`, `test_rule005_mcp_decisions_*` |
 | BR-011 | FR-007 | UC-001, UC-002 | — | WP-02, WP-16 | `test_fr007_*, test_rule014_*`, `projects.test.tsx` |
 | BR-011 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
-| BR-011 | FR-045 | UC-014 | — | — | — |
+| BR-011 | FR-045 | UC-014 | — | WP-14 | `test_fr045_*`, `test_uc014_*`, `test_svg.py`, `svg.test.tsx` |
 | BR-012 | FR-005 | UC-003 | AC-010, AC-015 | WP-02, WP-16 | `test_ac010_*`, `projects.test.tsx` |
 | BR-012 | FR-110 | — | — | WP-16 | `test_only_the_user_changes_settings`, `test_a_paused_queue_*`, `system.test.tsx` |
 | BR-013 | FR-016 | UC-005 | — | WP-13 | `test_fr075_*`, `test_lora_generation.py`, `inputs.test.tsx` |

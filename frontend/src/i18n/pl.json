@@ -21,7 +21,8 @@
     "publish": "Eksport i publikacja",
     "settings": "Ustawienia",
     "projects": "Projekty",
-    "system": "Stan systemu"
+    "system": "Stan systemu",
+    "svg": "SVG Studio"
   },
   "project": {
     "switch": "Zmień projekt",
@@ -279,7 +280,17 @@
     "TRAINING_INPUT_MISSING": "Brakuje zbioru albo pliku modelu bazowego.",
     "LORA_LIMIT": "Razem można użyć najwyżej 2 LoRA.",
     "LORA_LINK_NOT_FOUND": "Ta LoRA nie jest powiązana.",
-    "TARGET_ARCHIVED": "Jest zarchiwizowany."
+    "TARGET_ARCHIVED": "Jest zarchiwizowany.",
+    "SVG_NOT_READY": "Najpierw popraw problemy SVG.",
+    "SVG_TARGET_REQUIRED": "Wybierz asset albo kategorię i nazwę nowego.",
+    "SVG_PARAM_INVALID": "Parametr szablonu jest poza zakresem.",
+    "SVG_PARAM_UNKNOWN": "Szablon nie ma takiego parametru.",
+    "SVG_TEMPLATE_NOT_FOUND": "Taki szablon SVG nie istnieje.",
+    "SVG_TEMPLATE_CHANGED": "Szablon zmienił się po dodaniu do kolejki; utwórz ponownie.",
+    "PALETTE_MISMATCH": "Tego koloru nie ma w palecie stylu.",
+    "NOT_VECTOR": "Preset SVG publikuje tylko wersje SVG.",
+    "VERSION_NOT_RASTER": "Trening używa obrazów rastrowych; wersji SVG nie można dodać.",
+    "INIT_NOT_RASTER": "Obraz-do-obrazu startuje z wersji rastrowej, nie z SVG."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -634,7 +645,8 @@
     "download": "Pobieranie modelu",
     "verify_model": "Sprawdzanie modelu",
     "backup": "Kopia zapasowa",
-    "restore": "Przywracanie"
+    "restore": "Przywracanie",
+    "svg": "SVG"
   },
   "versionStates": {
     "generated": "Wygenerowana",
@@ -935,7 +947,8 @@
     "reasons": {
       "NOT_APPROVED": "niezatwierdzona",
       "NO_APPROVED_VERSION": "brak zatwierdzonej wersji",
-      "REPUBLISH_USER_ONLY": "ponowna publikacja to decyzja użytkownika"
+      "REPUBLISH_USER_ONLY": "ponowna publikacja to decyzja użytkownika",
+      "NOT_VECTOR": "to nie jest wersja wektorowa (SVG)"
     },
     "done": "Opublikowane wersje: {{count}}.",
     "history": "Ostatnie publikacje",
@@ -1109,5 +1122,68 @@
     "datasetCol": "Zbiór",
     "result": "Wytrenowana LoRA",
     "cancel": "Anuluj"
+  },
+  "svg": {
+    "settings": "Ustawienia SVG",
+    "asset": "Asset",
+    "template": "Szablon",
+    "parameters": "Parametry · z szablonu",
+    "incomplete": "Wybierz asset albo kategorię dla nowego.",
+    "notReady": "Popraw problemy pokazane obok podglądu.",
+    "cpu": "CPU · gotowe w około sekundę · bez GPU",
+    "create": "Utwórz do przeglądu",
+    "createVersion": "Utwórz v{{n}} do przeglądu",
+    "queued": "W kolejce. Wersja pojawi się niżej, gdy będzie gotowa do przeglądu.",
+    "preview": "Podgląd na żywo",
+    "background": "Tło podglądu",
+    "backgrounds": {
+      "transparent": "Przezroczyste",
+      "light": "Jasne",
+      "dark": "Ciemne"
+    },
+    "previewAlt": "Podgląd w {{size}} px",
+    "deterministic": "Podgląd to prawdziwy wynik: ta sama wersja szablonu i te same parametry zawsze dają ten sam plik.",
+    "output": "Wynik",
+    "sanitised": "Oczyszczone: bez skryptów, zdarzeń i zewnętrznych linków (usunięto: {{elements}} elementów, {{attributes}} atrybutów)",
+    "optimised": "Zoptymalizowane:",
+    "paletteOk": "Tylko kolory z palety stylu",
+    "paletteHint": "Kolory pochodzą z palety „{{name}}”, do tego biały i czarny.",
+    "noPalette": "Bez stylu z paletą można wybrać dowolny kolor.",
+    "fingerprint": "Odcisk",
+    "size": "viewBox",
+    "exportNote": "Eksport kopiuje SVG bez zmian (preset SVG) albo renderuje go w każdym rozmiarze presetu PNG, WebP lub JPEG.",
+    "source": "Źródło SVG",
+    "templates": {
+      "icon-line": {
+        "name": "Ikona — zaokrąglona linia",
+        "description": "Jeden glif w stylu zaokrąglonej linii."
+      },
+      "badge-circle": {
+        "name": "Odznaka — koło",
+        "description": "Glif na wypełnionym kole."
+      },
+      "pattern-dots": {
+        "name": "Wzór — siatka kropek",
+        "description": "Powtarzalne tło z kropek."
+      }
+    },
+    "params": {
+      "glyph": "Glif",
+      "color": "Kolor",
+      "glyph_color": "Kolor glifu",
+      "stroke_width": "Grubość linii",
+      "spacing": "Odstęp",
+      "dot": "Wielkość kropki"
+    },
+    "glyphs": {
+      "dumbbell": "Hantel",
+      "heart": "Serce",
+      "timer": "Stoper",
+      "play": "Odtwórz",
+      "check": "Ptaszek",
+      "plus": "Plus",
+      "star": "Gwiazda",
+      "flame": "Płomień"
+    }
   }
 }
