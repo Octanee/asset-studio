@@ -34,10 +34,10 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-090 | UC-011 | AC-001 | WP-11 | `test_fr090_*`, `publish.test.tsx` |
 | BR-001 | FR-091 | UC-011 | AC-001 | WP-11 | `test_fr091_*` |
 | BR-001 | FR-100 | UC-015 | — | WP-16 | `test_api_settings_status_backups_and_dashboard`, `system.test.tsx` |
-| BR-002 | FR-001 | UC-001 | — | WP-02 | `test_fr001_*` |
-| BR-002 | FR-002 | — | — | WP-02 | `test_rule005_*` |
-| BR-002 | FR-003 | — | AC-005 | WP-02 | `test_fr003_*` |
-| BR-002 | FR-007 | UC-001, UC-002 | — | WP-02 | `test_fr007_*, test_rule014_*` |
+| BR-002 | FR-001 | UC-001 | — | WP-02, WP-16 | `test_fr001_*`, `projects.test.tsx` |
+| BR-002 | FR-002 | — | — | WP-02, WP-16 | `test_rule005_*`, `projects.test.tsx` |
+| BR-002 | FR-003 | — | AC-005 | WP-02, WP-16 | `test_fr003_*`, `projects.test.tsx` |
+| BR-002 | FR-007 | UC-001, UC-002 | — | WP-02, WP-16 | `test_fr007_*, test_rule014_*`, `projects.test.tsx` |
 | BR-003 | FR-010 | UC-004 | — | WP-07 | `test_fr010_*`, `inputs.test.tsx` (Style Studio) |
 | BR-003 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
 | BR-003 | FR-020 | UC-006 | — | WP-07 | `test_fr020_*`, `inputs.test.tsx` (Poses) |
@@ -50,9 +50,9 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-004 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
 | BR-004 | FR-032 | UC-007 | AC-001 | WP-08 (IP-Adapter reference) | `test_fr033_*` |
 | BR-004 | FR-075 | UC-012 | — | — | — |
-| BR-005 | FR-004 | UC-003 | — | WP-02 | `test_fr004_*` |
-| BR-005 | FR-005 | UC-003 | AC-010, AC-015 | WP-02 | `test_ac010_*` |
-| BR-005 | FR-006 | UC-003 | AC-010 | WP-02 | `test_fr006_*, test_ac010_*` |
+| BR-005 | FR-004 | UC-003 | — | WP-02, WP-16 | `test_fr004_*`, `projects.test.tsx` |
+| BR-005 | FR-005 | UC-003 | AC-010, AC-015 | WP-02, WP-16 | `test_ac010_*`, `projects.test.tsx` |
+| BR-005 | FR-006 | UC-003 | AC-010 | WP-02, WP-16 | `test_fr006_*, test_ac010_*`, `projects.test.tsx` |
 | BR-005 | FR-010 | UC-004 | — | WP-07 | `test_fr010_*`, `inputs.test.tsx` (Style Studio) |
 | BR-006 | FR-042 | — | — | WP-04 | `test_rule012_*` (training hand-off in WP-13) |
 | BR-006 | FR-043 | — | AC-006 | WP-04, WP-05, WP-08 (waiting shown in studio and Queue) | `test_rule013_*`, `test_fr043_*`, host agent `test_gpu_*`, `generation.test.tsx` |
@@ -84,16 +84,16 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-009 | FR-051 | — | — | WP-03 | `test_fr051_*` |
 | BR-009 | FR-052 | UC-010 | AC-002 | WP-08 | `test_ac002_*` |
 | BR-009 | FR-084 | UC-013 | — | WP-12 (models); WP-08 (workflows) | `test_rule015_*` |
-| BR-010 | FR-002 | — | — | WP-02 | `test_rule005_*` |
-| BR-010 | FR-008 | UC-002 | — | WP-02 | `test_fr008_*` |
+| BR-010 | FR-002 | — | — | WP-02, WP-16 | `test_rule005_*`, `projects.test.tsx` |
+| BR-010 | FR-008 | UC-002 | — | WP-02, WP-15, WP-16 | `test_fr008_*`, `test_rule010_*`, `projects.test.tsx` |
 | BR-010 | FR-064 | UC-009 | — | WP-03, WP-10 (comments) | `test_rule005_mcp_decisions_*`, `test_fr064_*`, `review.test.tsx` |
 | BR-010 | FR-095 | UC-011 | AC-001 | WP-11 | `test_rule005_ac004_*` |
 | BR-010 | FR-120 | — | — | WP-15 | `test_fr120_*`, `test_mcp.py` |
 | BR-010 | FR-121 | — | AC-004 | WP-15 | `test_ac004_*`, `test_rule005_ac004_*`, `test_rule005_mcp_decisions_*` |
-| BR-011 | FR-007 | UC-001, UC-002 | — | WP-02 | `test_fr007_*, test_rule014_*` |
+| BR-011 | FR-007 | UC-001, UC-002 | — | WP-02, WP-16 | `test_fr007_*, test_rule014_*`, `projects.test.tsx` |
 | BR-011 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
 | BR-011 | FR-045 | UC-014 | — | — | — |
-| BR-012 | FR-005 | UC-003 | AC-010, AC-015 | WP-02 | `test_ac010_*` |
+| BR-012 | FR-005 | UC-003 | AC-010, AC-015 | WP-02, WP-16 | `test_ac010_*`, `projects.test.tsx` |
 | BR-012 | FR-110 | — | — | WP-16 | `test_only_the_user_changes_settings`, `test_a_paused_queue_*`, `system.test.tsx` |
 | BR-013 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
 | BR-013 | FR-070 | UC-012 | — | — | — |

@@ -1065,6 +1065,11 @@
       },
       "ConfigVersionOut": {
         "properties": {
+          "config": {
+            "additionalProperties": true,
+            "title": "Config",
+            "type": "object"
+          },
           "created_at": {
             "format": "date-time",
             "title": "Created At",
@@ -1092,7 +1097,8 @@
           "schema_version",
           "created_by_actor",
           "note",
-          "created_at"
+          "created_at",
+          "config"
         ],
         "title": "ConfigVersionOut",
         "type": "object"
@@ -3628,6 +3634,45 @@
           "intended_use"
         ],
         "title": "ProjectConfig",
+        "type": "object"
+      },
+      "ProjectCounts": {
+        "properties": {
+          "approved": {
+            "title": "Approved",
+            "type": "integer"
+          },
+          "assets": {
+            "title": "Assets",
+            "type": "integer"
+          },
+          "awaiting_review": {
+            "title": "Awaiting Review",
+            "type": "integer"
+          },
+          "project_id": {
+            "format": "uuid",
+            "title": "Project Id",
+            "type": "string"
+          },
+          "published": {
+            "title": "Published",
+            "type": "integer"
+          },
+          "versions": {
+            "title": "Versions",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "project_id",
+          "assets",
+          "versions",
+          "awaiting_review",
+          "approved",
+          "published"
+        ],
+        "title": "ProjectCounts",
         "type": "object"
       },
       "ProjectDetail": {
@@ -6555,6 +6600,32 @@
         ]
       }
     },
+    "/api/v1/dashboard/projects": {
+      "get": {
+        "description": "Counts for every project, for the Projects screen.",
+        "operationId": "project_counts_api_v1_dashboard_projects_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectCounts"
+                  },
+                  "title": "Response Project Counts Api V1 Dashboard Projects Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Project Counts",
+        "tags": [
+          "dashboard"
+        ]
+      }
+    },
     "/api/v1/events": {
       "get": {
         "description": "Server-Sent Events. A reconnecting client sends ``Last-Event-ID`` and receives what it\nmissed, because events are stored (NFR-003). ``follow=false`` returns the backlog only.",
@@ -7950,6 +8021,63 @@
       }
     },
     "/api/v1/projects/drafts": {
+      "get": {
+        "operationId": "list_drafts_api_v1_projects_drafts_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "pending",
+                    "confirmed",
+                    "discarded"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": "pending",
+              "title": "Status"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DraftOut"
+                  },
+                  "title": "Response List Drafts Api V1 Projects Drafts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Drafts",
+        "tags": [
+          "projects"
+        ]
+      },
       "post": {
         "operationId": "create_draft_api_v1_projects_drafts_post",
         "requestBody": {
@@ -8132,6 +8260,50 @@
           }
         },
         "summary": "Confirm Draft",
+        "tags": [
+          "projects"
+        ]
+      }
+    },
+    "/api/v1/projects/drafts/{draft_id}/discard": {
+      "post": {
+        "description": "User only: turn down a draft (RULE-010).",
+        "operationId": "discard_draft_api_v1_projects_drafts__draft_id__discard_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "draft_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Draft Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DraftOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Discard Draft",
         "tags": [
           "projects"
         ]
