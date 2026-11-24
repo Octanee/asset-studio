@@ -15,3 +15,4 @@ def load_all() -> None:
     from asset_studio.modules.styles import models as _styles  # noqa: F401
     from asset_studio.modules.system import idempotency as _idempotency  # noqa: F401
     from asset_studio.modules.system import settings as _settings  # noqa: F401
+    from asset_studio.modules.training import models as _training  # noqa: F401

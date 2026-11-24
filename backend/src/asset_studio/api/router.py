@@ -19,6 +19,7 @@ from asset_studio.api import (
     settings,
     styles,
     system,
+    training,
     workflows,
 )
 
@@ -50,6 +51,10 @@ api_router.include_router(publishing.targets_router, prefix="/targets", tags=["p
 api_router.include_router(publishing.router, prefix="/publications", tags=["publishing"])
 api_router.include_router(jobs.jobs_router, prefix="/jobs", tags=["jobs"])
 api_router.include_router(settings.router, prefix="/settings", tags=["system"])
+api_router.include_router(training.project_router, prefix="/projects", tags=["training"])
+api_router.include_router(training.datasets_router, prefix="/datasets", tags=["training"])
+api_router.include_router(training.items_router, prefix="/training-items", tags=["training"])
+api_router.include_router(training.runs_router, prefix="/training-runs", tags=["training"])
 api_router.include_router(backups.router, prefix="/backups", tags=["system"])
 api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(jobs.events_router, prefix="/events", tags=["events"])

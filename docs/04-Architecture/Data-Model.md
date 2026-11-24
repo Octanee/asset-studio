@@ -46,8 +46,8 @@ tags:
 | `publication` | id, asset_version_id, target_id, preset_id, plan_id, job_id, actor, at | (WP-11) |
 | `publication_file` | id, publication_id, relative_path, sha256, overwrote_sha256 null, confirmed_overwrite bool | |
 | `current_publication` | asset_id, target_id, publication_id | the pointer (D-41) |
-| `training_dataset` / `training_item` | dataset: id, project_id, name, trigger_word; item: dataset_id, source (`asset_version`/`upload`), ref id, caption | |
-| `training_run` | id, dataset_id, family_id, preset, steps, job_id, output_model_id | |
+| `training_dataset` / `training_item` | dataset: id, project_id, name, trigger_word, archived_at; item: dataset_id, source (`asset_version`/`upload`), asset_version_id null, storage_key, sha256, width, height, caption | an image appears once per dataset (unique sha256); uploads are stored under `projects/<id>/training/<dataset>/` (WP-13) |
+| `training_run` | id, project_id, dataset_id, family_id (`sd15`/`sdxl`), base_model_id, params jsonb (resolution, steps, rank, alpha, learning rate, seed, trigger word), images, estimate jsonb, acknowledged_estimate, output_name, job_id, output_model_id, created_by_actor | the trained LoRA is a `model` row (kind `lora`, the run's family, the base model's licence) (WP-13) |
 | `audit_entry` | id, at, actor, project_id null, action, subject_type, subject_id, data jsonb | append-only; the DB role has no UPDATE/DELETE grant |
 | `setting` | key, value jsonb, updated_at | settings changed from the app: `queue_paused` (WP-16). Locations, the engine address and tokens stay in the environment (D-58). While the queue is paused, queued jobs wait with `wait_reason = QUEUE_PAUSED`; backup and restore still start |
 | `idempotency_key` | id, actor, key, request (hash of method, path and body), status_code, response jsonb, created_at | unique (actor, key); kept 24 hours; written in the request's transaction, so a failed request stores nothing (WP-15) |

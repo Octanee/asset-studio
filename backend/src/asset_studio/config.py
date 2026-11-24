@@ -42,6 +42,10 @@ class Settings(BaseSettings):
     # Where backups are written and restored from (FR-111): a bind mount of a Windows folder in
     # compose, so a backup lives outside Docker (ADR-013). Empty means <data_dir>/backups.
     backups_dir: str = ""
+    # Training exchange folder (ADR-011): the worker writes each run's images and captions
+    # here and the host agent's kohya reads them; a bind mount of a Windows folder in compose.
+    # Empty means <data_dir>/training-exchange.
+    training_dir: str = ""
     # Port of the MCP server on the host, shown in Settings > MCP connection.
     mcp_port: int = 8411
 
