@@ -310,6 +310,10 @@ def test_claude_can_detect_but_only_with_a_session_or_token(
     client: TestClient, anon: TestClient
 ) -> None:
     rid = _upload(client, _project(client)).json()["id"]
-    r = client.post("/api/v1/poses:detect", json={"reference_id": rid}, headers=MCP)
+    r = client.post(
+        "/api/v1/poses:detect",
+        json={"reference_id": rid},
+        headers=MCP | {"Idempotency-Key": f"detect-{rid}"},
+    )
     assert r.status_code == 202
     assert anon.get("/api/v1/poses").status_code == 401

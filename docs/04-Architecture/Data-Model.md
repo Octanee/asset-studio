@@ -50,5 +50,6 @@ tags:
 | `training_run` | id, dataset_id, family_id, preset, steps, job_id, output_model_id | |
 | `audit_entry` | id, at, actor, project_id null, action, subject_type, subject_id, data jsonb | append-only; the DB role has no UPDATE/DELETE grant |
 | `setting` | key, value jsonb | app settings |
+| `idempotency_key` | id, actor, key, request (hash of method, path and body), status_code, response jsonb, created_at | unique (actor, key); kept 24 hours; written in the request's transaction, so a failed request stores nothing (WP-15) |
 
 Migrations use **Alembic**, forward-only in releases. A migration test runs upgrade on an empty DB and on a seeded fixture, in CI.

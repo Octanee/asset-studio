@@ -65,6 +65,20 @@ services:
       db:
         condition: service_healthy
 
+  # MCP server for Claude (ADR-008): only calls the API with the caller's MCP token. No
+  # database, no volumes, no secrets of its own.
+  mcp:
+    build: ./backend
+    command: ["python", "-m", "asset_studio_mcp"]
+    environment:
+      ASSET_STUDIO_MCP_API_URL: http://api:8400
+      ASSET_STUDIO_MCP_BIND: 0.0.0.0
+      ASSET_STUDIO_MCP_PORT: "8411"
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:${ASSET_STUDIO_MCP_PORT:-8411}:8411"
+
   web:
     build: ./frontend
     depends_on:

@@ -390,7 +390,14 @@ def test_engine_failure_fails_the_job(
 
 def test_claude_can_queue_generation(api: TestClient) -> None:
     pid = _project(api)
-    assert api.post("/api/v1/generations", json=_spec(pid), headers=MCP).status_code == 202
+    assert (
+        api.post(
+            "/api/v1/generations",
+            json=_spec(pid),
+            headers=MCP | {"Idempotency-Key": "claude-generate-1"},
+        ).status_code
+        == 202
+    )
 
 
 # --- ComfyUI adapter: image upload and step progress -------------------------------------------

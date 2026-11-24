@@ -21,6 +21,7 @@ dependencies = [
   "onnxruntime>=1.20,<2",
   "numpy>=1.26,<3",
   "pillow>=13,<14",
+  "mcp>=1.20,<2",
 ]
 
 [dependency-groups]
@@ -37,7 +38,7 @@ requires = ["hatchling>=1.25"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/asset_studio"]
+packages = ["src/asset_studio", "src/asset_studio_mcp"]
 
 [tool.ruff]
 line-length = 100
@@ -62,13 +63,20 @@ testpaths = ["tests"]
 addopts = "-q"
 
 [tool.importlinter]
-root_package = "asset_studio"
+root_packages = ["asset_studio", "asset_studio_mcp"]
+include_external_packages = true
 
 [[tool.importlinter.contracts]]
 name = "Domain modules never import the API layer"
 type = "forbidden"
 source_modules = ["asset_studio.modules"]
 forbidden_modules = ["asset_studio.api"]
+
+[[tool.importlinter.contracts]]
+name = "The MCP server only calls the API: no database, files or domain code (ADR-008)"
+type = "forbidden"
+source_modules = ["asset_studio_mcp"]
+forbidden_modules = ["asset_studio", "sqlalchemy", "psycopg"]
 
 [[tool.importlinter.contracts]]
 name = "Foundation modules do not depend on domain modules"
