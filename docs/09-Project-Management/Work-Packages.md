@@ -32,7 +32,7 @@ Every package is one or more small PRs on a `feature/*` branch, reviewed by the 
 | WP-15 | MCP server and tools | FR-120, FR-121, RULE-005, RULE-010 | WP-08, WP-10, WP-11 | MCP / Sonnet; security / Opus |
 | WP-16 | Dashboard, settings, system status, audit view (UXQ-02), backup and restore | FR-100, FR-110–FR-115 | most | backend + frontend / Sonnet |
 | WP-17 | Setup/start scripts for Windows, ComfyUI and training install with approval prompts | NFR-013, NFR-014 | WP-05, WP-13 | infra / Sonnet |
-| WP-18 | QA hardening: E2E for AC-001–AC-015, failure scenarios, GPU integration run, docs completion | all AC | all | QA / Sonnet; final review Opus |
+| WP-18 | ✅ done — part 2: GPU integration run on the reference machine (AC-001 10 images to export, AC-005 restart, AC-006 engine stopped, AC-014 screens in PL, AC-015 sockets), 42 missing audit labels fixed with a guard test, [[QA-Report]]. Part 1: acceptance journeys, translation checks, [[Acceptance-Coverage]] | #36, PR pending |
 
 ## Status
 
