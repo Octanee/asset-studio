@@ -417,6 +417,39 @@
         "title": "AssetTarget",
         "type": "object"
       },
+      "Attention": {
+        "properties": {
+          "awaiting_review": {
+            "title": "Awaiting Review",
+            "type": "integer"
+          },
+          "backup_due": {
+            "title": "Backup Due",
+            "type": "boolean"
+          },
+          "failed_jobs": {
+            "title": "Failed Jobs",
+            "type": "integer"
+          },
+          "licence_warnings": {
+            "title": "Licence Warnings",
+            "type": "integer"
+          },
+          "processing_failed": {
+            "title": "Processing Failed",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "awaiting_review",
+          "processing_failed",
+          "failed_jobs",
+          "licence_warnings",
+          "backup_due"
+        ],
+        "title": "Attention",
+        "type": "object"
+      },
       "AuditOut": {
         "properties": {
           "action": {
@@ -482,6 +515,96 @@
           "data"
         ],
         "title": "AuditOut",
+        "type": "object"
+      },
+      "BackupOut": {
+        "properties": {
+          "app_version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "App Version"
+          },
+          "bytes": {
+            "title": "Bytes",
+            "type": "integer"
+          },
+          "created_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Created At"
+          },
+          "models": {
+            "default": 0,
+            "title": "Models",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "readable": {
+            "title": "Readable",
+            "type": "boolean"
+          },
+          "schema_revision": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Schema Revision"
+          },
+          "totals": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "default": {},
+            "title": "Totals",
+            "type": "object"
+          }
+        },
+        "required": [
+          "name",
+          "bytes",
+          "readable"
+        ],
+        "title": "BackupOut",
+        "type": "object"
+      },
+      "BackupsOut": {
+        "properties": {
+          "configured": {
+            "title": "Configured",
+            "type": "boolean"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/BackupOut"
+            },
+            "title": "Items",
+            "type": "array"
+          }
+        },
+        "required": [
+          "configured",
+          "items"
+        ],
+        "title": "BackupsOut",
         "type": "object"
       },
       "BatchItem": {
@@ -974,6 +1097,53 @@
         "title": "ConfigVersionOut",
         "type": "object"
       },
+      "DashboardOut": {
+        "properties": {
+          "attention": {
+            "$ref": "#/components/schemas/Attention"
+          },
+          "failed_jobs": {
+            "items": {
+              "$ref": "#/components/schemas/FailedJob"
+            },
+            "title": "Failed Jobs",
+            "type": "array"
+          },
+          "last_backup": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/BackupOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "latest_versions": {
+            "items": {
+              "$ref": "#/components/schemas/LatestVersion"
+            },
+            "title": "Latest Versions",
+            "type": "array"
+          },
+          "versions_by_state": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Versions By State",
+            "type": "object"
+          }
+        },
+        "required": [
+          "versions_by_state",
+          "attention",
+          "latest_versions",
+          "failed_jobs",
+          "last_backup"
+        ],
+        "title": "DashboardOut",
+        "type": "object"
+      },
       "DetectRequest": {
         "properties": {
           "box": {
@@ -1421,6 +1591,62 @@
           "name"
         ],
         "title": "ExportRootOut",
+        "type": "object"
+      },
+      "FailedJob": {
+        "properties": {
+          "code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Code"
+          },
+          "finished_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Finished At"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "finished_at",
+          "code",
+          "message"
+        ],
+        "title": "FailedJob",
         "type": "object"
       },
       "FamilyUpdate": {
@@ -2137,6 +2363,52 @@
           "finished_at"
         ],
         "title": "JobOut",
+        "type": "object"
+      },
+      "LatestVersion": {
+        "properties": {
+          "asset_id": {
+            "format": "uuid",
+            "title": "Asset Id",
+            "type": "string"
+          },
+          "asset_name": {
+            "title": "Asset Name",
+            "type": "string"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "number": {
+            "title": "Number",
+            "type": "integer"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "asset_id",
+          "asset_name",
+          "category",
+          "number",
+          "state",
+          "created_at"
+        ],
+        "title": "LatestVersion",
         "type": "object"
       },
       "LicenceOut": {
@@ -3958,6 +4230,20 @@
         "title": "ReferenceUpdate",
         "type": "object"
       },
+      "RestoreIn": {
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "RestoreIn",
+        "type": "object"
+      },
       "RuleResultOut": {
         "properties": {
           "details": {
@@ -4024,17 +4310,17 @@
         "title": "SessionInfo",
         "type": "object"
       },
-      "SettingsUpdate": {
+      "SettingsOut": {
         "properties": {
-          "mcp_can_decide": {
-            "title": "Mcp Can Decide",
+          "queue_paused": {
+            "title": "Queue Paused",
             "type": "boolean"
           }
         },
         "required": [
-          "mcp_can_decide"
+          "queue_paused"
         ],
-        "title": "SettingsUpdate",
+        "title": "SettingsOut",
         "type": "object"
       },
       "Size": {
@@ -4064,6 +4350,64 @@
           "height"
         ],
         "title": "Size",
+        "type": "object"
+      },
+      "StatusOut": {
+        "properties": {
+          "api": {
+            "$ref": "#/components/schemas/Health"
+          },
+          "backups": {
+            "additionalProperties": true,
+            "title": "Backups",
+            "type": "object"
+          },
+          "consistency": {
+            "additionalProperties": true,
+            "title": "Consistency",
+            "type": "object"
+          },
+          "database": {
+            "additionalProperties": true,
+            "title": "Database",
+            "type": "object"
+          },
+          "engine": {
+            "$ref": "#/components/schemas/EngineOut"
+          },
+          "locations": {
+            "additionalProperties": true,
+            "title": "Locations",
+            "type": "object"
+          },
+          "mcp": {
+            "additionalProperties": true,
+            "title": "Mcp",
+            "type": "object"
+          },
+          "queue": {
+            "additionalProperties": true,
+            "title": "Queue",
+            "type": "object"
+          },
+          "storage": {
+            "additionalProperties": true,
+            "title": "Storage",
+            "type": "object"
+          }
+        },
+        "required": [
+          "api",
+          "engine",
+          "database",
+          "queue",
+          "storage",
+          "consistency",
+          "backups",
+          "locations",
+          "mcp"
+        ],
+        "title": "StatusOut",
         "type": "object"
       },
       "StyleAttributes": {
@@ -4867,6 +5211,37 @@
         ],
         "title": "WorkflowRef",
         "type": "object"
+      },
+      "asset_studio__api__projects__SettingsUpdate": {
+        "properties": {
+          "mcp_can_decide": {
+            "title": "Mcp Can Decide",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "mcp_can_decide"
+        ],
+        "title": "SettingsUpdate",
+        "type": "object"
+      },
+      "asset_studio__api__settings__SettingsUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "queue_paused": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Queue Paused"
+          }
+        },
+        "title": "SettingsUpdate",
+        "type": "object"
       }
     }
   },
@@ -5577,6 +5952,192 @@
         ]
       }
     },
+    "/api/v1/audit/actions": {
+      "get": {
+        "description": "The actions that appear in the log, for the audit view's filter (FR-115).",
+        "operationId": "audit_actions_api_v1_audit_actions_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Project Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "type": "string"
+                  },
+                  "title": "Response Audit Actions Api V1 Audit Actions Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Audit Actions",
+        "tags": [
+          "audit"
+        ]
+      }
+    },
+    "/api/v1/backups": {
+      "get": {
+        "operationId": "list_backups_api_v1_backups_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BackupsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Backups",
+        "tags": [
+          "system"
+        ]
+      },
+      "post": {
+        "description": "Queue a backup: database, library files and the model list (no model files).",
+        "operationId": "create_backup_api_v1_backups_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Backup",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/v1/backups:restore": {
+      "post": {
+        "description": "Queue a restore of a backup from the backup folder into this empty data location.",
+        "operationId": "restore_backup_api_v1_backups_restore_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Idempotency-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RestoreIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Restore Backup",
+        "tags": [
+          "system"
+        ]
+      }
+    },
     "/api/v1/characters/{character_id}": {
       "get": {
         "operationId": "get_character_api_v1_characters__character_id__get",
@@ -5948,6 +6509,49 @@
         "summary": "Remove Asset",
         "tags": [
           "collections"
+        ]
+      }
+    },
+    "/api/v1/dashboard": {
+      "get": {
+        "operationId": "dashboard_api_v1_dashboard_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "project_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Project Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Dashboard",
+        "tags": [
+          "dashboard"
         ]
       }
     },
@@ -8558,7 +9162,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SettingsUpdate"
+                "$ref": "#/components/schemas/asset_studio__api__projects__SettingsUpdate"
               }
             }
           },
@@ -9566,6 +10170,67 @@
         ]
       }
     },
+    "/api/v1/settings": {
+      "get": {
+        "operationId": "get_settings_api_v1_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Settings",
+        "tags": [
+          "system"
+        ]
+      },
+      "patch": {
+        "description": "User only; every change is audited.",
+        "operationId": "update_settings_api_v1_settings_patch",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/asset_studio__api__settings__SettingsUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Settings",
+        "tags": [
+          "system"
+        ]
+      }
+    },
     "/api/v1/styles/{style_id}": {
       "get": {
         "operationId": "get_style_api_v1_styles__style_id__get",
@@ -9833,6 +10498,28 @@
           }
         },
         "summary": "Health",
+        "tags": [
+          "system"
+        ]
+      }
+    },
+    "/api/v1/system/status": {
+      "get": {
+        "description": "Component health for the System status screen (NFR-003).",
+        "operationId": "status_api_v1_system_status_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatusOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Status",
         "tags": [
           "system"
         ]

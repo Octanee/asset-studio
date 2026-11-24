@@ -34,7 +34,11 @@ KIND_LANES: dict[str, Lane] = {
     "download": "cpu",
     "verify_model": "cpu",
     "backup": "cpu",
+    "restore": "cpu",
 }
+# Kinds that still start while the queue is paused (WP-16): a paused queue is the safe
+# moment for a backup.
+PAUSE_EXEMPT = frozenset({"backup", "restore"})
 NOTIFY_CHANNEL = "asset_studio_jobs"
 GPU_LOCK = "asset_studio_gpu_lane"
 DEFAULT_LEASE = timedelta(seconds=60)

@@ -92,7 +92,62 @@
     "language": "Język",
     "languagePl": "Polski",
     "languageEn": "English",
-    "rest": "Lokalizacje danych, foldery modeli, kopia zapasowa i przywracanie pojawią się w WP-16."
+    "sections": "Sekcje ustawień",
+    "section": {
+      "general": "Ogólne",
+      "data": "Dane i kopie",
+      "mcp": "Połączenie MCP",
+      "audit": "Dziennik audytu"
+    },
+    "queue": "Kolejka",
+    "queuePaused": "Kolejka jest wstrzymana.",
+    "queueRunning": "Kolejka działa.",
+    "queueHint": "Po wstrzymaniu trwające zadania się kończą, a nowe nie startują – poza kopią zapasową i przywracaniem.",
+    "pauseQueue": "Wstrzymaj kolejkę",
+    "resumeQueue": "Wznów kolejkę",
+    "configured": "skonfigurowany",
+    "notConfigured": "nieskonfigurowany",
+    "locations": "Lokalizacje danych",
+    "library": "Biblioteka",
+    "libraryUsage": "pliki: {{files}} · {{size}}",
+    "free": "Wolne miejsce",
+    "backupsFolder": "Folder kopii",
+    "exportRoots": "Foldery eksportu",
+    "exportRootsCount": "skonfigurowane: {{count}}",
+    "modelsFolder": "Folder modeli",
+    "engine": "Adres silnika",
+    "locationsHint": "Foldery wybiera się w pliku .env podczas instalacji (ADR-013); zmiana działa po restarcie. Aplikacja nigdy nie pokazuje ścieżek z Twojego komputera.",
+    "backups": "Kopie zapasowe",
+    "createBackup": "Utwórz kopię",
+    "backupHint": "Kopia zawiera bazę danych, wszystkie pliki biblioteki i listę modeli z sumami kontrolnymi i źródłami. Pliki modeli nie są kopiowane.",
+    "backupsNotConfigured": "Folder kopii nie jest skonfigurowany. Ustaw ASSET_STUDIO_BACKUPS_HOST_DIR w .env.",
+    "noBackups": "W folderze kopii nie ma jeszcze żadnej kopii.",
+    "backupName": "Nazwa",
+    "backupCreated": "Utworzono",
+    "backupSize": "Rozmiar",
+    "backupContents": "Zawartość",
+    "backupTotals": "pliki: {{files}}, wiersze: {{rows}}, modele: {{models}}",
+    "backupUnreadable": "Nie da się odczytać",
+    "restore": "Przywróć",
+    "confirmRestore": "Przywróć teraz",
+    "cancel": "Anuluj",
+    "restoreNotEmpty": "Przywracanie działa tylko do pustej lokalizacji danych (świeża instalacja). Tu są już projekty.",
+    "mcp": "Połączenie MCP",
+    "mcpConfigured": "Token MCP jest ustawiony: Claude może się połączyć.",
+    "mcpNotConfigured": "Token MCP nie jest ustawiony. Ustaw ASSET_STUDIO_MCP_TOKEN w .env i uruchom ponownie.",
+    "mcpUrl": "Adres",
+    "mcpConnect": "Podłączenie Claude Code:",
+    "mcpToken": "Zastąp <token> wartością ASSET_STUDIO_MCP_TOKEN z .env. Aplikacja nigdy nie pokazuje tokenu; zmienisz go w .env i po restarcie.",
+    "mcpRules": "Claude działa przez to samo API co Ty: nie usuwa, nie pobiera modeli i nie zmienia ustawień, a zatwierdza, odrzuca i publikuje tylko w projektach, w których mu na to pozwolisz.",
+    "auditFilters": "Filtry dziennika audytu",
+    "auditProject": "Projekt",
+    "auditAny": "Dowolny",
+    "auditActor": "Aktor",
+    "auditAction": "Akcja",
+    "auditEmpty": "Żaden wpis nie pasuje do filtrów.",
+    "auditTime": "Czas",
+    "auditDetails": "Szczegóły",
+    "auditMore": "Pokaż starsze wpisy"
   },
   "problems": {
     "ENGINE_NOT_CONFIGURED": "Host agent nie ma skonfigurowanego folderu ComfyUI. Uruchom skrypt instalacyjny.",
@@ -192,7 +247,17 @@
     "TARGET_NOT_FOUND": "Ten cel już nie istnieje.",
     "NOT_APPROVED": "Wersja nie jest już zatwierdzona.",
     "ARCHIVED": "Preset lub cel jest zarchiwizowany.",
-    "OTHER_PROJECT": "Preset i cel muszą należeć do projektu."
+    "OTHER_PROJECT": "Preset i cel muszą należeć do projektu.",
+    "BACKUP_NAME_INVALID": "To nie jest nazwa kopii.",
+    "BACKUP_NOT_FOUND": "Tej kopii nie ma w folderze kopii.",
+    "BACKUP_INVALID": "To archiwum nie jest poprawną kopią Asset Studio.",
+    "BACKUP_CORRUPT": "Kopia jest uszkodzona: plik nie zgadza się z sumą kontrolną. Nic nie zostało przywrócone.",
+    "BACKUP_SCHEMA_UNKNOWN": "Kopia pochodzi z nowszej wersji Asset Studio. Zaktualizuj aplikację przed przywróceniem.",
+    "DATA_LOCATION_NOT_EMPTY": "Przywracanie działa tylko do pustej lokalizacji danych. Tu są już projekty.",
+    "RESTORE_INCOMPLETE": "Przywrócono, ale brakuje części plików wersji.",
+    "RESTORED": "Anulowane przez przywrócenie kopii.",
+    "SETTING_UNKNOWN": "Nieznane ustawienie.",
+    "SETTING_INVALID": "Nieprawidłowa wartość ustawienia."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -514,7 +579,10 @@
     "oneAtATime": "Zadania GPU wykonują się po jednym.",
     "waiting": "Czeka: {{reason}}",
     "inLine": "Czeka na swoją kolej",
-    "starting": "Uruchamianie…"
+    "starting": "Uruchamianie…",
+    "pausedBanner": "Kolejka jest wstrzymana: trwające zadania się kończą, nowe nie startują – poza kopią zapasową i przywracaniem.",
+    "pauseAll": "Wstrzymaj kolejkę",
+    "resumeAll": "Wznów kolejkę"
   },
   "jobStates": {
     "queued": "W kolejce",
@@ -534,7 +602,8 @@
     "export": "Eksport",
     "download": "Pobieranie modelu",
     "verify_model": "Sprawdzanie modelu",
-    "backup": "Kopia zapasowa"
+    "backup": "Kopia zapasowa",
+    "restore": "Przywracanie"
   },
   "versionStates": {
     "generated": "Wygenerowana",
@@ -550,7 +619,8 @@
   "waitReasons": {
     "ENGINE_UNAVAILABLE": "silnik jest niedostępny",
     "HOST_AGENT_UNAVAILABLE": "host agent nie działa",
-    "HOST_AGENT_NOT_CONFIGURED": "host agent nie jest skonfigurowany"
+    "HOST_AGENT_NOT_CONFIGURED": "host agent nie jest skonfigurowany",
+    "QUEUE_PAUSED": "kolejka jest wstrzymana"
   },
   "library": {
     "search": "Szukaj po nazwie, slugu lub tagu",
@@ -644,7 +714,16 @@
       "asset_version_deleted": "usunięto trwale",
       "review_comment_created": "dodano komentarz",
       "publication_created": "opublikowano do celu",
-      "publication_file_overwritten": "nadpisano plik"
+      "publication_file_overwritten": "nadpisano plik",
+      "setting_changed": "zmiana ustawienia",
+      "backup_created": "utworzono kopię",
+      "backup_restored": "przywrócono kopię",
+      "job_enqueued": "zadanie w kolejce",
+      "engine_start": "uruchomiono silnik",
+      "engine_stop": "zatrzymano silnik",
+      "engine_restart": "zrestartowano silnik",
+      "project_created": "utworzono projekt",
+      "licence_acknowledged": "potwierdzono ostrzeżenie licencyjne"
     },
     "publications": "Publikacje",
     "notPublished": "Jeszcze nieopublikowany."
@@ -812,5 +891,50 @@
     "done": "Opublikowane wersje: {{count}}.",
     "history": "Ostatnie publikacje",
     "overwrote": "nadpisano pliki"
+  },
+  "dashboard": {
+    "attention": "Wymaga uwagi",
+    "openLibrary": "Otwórz bibliotekę",
+    "batch": "Seria",
+    "newGeneration": "Nowa generacja",
+    "awaitingReview": "Czeka na przegląd",
+    "processingFailed": "Obróbka nieudana",
+    "failedJobs": "Nieudane zadania",
+    "lastDays": "Ostatnie dni: {{count}}",
+    "licence": "Ostrzeżenia licencyjne",
+    "queue": "Kolejka",
+    "runningQueued": "w toku / w kolejce",
+    "backup": "Ostatnia kopia",
+    "noBackup": "Brak kopii zapasowej",
+    "byState": "Wersje według stanu",
+    "activity": "Ostatnia aktywność",
+    "noActivity": "W tym projekcie nic się jeszcze nie wydarzyło.",
+    "allActivity": "Otwórz dziennik audytu",
+    "latest": "Najnowsze wersje",
+    "noVersions": "Brak wersji. Zacznij od nowej generacji.",
+    "failures": "Ostatnie błędy",
+    "openQueue": "Otwórz kolejkę"
+  },
+  "system": {
+    "health": {
+      "ok": "OK",
+      "warn": "Uwaga",
+      "bad": "Problem"
+    },
+    "components": "Komponenty",
+    "component": "Komponent",
+    "state": "Stan",
+    "details": "Szczegóły",
+    "database": "Baza danych",
+    "schema": "schemat {{current}} (najnowszy {{head}})",
+    "worker": "Worker",
+    "workers": "aktywne workery: {{count}}",
+    "queue": "Kolejka",
+    "openQueue": "Otwórz kolejkę",
+    "consistency": "Spójność biblioteki",
+    "consistencyCounts": "brakujące pliki: {{missing}}, pliki bez rekordu: {{orphans}}",
+    "lastBackup": "ostatnia kopia {{at}}",
+    "openBackups": "Kopie zapasowe",
+    "missingHint": "Wersje, którym brakuje pliku:"
   }
 }

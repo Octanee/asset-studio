@@ -57,3 +57,10 @@ def list_entries(
     if before:
         q = q.where(AuditEntry.id < before)
     return list(session.scalars(q))
+
+
+def list_actions(session: Session, *, project_id: uuid.UUID | None = None) -> list[str]:
+    q = select(AuditEntry.action).distinct().order_by(AuditEntry.action)
+    if project_id:
+        q = q.where(AuditEntry.project_id == project_id)
+    return list(session.scalars(q))

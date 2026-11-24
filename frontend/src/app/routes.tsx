@@ -8,17 +8,21 @@ import { Compare } from "../pages/Compare";
 import { GenerationStudio } from "../pages/GenerationStudio";
 import { Library } from "../pages/Library";
 import { Models } from "../pages/Models";
-import { NotFound, Placeholder, Settings, SystemStatus } from "../pages/pages";
+import { Dashboard } from "../pages/Dashboard";
+import { NotFound, Placeholder } from "../pages/pages";
 import { Poses } from "../pages/Poses";
 import { Publish } from "../pages/Publish";
 import { Queue } from "../pages/Queue";
 import { References } from "../pages/References";
 import { Review } from "../pages/Review";
+import { Settings } from "../pages/Settings";
 import { StyleStudio } from "../pages/StyleStudio";
+import { SystemStatus } from "../pages/System";
 import { MODULES, type ModuleId } from "./modules";
 
 /** Modules whose screen exists; the rest show a placeholder naming their work package. */
 const BUILT = new Set<ModuleId>([
+  "dashboard",
   "settings",
   "styles",
   "references",
@@ -82,6 +86,7 @@ export const routes: RouteObject[] = [
             path: m.path,
             element: <Placeholder module={m} />,
           })),
+          { path: "/", element: <Dashboard /> },
           { path: "/generate", element: <GenerationStudio /> },
           { path: "/queue", element: <Queue /> },
           { path: "/library", element: <Library /> },
@@ -93,7 +98,10 @@ export const routes: RouteObject[] = [
           { path: "/references", element: <References /> },
           { path: "/poses", element: <Poses /> },
           { path: "/models", element: <Models /> },
-          { path: "/settings", element: <Settings /> },
+          { path: "/settings", element: <Settings section="general" /> },
+          { path: "/settings/data", element: <Settings section="data" /> },
+          { path: "/settings/mcp", element: <Settings section="mcp" /> },
+          { path: "/settings/audit", element: <Settings section="audit" /> },
           { path: "/projects", element: <Placeholder module={{ id: "projects", wp: "WP-16" }} /> },
           { path: "/system", element: <SystemStatus /> },
           { path: "*", element: <NotFound /> },

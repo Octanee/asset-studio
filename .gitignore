@@ -37,6 +37,7 @@ coverage/
 # Local data
 data/
 exports/
+backups/
 
 # Python
 *.pyc

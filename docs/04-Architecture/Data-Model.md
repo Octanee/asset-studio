@@ -3,7 +3,7 @@ title: Data Model
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - architecture
   - data
@@ -30,7 +30,7 @@ tags:
 | `licence_acknowledgement` | id, project_id, model_id, licence_id, intended_use, actor, note, at | RULE-007: valid while the licence and the project's intended use are unchanged (WP-12) |
 | `lora` | id, model_id, project_id, character_id null, style_id null, trigger_word, training_run_id | |
 | `workflow` / `workflow_version` | id, name, engine (`comfyui`/`svg`/`builtin`), version, definition jsonb, inputs schema jsonb, required_model_kinds, validated_at | not created yet: the built-in workflows are versioned code templates (WP-08); the tables arrive with workflow import |
-| `job` | id, kind (`generate`/`remove_background`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`), lane (`gpu`/`cpu`), state (`queued`/`running`/`completed`/`failed`/`cancelled`/`interrupted`), priority, params jsonb (frozen), result jsonb, attempts, max_attempts, progress jsonb, error jsonb, wait_reason, cancel_requested, locked_by, locked_until, project_id, enqueued_by_actor, created_at, started_at, finished_at | queue index on (lane, state, priority, id); state and lane are check-constrained (WP-04) |
+| `job` | id, kind (`generate`/`remove_background`/`process`/`validate`/`detect_pose`/`train`/`export`/`download`/`backup`/`restore`), lane (`gpu`/`cpu`), state (`queued`/`running`/`completed`/`failed`/`cancelled`/`interrupted`), priority, params jsonb (frozen), result jsonb, attempts, max_attempts, progress jsonb, error jsonb, wait_reason, cancel_requested, locked_by, locked_until, project_id, enqueued_by_actor, created_at, started_at, finished_at | queue index on (lane, state, priority, id); state and lane are check-constrained (WP-04) |
 | `worker_heartbeat` | worker_id, lanes, kinds, started_at, seen_at | live workers for the queue summary (WP-04) |
 | `job_event` | id, job_id, at, kind, data jsonb | progress history; SSE source |
 | `asset` | id, project_id, category, slug, name, tags text[], favorite_at, archived_at | unique (project_id, slug); GIN index on `tags` (WP-10) |
@@ -49,7 +49,7 @@ tags:
 | `training_dataset` / `training_item` | dataset: id, project_id, name, trigger_word; item: dataset_id, source (`asset_version`/`upload`), ref id, caption | |
 | `training_run` | id, dataset_id, family_id, preset, steps, job_id, output_model_id | |
 | `audit_entry` | id, at, actor, project_id null, action, subject_type, subject_id, data jsonb | append-only; the DB role has no UPDATE/DELETE grant |
-| `setting` | key, value jsonb | app settings |
+| `setting` | key, value jsonb, updated_at | settings changed from the app: `queue_paused` (WP-16). Locations, the engine address and tokens stay in the environment (D-58). While the queue is paused, queued jobs wait with `wait_reason = QUEUE_PAUSED`; backup and restore still start |
 | `idempotency_key` | id, actor, key, request (hash of method, path and body), status_code, response jsonb, created_at | unique (actor, key); kept 24 hours; written in the request's transaction, so a failed request stores nothing (WP-15) |
 
 Migrations use **Alembic**, forward-only in releases. A migration test runs upgrade on an empty DB and on a seeded fixture, in CI.

@@ -92,7 +92,62 @@
     "language": "Language",
     "languagePl": "Polski",
     "languageEn": "English",
-    "rest": "Data locations, model folders, backup and restore arrive in WP-16."
+    "sections": "Settings sections",
+    "section": {
+      "general": "General",
+      "data": "Data and backup",
+      "mcp": "MCP connection",
+      "audit": "Audit log"
+    },
+    "queue": "Queue",
+    "queuePaused": "The queue is paused.",
+    "queueRunning": "The queue is running.",
+    "queueHint": "While paused, running jobs finish and nothing new starts, except backup and restore.",
+    "pauseQueue": "Pause the queue",
+    "resumeQueue": "Resume the queue",
+    "configured": "configured",
+    "notConfigured": "not configured",
+    "locations": "Data locations",
+    "library": "Library",
+    "libraryUsage": "files: {{files}} · {{size}}",
+    "free": "Free space",
+    "backupsFolder": "Backup folder",
+    "exportRoots": "Export folders",
+    "exportRootsCount": "configured: {{count}}",
+    "modelsFolder": "Model folder",
+    "engine": "Engine address",
+    "locationsHint": "Folders are chosen in the .env file at setup (ADR-013) and take effect after a restart. The app never shows paths from your computer.",
+    "backups": "Backups",
+    "createBackup": "Create backup",
+    "backupHint": "A backup holds the database, every library file and the list of models with their hashes and sources. Model files are not included.",
+    "backupsNotConfigured": "The backup folder is not configured. Set ASSET_STUDIO_BACKUPS_HOST_DIR in .env.",
+    "noBackups": "No backups in the backup folder yet.",
+    "backupName": "Name",
+    "backupCreated": "Created",
+    "backupSize": "Size",
+    "backupContents": "Contents",
+    "backupTotals": "files: {{files}}, rows: {{rows}}, models: {{models}}",
+    "backupUnreadable": "Cannot be read",
+    "restore": "Restore",
+    "confirmRestore": "Restore now",
+    "cancel": "Cancel",
+    "restoreNotEmpty": "Restore works only into an empty data location (a fresh install). This one already has projects.",
+    "mcp": "MCP connection",
+    "mcpConfigured": "The MCP token is set: Claude can connect.",
+    "mcpNotConfigured": "The MCP token is not set. Set ASSET_STUDIO_MCP_TOKEN in .env and restart.",
+    "mcpUrl": "Address",
+    "mcpConnect": "Connect Claude Code:",
+    "mcpToken": "Replace <token> with ASSET_STUDIO_MCP_TOKEN from .env. The app never shows the token; to change it, edit .env and restart.",
+    "mcpRules": "Claude works through the same API as you: it cannot delete, download models or change settings, and it approves, rejects or publishes only in projects where you allow it.",
+    "auditFilters": "Audit log filters",
+    "auditProject": "Project",
+    "auditAny": "Any",
+    "auditActor": "Actor",
+    "auditAction": "Action",
+    "auditEmpty": "No entries match these filters.",
+    "auditTime": "Time",
+    "auditDetails": "Details",
+    "auditMore": "Show older entries"
   },
   "problems": {
     "ENGINE_NOT_CONFIGURED": "No ComfyUI folder is configured for the host agent. Run the setup script.",
@@ -192,7 +247,17 @@
     "TARGET_NOT_FOUND": "The target no longer exists.",
     "NOT_APPROVED": "The version is not approved any more.",
     "ARCHIVED": "The preset or the target is archived.",
-    "OTHER_PROJECT": "The preset and the target must belong to the project."
+    "OTHER_PROJECT": "The preset and the target must belong to the project.",
+    "BACKUP_NAME_INVALID": "This is not a backup name.",
+    "BACKUP_NOT_FOUND": "This backup is not in the backup folder.",
+    "BACKUP_INVALID": "This archive is not a valid Asset Studio backup.",
+    "BACKUP_CORRUPT": "The backup is damaged: a file does not match its checksum. Nothing was restored.",
+    "BACKUP_SCHEMA_UNKNOWN": "The backup comes from a newer version of Asset Studio. Update before restoring.",
+    "DATA_LOCATION_NOT_EMPTY": "Restore works only into an empty data location. This one already has projects.",
+    "RESTORE_INCOMPLETE": "Restored, but some version files are missing.",
+    "RESTORED": "Cancelled by restoring a backup.",
+    "SETTING_UNKNOWN": "Unknown setting.",
+    "SETTING_INVALID": "Wrong value for this setting."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -514,7 +579,10 @@
     "oneAtATime": "GPU jobs run one at a time.",
     "waiting": "Waiting: {{reason}}",
     "inLine": "Waiting for its turn",
-    "starting": "Starting…"
+    "starting": "Starting…",
+    "pausedBanner": "The queue is paused: running jobs finish, nothing new starts except backup and restore.",
+    "pauseAll": "Pause queue",
+    "resumeAll": "Resume queue"
   },
   "jobStates": {
     "queued": "Queued",
@@ -534,7 +602,8 @@
     "export": "Export",
     "download": "Model download",
     "verify_model": "Model check",
-    "backup": "Backup"
+    "backup": "Backup",
+    "restore": "Restore"
   },
   "versionStates": {
     "generated": "Generated",
@@ -550,7 +619,8 @@
   "waitReasons": {
     "ENGINE_UNAVAILABLE": "the engine is unavailable",
     "HOST_AGENT_UNAVAILABLE": "the host agent is not running",
-    "HOST_AGENT_NOT_CONFIGURED": "the host agent is not configured"
+    "HOST_AGENT_NOT_CONFIGURED": "the host agent is not configured",
+    "QUEUE_PAUSED": "the queue is paused"
   },
   "library": {
     "search": "Search by name, slug or tag",
@@ -644,7 +714,16 @@
       "asset_version_deleted": "permanently deleted",
       "review_comment_created": "comment added",
       "publication_created": "published to a target",
-      "publication_file_overwritten": "file overwritten"
+      "publication_file_overwritten": "file overwritten",
+      "setting_changed": "setting changed",
+      "backup_created": "backup created",
+      "backup_restored": "backup restored",
+      "job_enqueued": "job queued",
+      "engine_start": "engine started",
+      "engine_stop": "engine stopped",
+      "engine_restart": "engine restarted",
+      "project_created": "project created",
+      "licence_acknowledged": "licence warning confirmed"
     },
     "publications": "Publications",
     "notPublished": "Not published yet."
@@ -812,5 +891,50 @@
     "done": "Published versions: {{count}}.",
     "history": "Recent publications",
     "overwrote": "overwrote files"
+  },
+  "dashboard": {
+    "attention": "Needs attention",
+    "openLibrary": "Open library",
+    "batch": "Batch",
+    "newGeneration": "New generation",
+    "awaitingReview": "Awaiting review",
+    "processingFailed": "Processing failed",
+    "failedJobs": "Failed jobs",
+    "lastDays": "Last {{count}} days",
+    "licence": "Licence warnings",
+    "queue": "Queue",
+    "runningQueued": "running / queued",
+    "backup": "Last backup",
+    "noBackup": "No backup yet",
+    "byState": "Versions by state",
+    "activity": "Recent activity",
+    "noActivity": "Nothing has happened in this project yet.",
+    "allActivity": "Open the audit log",
+    "latest": "Latest versions",
+    "noVersions": "No versions yet. Start with a new generation.",
+    "failures": "Recent failures",
+    "openQueue": "Open the queue"
+  },
+  "system": {
+    "health": {
+      "ok": "OK",
+      "warn": "Attention",
+      "bad": "Problem"
+    },
+    "components": "Components",
+    "component": "Component",
+    "state": "State",
+    "details": "Details",
+    "database": "Database",
+    "schema": "schema {{current}} (newest {{head}})",
+    "worker": "Worker",
+    "workers": "active workers: {{count}}",
+    "queue": "Queue",
+    "openQueue": "Open the queue",
+    "consistency": "Library consistency",
+    "consistencyCounts": "missing files: {{missing}}, files without a record: {{orphans}}",
+    "lastBackup": "last backup {{at}}",
+    "openBackups": "Backups",
+    "missingHint": "Versions whose file is missing:"
   }
 }

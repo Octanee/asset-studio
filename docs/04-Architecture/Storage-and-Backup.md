@@ -3,7 +3,7 @@ title: Storage and Backup
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - architecture
   - storage
@@ -37,18 +37,21 @@ Publishing (WP-11) writes outside the library, into export roots: bind mounts of
 - A version directory is written once (temp file → fsync → rename) and is never modified afterwards (RULE-003). The original never changes; post-processing adds its own files once (processed file, cut-out, thumbnail, preview). A failed attempt's leftovers, which no row points to, are removed before the retry writes them again.
 - Thumbnails and previews are derived and can be regenerated.
 - Permanent deletion removes the version directory and keeps its database rows and audit trail (RULE-019).
-- On start, `staging/` is cleaned. A consistency check (`assets.service.consistency_report`) reports orphan files and missing files; it is exposed in the system status view in WP-16.
+- On start, `staging/` is cleaned. A consistency check (`assets.service.consistency_report`) reports orphan files and missing files; System status shows its counts (WP-16).
 
 ## Backup and restore (FR-111, FR-112)
 
-- **Backup** runs as a job:
-  1. `pg_dump` (custom format);
-  2. a copy of `projects/` (originals and references; derived files optional);
-  3. `manifest.json` with the app version, schema version, file list with SHA-256, and the model list with hashes and sources (no model files, D-41).
-  4. Everything goes into one `.zip` (zip64) in `backups/` or a folder the user picks, verified after writing.
-- **Restore** goes only into an **empty** data location:
-  1. verify the manifest hashes;
-  2. restore the database and run migrations up to the current schema;
-  3. copy the files;
-  4. run the consistency check.
-- **Retention:** manual in the MVP; the UI shows the last backup and its size.
+Implemented in WP-16 (D-58). Backups live in the backup folder, a bind mount of a Windows folder (`ASSET_STUDIO_BACKUPS_HOST_DIR` → `/backups`), so they are the copy outside Docker (ADR-013).
+
+- **Backup** runs as a `backup` job on the CPU lane, started by the user:
+  1. every table is read in one `REPEATABLE READ` snapshot with `COPY ... TO STDOUT` (PostgreSQL text format). Idempotency keys and worker heartbeats are left out. No `pg_dump` is needed, so the image needs no PostgreSQL client;
+  2. every file under `projects/` (originals, references, processed files, cut-outs, thumbnails and previews) is copied. Images are stored as they are; table dumps are compressed;
+  3. `manifest.json` holds the app version, the schema revision, each table with its columns, row count and SHA-256, each file with its SHA-256, and the installed models with their hashes and sources (no model files, D-41). It never holds host paths;
+  4. everything goes into one zip (zip64) named `asset-studio-backup-<date>-<time>.zip`. It is written under a temporary name, read back against the manifest, then renamed.
+- **Restore** runs as a `restore` job, only into an **empty** data location (no project and no library file):
+  1. the archive is checked first: every member must be in the manifest and match its SHA-256, and file names must be library keys. A damaged or unknown archive changes nothing;
+  2. the files are unpacked to `staging/`;
+  3. in one transaction, a scratch schema is migrated to the backup's schema revision, the rows are loaded into it, it is migrated to the current schema (data migrations run on the restored rows), and the rows are copied into the live tables. A backup from a newer app version is refused;
+  4. jobs that were queued or running when the backup was taken come back `cancelled` (`RESTORED`), so nothing starts by itself;
+  5. after the commit the files are moved into the library, and the consistency check runs.
+- **Retention:** manual in the MVP. Settings › Data and backup lists the backups with size and contents; the dashboard and System status show the last backup and remind the user after 7 days.
