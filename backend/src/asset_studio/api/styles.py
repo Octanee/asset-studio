@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from asset_studio.api.security import CurrentActor
 from asset_studio.db import get_session
-from asset_studio.modules.styles import service
+from asset_studio.modules.styles import loras, service
 from asset_studio.modules.styles.service import CharacterAttributes, StyleAttributes
 
 project_router = APIRouter()
@@ -142,3 +142,58 @@ def archive_character(db: Db, actor: CurrentActor, character_id: uuid.UUID) -> A
 @characters_router.post("/{character_id}/restore", response_model=CharacterOut)
 def restore_character(db: Db, actor: CurrentActor, character_id: uuid.UUID) -> Any:
     return service.set_archived(db, service.get_character(db, character_id), False, actor)
+
+
+# --- LoRA links (FR-016, FR-075) ---------------------------------------------------------------
+
+
+class LoraLinkOut(BaseModel):
+    model_id: str
+    name: str
+    family_id: str | None
+    status: str
+    strength: float
+    trigger_word: str | None
+
+
+class LoraLinkIn(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    strength: float = Field(default=0.8, ge=0, le=2)
+
+
+@styles_router.get("/{style_id}/loras", response_model=list[LoraLinkOut])
+def style_loras(db: Db, _: CurrentActor, style_id: uuid.UUID) -> list[dict[str, Any]]:
+    return loras.list_links(db, "style", style_id)
+
+
+@styles_router.put("/{style_id}/loras/{model_id}", response_model=list[LoraLinkOut])
+def link_style_lora(
+    db: Db, actor: CurrentActor, style_id: uuid.UUID, model_id: str, body: LoraLinkIn
+) -> list[dict[str, Any]]:
+    return loras.link(db, "style", style_id, model_id, body.strength, actor)
+
+
+@styles_router.delete("/{style_id}/loras/{model_id}", response_model=list[LoraLinkOut])
+def unlink_style_lora(
+    db: Db, actor: CurrentActor, style_id: uuid.UUID, model_id: str
+) -> list[dict[str, Any]]:
+    return loras.unlink(db, "style", style_id, model_id, actor)
+
+
+@characters_router.get("/{character_id}/loras", response_model=list[LoraLinkOut])
+def character_loras(db: Db, _: CurrentActor, character_id: uuid.UUID) -> list[dict[str, Any]]:
+    return loras.list_links(db, "character", character_id)
+
+
+@characters_router.put("/{character_id}/loras/{model_id}", response_model=list[LoraLinkOut])
+def link_character_lora(
+    db: Db, actor: CurrentActor, character_id: uuid.UUID, model_id: str, body: LoraLinkIn
+) -> list[dict[str, Any]]:
+    return loras.link(db, "character", character_id, model_id, body.strength, actor)
+
+
+@characters_router.delete("/{character_id}/loras/{model_id}", response_model=list[LoraLinkOut])
+def unlink_character_lora(
+    db: Db, actor: CurrentActor, character_id: uuid.UUID, model_id: str
+) -> list[dict[str, Any]]:
+    return loras.unlink(db, "character", character_id, model_id, actor)

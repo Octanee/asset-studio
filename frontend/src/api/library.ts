@@ -317,3 +317,63 @@ export function useJob(jobId: string | null) {
     },
   });
 }
+
+export type LoraLink = Schemas["LoraLinkOut"];
+
+/** LoRAs linked to a style or character (FR-016, FR-075). */
+export function useLoraLinks(target: { type: "style" | "character"; id: string }) {
+  return useQuery({
+    queryKey: ["lora-links", target.type, target.id],
+    queryFn: () =>
+      target.type === "style"
+        ? unwrap(
+            api.GET("/api/v1/styles/{style_id}/loras", {
+              params: { path: { style_id: target.id } },
+            }),
+          )
+        : unwrap(
+            api.GET("/api/v1/characters/{character_id}/loras", {
+              params: { path: { character_id: target.id } },
+            }),
+          ),
+  });
+}
+
+export function useLoraLinkActions(target: { type: "style" | "character"; id: string }) {
+  const client = useQueryClient();
+  const done = (data: LoraLink[]) =>
+    client.setQueryData(["lora-links", target.type, target.id], data);
+  const link = useMutation({
+    mutationFn: ({ modelId, strength }: { modelId: string; strength: number }) =>
+      target.type === "style"
+        ? unwrap(
+            api.PUT("/api/v1/styles/{style_id}/loras/{model_id}", {
+              params: { path: { style_id: target.id, model_id: modelId } },
+              body: { strength },
+            }),
+          )
+        : unwrap(
+            api.PUT("/api/v1/characters/{character_id}/loras/{model_id}", {
+              params: { path: { character_id: target.id, model_id: modelId } },
+              body: { strength },
+            }),
+          ),
+    onSuccess: done,
+  });
+  const unlink = useMutation({
+    mutationFn: (modelId: string) =>
+      target.type === "style"
+        ? unwrap(
+            api.DELETE("/api/v1/styles/{style_id}/loras/{model_id}", {
+              params: { path: { style_id: target.id, model_id: modelId } },
+            }),
+          )
+        : unwrap(
+            api.DELETE("/api/v1/characters/{character_id}/loras/{model_id}", {
+              params: { path: { character_id: target.id, model_id: modelId } },
+            }),
+          ),
+    onSuccess: done,
+  });
+  return { link, unlink };
+}

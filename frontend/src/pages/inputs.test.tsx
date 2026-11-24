@@ -293,3 +293,63 @@ describe("Poses", () => {
     expect(within(panel).getByText(/set the pose by hand/)).toBeVisible();
   });
 });
+
+describe("Style LoRAs (FR-016, FR-075)", () => {
+  it("links a trained LoRA to a style and changes its strength", async () => {
+    const user = userEvent.setup();
+    const style = {
+      id: "s1",
+      project_id: P,
+      name: "Flat",
+      attributes: { palette: [], avoid: [], extra: {} },
+      version: 1,
+      archived_at: null,
+      created_at: "2026-11-24T08:00:00Z",
+      updated_at: "2026-11-24T08:00:00Z",
+    };
+    const lora = {
+      model_id: "lora-exz",
+      name: "Exerzio woman (SD15 LoRA)",
+      family_id: "sd15",
+      status: "installed",
+      strength: 0.8,
+      trigger_word: "exz_woman",
+    };
+    let links: unknown[] = [];
+    const sent: { method: string; body: unknown }[] = [];
+    stub({
+      [`GET /api/v1/projects/${P}/styles`]: { body: [style] },
+      "GET /api/v1/models": {
+        body: [
+          { id: "lora-exz", name: lora.name, kind: "lora", family_id: "sd15", status: "installed" },
+        ],
+      },
+      "GET /api/v1/styles/s1/loras": () => links,
+      "PUT /api/v1/styles/s1/loras/lora-exz": async (r) => {
+        const body = (await r.json()) as { strength: number };
+        sent.push({ method: "PUT", body });
+        links = [{ ...lora, strength: body.strength }];
+        return links;
+      },
+      "DELETE /api/v1/styles/s1/loras/lora-exz": () => {
+        sent.push({ method: "DELETE", body: null });
+        links = [];
+        return links;
+      },
+    });
+    renderAt("/styles");
+    await user.click(await screen.findByRole("button", { name: /Flat/ }));
+    expect(await screen.findByText("No LoRA is linked.")).toBeVisible();
+    await user.selectOptions(screen.getByRole("combobox", { name: "Link LoRA" }), "lora-exz");
+    await user.click(screen.getByRole("button", { name: "Link LoRA" }));
+    expect(await screen.findByText(/sd15 · exz_woman/)).toBeVisible();
+    expect(sent[0]).toEqual({ method: "PUT", body: { strength: 0.8 } });
+    const strength = screen.getByRole("spinbutton", { name: `Strength of ${lora.name}` });
+    await user.clear(strength);
+    await user.type(strength, "0.6");
+    await user.tab();
+    await waitFor(() => expect(sent[1]).toEqual({ method: "PUT", body: { strength: 0.6 } }));
+    await user.click(screen.getByRole("button", { name: "Unlink" }));
+    expect(await screen.findByText("No LoRA is linked.")).toBeVisible();
+  });
+});

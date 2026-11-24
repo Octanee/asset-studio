@@ -103,7 +103,8 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - **The job:** renders the pose as an OpenPose image fitted to the output size, uploads images through `/upload/image`, runs the engine with step progress from `/ws` (`progress` messages; polling stays the fallback), and stores each output as a new `generated` version with metadata: workflow, engine, models with hashes, prompts, seed and sampling parameters, size, style and character versions, pose, references, hardware (RULE-011). References are linked to the job and the version (FR-026).
 - **Regeneration (FR-052, AC-002):** replays the stored request for the same asset with changes; the earlier version is untouched.
 - **Verified on the GPU:** SDXL + OpenPose ControlNet + IP-Adapter at 1024², 25 steps, with step progress, then regenerated with another seed.
-- **Not yet:** one reference image per generation; LoRAs (WP-13). Post-processing and validation start on their own after each generated version (WP-09).
+- **LoRAs (WP-13):** every template has variants with one or two `LoraLoader` nodes after the checkpoint (`+lora`, `+lora2`); the prompts, the sampler and IP-Adapter take the last LoRA's model and text encoder. A generation uses the LoRAs it names and those linked to its style and character (a named one sets its own strength), at most two, of the checkpoint's family (RULE-015). A trained LoRA's trigger word starts the prompt. The version's metadata lists each LoRA with file, hash, strength and trigger word (RULE-011).
+- **Not yet:** one reference image per generation. Post-processing and validation start on their own after each generated version (WP-09).
 
 ### Implementation notes (WP-08, screens)
 
@@ -151,4 +152,4 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
 - **Not yet:**
   - installing the pinned ComfyUI build and kohya (WP-17);
   - SVG templates (WP-14);
-  - linking LoRAs to styles and characters and using them in generation (WP-13 part 2).
+  - (LoRAs in generation: done in WP-13 part 2, see above.)

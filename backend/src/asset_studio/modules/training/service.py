@@ -522,3 +522,15 @@ def get_run(session: Session, run_id: uuid.UUID) -> TrainingRun:
     if run is None:
         raise DomainError(404, "TRAINING_RUN_NOT_FOUND", "Training run not found.")
     return run
+
+
+def trigger_words(session: Session, model_ids: list[str]) -> dict[str, str]:
+    """The trigger word of each LoRA trained here, by model id (FR-075)."""
+    if not model_ids:
+        return {}
+    q = (
+        select(TrainingRun.output_model_id, TrainingDataset.trigger_word)
+        .join(TrainingDataset, TrainingDataset.id == TrainingRun.dataset_id)
+        .where(TrainingRun.output_model_id.in_(model_ids))
+    )
+    return {mid: word for mid, word in session.execute(q) if mid}

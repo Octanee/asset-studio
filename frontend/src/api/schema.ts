@@ -230,6 +230,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/characters/{character_id}/loras": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Character Loras */
+        get: operations["character_loras_api_v1_characters__character_id__loras_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/characters/{character_id}/loras/{model_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Link Character Lora */
+        put: operations["link_character_lora_api_v1_characters__character_id__loras__model_id__put"];
+        post?: never;
+        /** Unlink Character Lora */
+        delete: operations["unlink_character_lora_api_v1_characters__character_id__loras__model_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/characters/{character_id}/restore": {
         parameters: {
             query?: never;
@@ -1481,6 +1516,41 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/styles/{style_id}/loras": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Style Loras */
+        get: operations["style_loras_api_v1_styles__style_id__loras_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/styles/{style_id}/loras/{model_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Link Style Lora */
+        put: operations["link_style_lora_api_v1_styles__style_id__loras__model_id__put"];
+        post?: never;
+        /** Unlink Style Lora */
+        delete: operations["unlink_style_lora_api_v1_styles__style_id__loras__model_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/styles/{style_id}/restore": {
         parameters: {
             query?: never;
@@ -2661,6 +2731,8 @@ export interface components {
             init?: components["schemas"]["InitImage"] | null;
             /** Ip Adapter Id */
             ip_adapter_id?: string | null;
+            /** Loras */
+            loras?: components["schemas"]["LoraUse"][];
             /**
              * Negative
              * @default
@@ -2978,6 +3050,39 @@ export interface components {
              * @default 1
              */
             weight: number;
+        };
+        /** LoraLinkIn */
+        LoraLinkIn: {
+            /**
+             * Strength
+             * @default 0.8
+             */
+            strength: number;
+        };
+        /** LoraLinkOut */
+        LoraLinkOut: {
+            /** Family Id */
+            family_id: string | null;
+            /** Model Id */
+            model_id: string;
+            /** Name */
+            name: string;
+            /** Status */
+            status: string;
+            /** Strength */
+            strength: number;
+            /** Trigger Word */
+            trigger_word: string | null;
+        };
+        /** LoraUse */
+        LoraUse: {
+            /** Model Id */
+            model_id: string;
+            /**
+             * Strength
+             * @default 0.8
+             */
+            strength: number;
         };
         /** ModelOut */
         ModelOut: {
@@ -4660,6 +4765,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CharacterOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    character_loras_api_v1_characters__character_id__loras_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    link_character_lora_api_v1_characters__character_id__loras__model_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoraLinkIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlink_character_lora_api_v1_characters__character_id__loras__model_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                character_id: string;
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
                 };
             };
             /** @description Validation Error */
@@ -7561,6 +7765,105 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["StyleOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    style_loras_api_v1_styles__style_id__loras_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    link_style_lora_api_v1_styles__style_id__loras__model_id__put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoraLinkIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    unlink_style_lora_api_v1_styles__style_id__loras__model_id__delete: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                style_id: string;
+                model_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LoraLinkOut"][];
                 };
             };
             /** @description Validation Error */

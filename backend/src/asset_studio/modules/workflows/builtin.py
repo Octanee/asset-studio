@@ -1,9 +1,9 @@
 """Built-in ComfyUI workflows (FR-030-FR-033), from the graph the WP-01 spike ran on the GPU.
 
 One base (text-to-image or image-to-image) plus optional pose control (OpenPose ControlNet),
-reference conditioning (IP-Adapter) and a separate VAE. Each combination is a versioned
-template with its own id, e.g. ``txt2img+pose+reference+vae`` v1. The domain fills named
-inputs; node ids stay here (ADR-006).
+reference conditioning (IP-Adapter), a separate VAE and up to two LoRAs (WP-13). Each
+combination is a versioned template with its own id, e.g. ``txt2img+pose+lora`` v1. The
+domain fills named inputs; node ids stay here (ADR-006).
 """
 
 from dataclasses import dataclass
@@ -13,6 +13,7 @@ from typing import Any
 from asset_studio.modules.providers.workflows import InputSpec, InputType, WorkflowTemplate
 
 VERSION = 1
+MAX_LORAS = 2
 SAMPLERS = ("euler", "euler_ancestral", "dpmpp_2m", "dpmpp_2m_sde", "dpmpp_sde", "ddim", "uni_pc")
 SCHEDULERS = ("normal", "karras", "exponential", "sgm_uniform", "simple")
 
@@ -23,11 +24,14 @@ class Features:
     pose: bool = False
     reference: bool = False
     vae: bool = False
+    loras: int = 0  # LoRAs chained after the checkpoint (FR-075)
 
     @property
     def id(self) -> str:
         parts = ["img2img" if self.img2img else "txt2img"]
         parts += [name for name in ("pose", "reference", "vae") if getattr(self, name)]
+        if self.loras:
+            parts.append("lora" if self.loras == 1 else f"lora{self.loras}")
         return "+".join(parts)
 
     def required_kinds(self) -> tuple[str, ...]:
@@ -38,6 +42,7 @@ class Features:
             kinds += ["ip_adapter", "clip_vision"]
         if self.vae:
             kinds.append("vae")
+        kinds += ["lora"] * self.loras
         return tuple(kinds)
 
 
@@ -56,10 +61,27 @@ def _n(
 @cache
 def template(f: Features) -> WorkflowTemplate:
     vae_ref: list[Any] = ["2", 0] if f.vae else ["1", 2]
+    # Each LoRA changes the model and the text encoder; later nodes take the last one's.
+    model_ref: list[Any] = ["1", 0]
+    clip_ref: list[Any] = ["1", 1]
+    loras: dict[str, dict[str, Any]] = {}
+    for n in range(1, f.loras + 1):
+        node = str(39 + n)
+        loras[node] = {
+            "class_type": "LoraLoader",
+            "inputs": {
+                "model": model_ref,
+                "clip": clip_ref,
+                "lora_name": "",
+                "strength_model": 1.0,
+                "strength_clip": 1.0,
+            },
+        }
+        model_ref, clip_ref = [node, 0], [node, 1]
     g: dict[str, dict[str, Any]] = {
         "1": {"class_type": "CheckpointLoaderSimple", "inputs": {"ckpt_name": ""}},
-        "3": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["1", 1]}},
-        "4": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": ["1", 1]}},
+        "3": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": clip_ref}},
+        "4": {"class_type": "CLIPTextEncode", "inputs": {"text": "", "clip": clip_ref}},
         "6": {
             "class_type": "KSampler",
             "inputs": {
@@ -69,7 +91,7 @@ def template(f: Features) -> WorkflowTemplate:
                 "sampler_name": "dpmpp_2m",
                 "scheduler": "karras",
                 "denoise": 1.0,
-                "model": ["1", 0],
+                "model": model_ref,
                 "positive": ["3", 0],
                 "negative": ["4", 0],
                 "latent_image": ["5", 0],
@@ -92,6 +114,12 @@ def template(f: Features) -> WorkflowTemplate:
         "scheduler": _s(("6", "scheduler")),
         "prefix": _s(("8", "filename_prefix"), required=False, default="asset_studio"),
     }
+    for n, node in enumerate(loras, start=1):
+        g[node] = loras[node]
+        inputs[f"lora_{n}"] = _s((node, "lora_name"))
+        inputs[f"lora_{n}_strength"] = _n(
+            "number", (node, "strength_model"), (node, "strength_clip"), lo=0, hi=2
+        )
     if f.vae:
         g["2"] = {"class_type": "VAELoader", "inputs": {"vae_name": ""}}
         inputs["vae"] = _s(("2", "vae_name"))
@@ -148,7 +176,7 @@ def template(f: Features) -> WorkflowTemplate:
         g["23"] = {
             "class_type": "IPAdapterAdvanced",
             "inputs": {
-                "model": ["1", 0],
+                "model": model_ref,
                 "ipadapter": ["20", 0],
                 "image": ["22", 0],
                 "clip_vision": ["21", 0],
@@ -170,11 +198,12 @@ def template(f: Features) -> WorkflowTemplate:
 
 
 ALL = tuple(
-    Features(img2img=a, pose=b, reference=c, vae=d)
+    Features(img2img=a, pose=b, reference=c, vae=d, loras=n)
     for a in (False, True)
     for b in (False, True)
     for c in (False, True)
     for d in (False, True)
+    for n in range(MAX_LORAS + 1)
 )
 
 

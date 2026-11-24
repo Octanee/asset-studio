@@ -276,7 +276,10 @@
     "TRAINING_NOT_CONFIGURED": "Training is not set up in the host agent (kohya, model and training folders).",
     "TRAINING_NOT_INSTALLED": "kohya sd-scripts is not installed.",
     "TRAINING_BUSY": "Another training run is in progress.",
-    "TRAINING_INPUT_MISSING": "The dataset or the base model file is missing."
+    "TRAINING_INPUT_MISSING": "The dataset or the base model file is missing.",
+    "LORA_LIMIT": "At most 2 LoRAs can be used together.",
+    "LORA_LINK_NOT_FOUND": "This LoRA is not linked.",
+    "TARGET_ARCHIVED": "It is archived."
   },
   "inputs": {
     "needsProject": "Choose a project in the top bar first.",
@@ -320,14 +323,21 @@
     "testLater": "Testing a style generates images; it arrives with Generation Studio (WP-08).",
     "characterForm": "Character",
     "traits": "Traits",
-    "loraLater": "Attaching a trained LoRA arrives with the model registry and training (WP-12, WP-13).",
     "references": "References",
     "done": "Done",
     "addReferences": "Add references",
     "noReferences": "No references linked yet.",
     "unlink": "Unlink",
     "pickReferences": "Click a reference to link it.",
-    "noCandidates": "Every reference is already linked. Upload more on the References screen."
+    "noCandidates": "Every reference is already linked. Upload more on the References screen.",
+    "loras": "LoRAs",
+    "noLoras": "No LoRA is linked.",
+    "loraStrength": "Strength",
+    "loraStrengthFor": "Strength of {{name}}",
+    "unlinkLora": "Unlink",
+    "addLora": "Link LoRA",
+    "chooseLora": "Choose a LoRA…",
+    "lorasHint": "Generation with this style or character uses these LoRAs (at most 2) and starts the prompt with their trigger words. The LoRA must match the checkpoint's family."
   },
   "references": {
     "role": {
@@ -435,7 +445,9 @@
       "clip_vision": "CLIP vision",
       "vae": "VAE",
       "pose": "Pose detection",
-      "segmentation": "Background removal"
+      "segmentation": "Background removal",
+      "lora_1": "LoRA 1",
+      "lora_2": "LoRA 2"
     },
     "name": "Model",
     "family": "Family",

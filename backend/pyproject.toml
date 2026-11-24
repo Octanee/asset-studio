@@ -51,6 +51,8 @@ ignore = []
 
 [tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101", "S105", "S106"]
+# Shares the generation fixtures by importing them; pytest uses them by parameter name.
+"tests/test_lora_generation.py" = ["F811"]
 
 [tool.mypy]
 python_version = "3.12"

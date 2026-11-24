@@ -2038,6 +2038,14 @@
             ],
             "title": "Ip Adapter Id"
           },
+          "loras": {
+            "items": {
+              "$ref": "#/components/schemas/LoraUse"
+            },
+            "maxItems": 2,
+            "title": "Loras",
+            "type": "array"
+          },
           "negative": {
             "default": "",
             "maxLength": 2000,
@@ -2767,6 +2775,95 @@
           }
         },
         "title": "LinkRequest",
+        "type": "object"
+      },
+      "LoraLinkIn": {
+        "additionalProperties": false,
+        "properties": {
+          "strength": {
+            "default": 0.8,
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Strength",
+            "type": "number"
+          }
+        },
+        "title": "LoraLinkIn",
+        "type": "object"
+      },
+      "LoraLinkOut": {
+        "properties": {
+          "family_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Family Id"
+          },
+          "model_id": {
+            "title": "Model Id",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "strength": {
+            "title": "Strength",
+            "type": "number"
+          },
+          "trigger_word": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Trigger Word"
+          }
+        },
+        "required": [
+          "model_id",
+          "name",
+          "family_id",
+          "status",
+          "strength",
+          "trigger_word"
+        ],
+        "title": "LoraLinkOut",
+        "type": "object"
+      },
+      "LoraUse": {
+        "additionalProperties": false,
+        "properties": {
+          "model_id": {
+            "maxLength": 120,
+            "minLength": 1,
+            "title": "Model Id",
+            "type": "string"
+          },
+          "strength": {
+            "default": 0.8,
+            "maximum": 2.0,
+            "minimum": 0.0,
+            "title": "Strength",
+            "type": "number"
+          }
+        },
+        "required": [
+          "model_id"
+        ],
+        "title": "LoraUse",
         "type": "object"
       },
       "ModelOut": {
@@ -6791,6 +6888,173 @@
           }
         },
         "summary": "Archive Character",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/characters/{character_id}/loras": {
+      "get": {
+        "operationId": "character_loras_api_v1_characters__character_id__loras_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Character Loras Api V1 Characters  Character Id  Loras Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Character Loras",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/characters/{character_id}/loras/{model_id}": {
+      "delete": {
+        "operationId": "unlink_character_lora_api_v1_characters__character_id__loras__model_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Unlink Character Lora Api V1 Characters  Character Id  Loras  Model Id  Delete",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Unlink Character Lora",
+        "tags": [
+          "styles"
+        ]
+      },
+      "put": {
+        "operationId": "link_character_lora_api_v1_characters__character_id__loras__model_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "character_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Character Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoraLinkIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Link Character Lora Api V1 Characters  Character Id  Loras  Model Id  Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Link Character Lora",
         "tags": [
           "styles"
         ]
@@ -11393,6 +11657,173 @@
           }
         },
         "summary": "Archive Style",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/styles/{style_id}/loras": {
+      "get": {
+        "operationId": "style_loras_api_v1_styles__style_id__loras_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Style Loras Api V1 Styles  Style Id  Loras Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Style Loras",
+        "tags": [
+          "styles"
+        ]
+      }
+    },
+    "/api/v1/styles/{style_id}/loras/{model_id}": {
+      "delete": {
+        "operationId": "unlink_style_lora_api_v1_styles__style_id__loras__model_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Unlink Style Lora Api V1 Styles  Style Id  Loras  Model Id  Delete",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Unlink Style Lora",
+        "tags": [
+          "styles"
+        ]
+      },
+      "put": {
+        "operationId": "link_style_lora_api_v1_styles__style_id__loras__model_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "style_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Style Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "model_id",
+            "required": true,
+            "schema": {
+              "title": "Model Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoraLinkIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/LoraLinkOut"
+                  },
+                  "title": "Response Link Style Lora Api V1 Styles  Style Id  Loras  Model Id  Put",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Link Style Lora",
         "tags": [
           "styles"
         ]
