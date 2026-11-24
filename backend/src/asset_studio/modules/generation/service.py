@@ -38,8 +38,16 @@ from asset_studio.modules.providers.engine import get_engine_monitor, run_genera
 from asset_studio.modules.references import service as references
 from asset_studio.modules.references.imaging import ImageError, sniff
 from asset_studio.modules.storage.local import LocalStorage, get_storage
+from asset_studio.modules.styles import loras
 from asset_studio.modules.styles.service import get_character, get_style
-from asset_studio.modules.workflows.builtin import SAMPLERS, SCHEDULERS, Features, template
+from asset_studio.modules.training.service import trigger_words
+from asset_studio.modules.workflows.builtin import (
+    MAX_LORAS,
+    SAMPLERS,
+    SCHEDULERS,
+    Features,
+    template,
+)
 
 MAX_SEED = 2**53 - 1
 Text = Annotated[str, Field(max_length=2000)]
@@ -95,6 +103,11 @@ class InitImage(_Strict):
         return self
 
 
+class LoraUse(_Strict):
+    model_id: str = Field(min_length=1, max_length=120)
+    strength: float = Field(default=0.8, ge=0, le=2)
+
+
 class BatchItem(_Strict):
     name: str = Field(min_length=1, max_length=200)
     prompt: Text = ""
@@ -109,6 +122,9 @@ class GenerationSpec(_Strict):
     controlnet_id: str | None = None
     ip_adapter_id: str | None = None
     clip_vision_id: str | None = None
+    # FR-075: LoRAs for this request; the style's and character's linked LoRAs are
+    # added too. A LoRA named here sets its own strength.
+    loras: list[LoraUse] = Field(default_factory=list, max_length=MAX_LORAS)
     style_id: uuid.UUID | None = None
     character_id: uuid.UUID | None = None
     pose_id: uuid.UUID | None = None
@@ -268,6 +284,26 @@ def plan(session: Session, spec: GenerationSpec) -> Plan:
             raise DomainError(422, "MODEL_KIND_WRONG", f"{m.name} is not a {kind} model.")
         else:
             models[kind] = m
+    # LoRAs: the request's, then the character's and style's links (FR-075).
+    strengths: dict[str, float] = {u.model_id: u.strength for u in spec.loras}
+    for model_id, strength in loras.linked(session, spec.style_id, spec.character_id):
+        strengths.setdefault(model_id, strength)
+    if len(strengths) > MAX_LORAS:
+        problems.append(
+            {
+                "code": "LORA_LIMIT",
+                "model_id": None,
+                "detail": f"At most {MAX_LORAS} LoRAs can be used together.",
+            }
+        )
+    lora_rows: list[tuple[Model, float]] = []
+    for model_id, strength in list(strengths.items())[:MAX_LORAS]:
+        m = registry.get_model(session, model_id)
+        if m.kind != "lora":
+            raise DomainError(422, "MODEL_KIND_WRONG", f"{m.name} is not a LoRA.")
+        lora_rows.append((m, strength))
+        models[f"lora_{len(lora_rows)}"] = m
+    triggers = trigger_words(session, [m.id for m, _ in lora_rows])
     problems += registry.compatibility(session, [m.id for m in models.values()])
 
     # Prompts: request, character, style (FR-035); negatives from the avoid lists.
@@ -299,8 +335,10 @@ def plan(session: Session, spec: GenerationSpec) -> Plan:
         targets = [Target(asset.id, asset.name, spec.prompt)]
     else:
         targets = [Target(None, spec.asset.name or "Untitled", spec.prompt)]
+    # A trained LoRA answers to its trigger word, so the prompt starts with it.
+    trigger = _join(*dict.fromkeys(triggers[m.id] for m, _ in lora_rows if m.id in triggers))
     context = describe()
-    positive = [_join(t.prompt, context) for t in targets]
+    positive = [_join(trigger, t.prompt, context) for t in targets]
     if not all(positive):
         problems.append(
             {
@@ -320,6 +358,7 @@ def plan(session: Session, spec: GenerationSpec) -> Plan:
         pose="controlnet" in models,
         reference="ip_adapter" in models and "clip_vision" in models,
         vae="vae" in models,
+        loras=len(lora_rows),
     )
     status = registry.licence_status(session, project.id, models.values())
     frozen = {
@@ -329,7 +368,19 @@ def plan(session: Session, spec: GenerationSpec) -> Plan:
             "pose": features.pose,
             "reference": features.reference,
             "vae": features.vae,
+            "loras": features.loras,
         },
+        "loras": [
+            {
+                "id": m.id,
+                "file": m.file_name,
+                "sha256": m.sha256,
+                "family": m.family_id,
+                "strength": strength,
+                "trigger_word": triggers.get(m.id),
+            }
+            for m, strength in lora_rows
+        ],
         "models": {
             role: {"id": m.id, "file": m.file_name, "sha256": m.sha256, "family": m.family_id}
             for role, m in models.items()
@@ -515,6 +566,9 @@ def handle_generate(ctx: JobContext) -> dict[str, Any]:
     images: dict[str, bytes] = {}
     if features.vae:
         inputs["vae"] = models["vae"]["file"]
+    for n, lora in enumerate(p.get("loras", []), start=1):
+        inputs[f"lora_{n}"] = lora["file"]
+        inputs[f"lora_{n}_strength"] = lora["strength"]
     if features.pose:
         inputs.update(
             controlnet=models["controlnet"]["file"],
@@ -550,7 +604,7 @@ def handle_generate(ctx: JobContext) -> dict[str, Any]:
         "workflow": p["workflow"],
         "engine": {"name": health.engine, "version": health.version},
         "models": models,
-        "loras": [],
+        "loras": p.get("loras", []),
         "prompt": p["positive"],
         "negative": p["negative"],
         "seed": p["seed"],

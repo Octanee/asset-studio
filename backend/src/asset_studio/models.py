@@ -12,6 +12,7 @@ def load_all() -> None:
     from asset_studio.modules.quality import models as _quality  # noqa: F401
     from asset_studio.modules.references import models as _references  # noqa: F401
     from asset_studio.modules.review import models as _review  # noqa: F401
+    from asset_studio.modules.styles import loras as _loras  # noqa: F401
     from asset_studio.modules.styles import models as _styles  # noqa: F401
     from asset_studio.modules.system import idempotency as _idempotency  # noqa: F401
     from asset_studio.modules.system import settings as _settings  # noqa: F401

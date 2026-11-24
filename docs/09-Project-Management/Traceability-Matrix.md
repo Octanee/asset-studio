@@ -47,9 +47,9 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-003 | FR-032 | UC-007 | AC-001 | WP-08 (IP-Adapter reference) | `test_fr033_*` |
 | BR-003 | FR-033 | UC-007 | AC-001 | WP-08 (OpenPose ControlNet) | `test_fr033_*`, `test_pose_image_*` |
 | BR-004 | FR-015 | UC-005 | — | WP-07 | `test_fr015_*` |
-| BR-004 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
+| BR-004 | FR-016 | UC-005 | — | WP-13 | `test_fr075_*`, `test_lora_generation.py`, `inputs.test.tsx` |
 | BR-004 | FR-032 | UC-007 | AC-001 | WP-08 (IP-Adapter reference) | `test_fr033_*` |
-| BR-004 | FR-075 | UC-012 | — | WP-13 | `test_fr072_fr075_*` (registration; linking in part 2) |
+| BR-004 | FR-075 | UC-012 | AC-007 | WP-13 | `test_fr072_fr075_*`, `test_fr075_*`, `test_lora_generation.py`, `inputs.test.tsx` |
 | BR-005 | FR-004 | UC-003 | — | WP-02, WP-16 | `test_fr004_*`, `projects.test.tsx` |
 | BR-005 | FR-005 | UC-003 | AC-010, AC-015 | WP-02, WP-16 | `test_ac010_*`, `projects.test.tsx` |
 | BR-005 | FR-006 | UC-003 | AC-010 | WP-02, WP-16 | `test_fr006_*, test_ac010_*`, `projects.test.tsx` |
@@ -95,13 +95,13 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-011 | FR-045 | UC-014 | — | — | — |
 | BR-012 | FR-005 | UC-003 | AC-010, AC-015 | WP-02, WP-16 | `test_ac010_*`, `projects.test.tsx` |
 | BR-012 | FR-110 | — | — | WP-16 | `test_only_the_user_changes_settings`, `test_a_paused_queue_*`, `system.test.tsx` |
-| BR-013 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
+| BR-013 | FR-016 | UC-005 | — | WP-13 | `test_fr075_*`, `test_lora_generation.py`, `inputs.test.tsx` |
 | BR-013 | FR-070 | UC-012 | — | WP-13 | `test_fr070_*`, `test_training.py`, `training.test.tsx` |
 | BR-013 | FR-071 | UC-012 | — | WP-13 | `test_fr070_*`, `training.test.tsx` |
 | BR-013 | FR-072 | UC-012 | AC-007 | WP-13 | `test_fr072_*`, host agent `test_training.py`, live SD1.5 run |
 | BR-013 | FR-073 | UC-012 | AC-007 | WP-13 | `test_fr073_*`, `training.test.tsx` |
 | BR-013 | FR-074 | UC-012 | — | WP-13 | `test_fr074_*`, `training.test.tsx` |
-| BR-013 | FR-075 | UC-012 | — | WP-13 | `test_fr072_fr075_*` (registration; linking to a style or character in WP-13 part 2) |
+| BR-013 | FR-075 | UC-012 | AC-007 | WP-13 | `test_fr072_fr075_*`, `test_fr075_*`, `test_lora_generation.py`, `inputs.test.tsx`, live generation with the trained LoRA |
 | BR-014 | FR-036 | UC-007 | AC-001 | WP-08 (with WP-12) | `test_rule015_*`, `test_rule007_*` |
 | BR-014 | FR-080 | UC-013 | — | WP-12 | `test_fr080_*`, `test_the_shipped_catalogue_*`, `models.test.tsx` |
 | BR-014 | FR-083 | UC-013 | AC-008 | WP-12 (registry and confirmation); WP-08 (check before queueing) | `test_ac008_*`, `test_licence_gate_*`, `models.test.tsx` |

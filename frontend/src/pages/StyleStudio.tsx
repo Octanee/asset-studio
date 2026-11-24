@@ -3,18 +3,21 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import {
+  type Character,
   referenceFileUrl,
+  type Style,
+  type StyleAttributes,
   useArchive,
   useCharacters,
   useLinkReference,
+  useLoraLinkActions,
+  useLoraLinks,
   useReferences,
   useSaveCharacter,
   useSaveStyle,
   useStyles,
-  type Character,
-  type Style,
-  type StyleAttributes,
 } from "../api/library";
+import { useModels } from "../api/models";
 import { useUi } from "../app/store";
 import { linesOf, NeedsProject, ProblemText } from "./common";
 import s from "./workspace.module.css";
@@ -344,6 +347,7 @@ function StyleEditor({
       </label>
       <PairsEditor label={t("styles.extra")} pairs={extra} onChange={setExtra} />
       {style && <LinkedReferences projectId={projectId} target={{ type: "style", id: style.id }} />}
+      {style && <LinkedLoras projectId={projectId} target={{ type: "style", id: style.id }} />}
       <ProblemText error={save.error ?? archive.error} />
       <div className={s.actions}>
         <button type="submit" className="btn primary" disabled={save.isPending}>
@@ -438,9 +442,9 @@ function CharacterEditor({
       {character && (
         <LinkedReferences projectId={projectId} target={{ type: "character", id: character.id }} />
       )}
-      <p className="muted" style={{ margin: 0, fontSize: 12 }}>
-        {t("styles.loraLater")}
-      </p>
+      {character && (
+        <LinkedLoras projectId={projectId} target={{ type: "character", id: character.id }} />
+      )}
       <ProblemText error={save.error ?? archive.error} />
       <div className={s.actions}>
         <button type="submit" className="btn primary" disabled={save.isPending}>
@@ -532,5 +536,98 @@ function LinkedReferences({
       )}
       <ProblemText error={link.error} />
     </section>
+  );
+}
+
+/** FR-016 / FR-075: LoRAs used whenever this style or character is used, at a strength. */
+function LinkedLoras({
+  projectId,
+  target,
+}: {
+  projectId: string;
+  target: { type: "style" | "character"; id: string };
+}) {
+  const { t } = useTranslation();
+  const links = useLoraLinks(target);
+  const { link, unlink } = useLoraLinkActions(target);
+  const models = useModels(projectId);
+  const [choice, setChoice] = useState("");
+  const linked = new Set((links.data ?? []).map((l) => l.model_id));
+  const available = (models.data ?? []).filter(
+    (m) => m.kind === "lora" && m.status === "installed" && !linked.has(m.id),
+  );
+  const full = (links.data ?? []).length >= 2;
+  return (
+    <fieldset className={s.fieldset}>
+      <legend className="label">{t("styles.loras")}</legend>
+      {!links.data?.length && (
+        <p className="muted" style={{ margin: 0 }}>
+          {t("styles.noLoras")}
+        </p>
+      )}
+      {(links.data ?? []).map((l) => (
+        <div key={l.model_id} className={s.row}>
+          <span className={s.grow}>
+            {l.name}{" "}
+            <span className="mono muted">
+              {l.family_id ?? "?"}
+              {l.trigger_word ? ` · ${l.trigger_word}` : ""}
+            </span>
+          </span>
+          <label className={s.radio}>
+            {t("styles.loraStrength")}
+            <input
+              type="number"
+              className="input mono"
+              style={{ width: 80 }}
+              min={0}
+              max={2}
+              step={0.05}
+              defaultValue={l.strength}
+              aria-label={t("styles.loraStrengthFor", { name: l.name })}
+              onBlur={(e) => {
+                const strength = Number(e.target.value);
+                if (strength !== l.strength && strength >= 0 && strength <= 2)
+                  link.mutate({ modelId: l.model_id, strength });
+              }}
+            />
+          </label>
+          <button type="button" className="btn ghost" onClick={() => unlink.mutate(l.model_id)}>
+            {t("styles.unlinkLora")}
+          </button>
+        </div>
+      ))}
+      {!full && (
+        <div className={s.row}>
+          <select
+            className="input"
+            aria-label={t("styles.addLora")}
+            value={choice}
+            onChange={(e) => setChoice(e.target.value)}
+          >
+            <option value="">{t("styles.chooseLora")}</option>
+            {available.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name} ({m.family_id ?? "?"})
+              </option>
+            ))}
+          </select>
+          <button
+            type="button"
+            className="btn"
+            disabled={!choice || link.isPending}
+            onClick={() =>
+              link.mutate({ modelId: choice, strength: 0.8 }, { onSuccess: () => setChoice("") })
+            }
+          >
+            {t("styles.addLora")}
+          </button>
+        </div>
+      )}
+      <p className="muted" style={{ margin: 0, fontSize: 12 }}>
+        {t("styles.lorasHint")}
+      </p>
+      <ProblemText error={link.error ?? unlink.error ?? links.error} />
+    </fieldset>
   );
 }

@@ -164,7 +164,7 @@ def _spec(pid: str, **extra: Any) -> dict[str, Any]:
 
 
 def test_every_builtin_workflow_renders() -> None:
-    assert len(ALL) == 16 and len({f.id for f in ALL}) == 16
+    assert len(ALL) == 48 and len({f.id for f in ALL}) == 48
     for f in ALL:
         t = template(f)
         values = {name: spec.default for name, spec in t.inputs.items() if spec.default is not None}

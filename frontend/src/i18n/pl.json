@@ -276,7 +276,10 @@
     "TRAINING_NOT_CONFIGURED": "Trening nie jest skonfigurowany w host agencie (kohya, foldery modeli i treningu).",
     "TRAINING_NOT_INSTALLED": "kohya sd-scripts nie jest zainstalowany.",
     "TRAINING_BUSY": "Trwa już inny trening.",
-    "TRAINING_INPUT_MISSING": "Brakuje zbioru albo pliku modelu bazowego."
+    "TRAINING_INPUT_MISSING": "Brakuje zbioru albo pliku modelu bazowego.",
+    "LORA_LIMIT": "Razem można użyć najwyżej 2 LoRA.",
+    "LORA_LINK_NOT_FOUND": "Ta LoRA nie jest powiązana.",
+    "TARGET_ARCHIVED": "Jest zarchiwizowany."
   },
   "inputs": {
     "needsProject": "Najpierw wybierz projekt na górnym pasku.",
@@ -320,14 +323,21 @@
     "testLater": "Test stylu generuje obrazy; pojawi się razem z Generation Studio (WP-08).",
     "characterForm": "Postać",
     "traits": "Cechy",
-    "loraLater": "Podpięcie wytrenowanej LoRA pojawi się z rejestrem modeli i treningiem (WP-12, WP-13).",
     "references": "Referencje",
     "done": "Gotowe",
     "addReferences": "Dodaj referencje",
     "noReferences": "Brak podpiętych referencji.",
     "unlink": "Odepnij",
     "pickReferences": "Kliknij referencję, aby ją podpiąć.",
-    "noCandidates": "Wszystkie referencje są już podpięte. Dodaj nowe na ekranie Referencje."
+    "noCandidates": "Wszystkie referencje są już podpięte. Dodaj nowe na ekranie Referencje.",
+    "loras": "LoRA",
+    "noLoras": "Nie powiązano żadnej LoRA.",
+    "loraStrength": "Siła",
+    "loraStrengthFor": "Siła {{name}}",
+    "unlinkLora": "Odłącz",
+    "addLora": "Powiąż LoRA",
+    "chooseLora": "Wybierz LoRA…",
+    "lorasHint": "Generacja z tym stylem lub postacią używa tych LoRA (najwyżej 2) i zaczyna prompt od ich słów wyzwalających. LoRA musi pasować do rodziny checkpointu."
   },
   "references": {
     "role": {
@@ -435,7 +445,9 @@
       "clip_vision": "CLIP vision",
       "vae": "VAE",
       "pose": "Wykrywanie pozy",
-      "segmentation": "Usuwanie tła"
+      "segmentation": "Usuwanie tła",
+      "lora_1": "LoRA 1",
+      "lora_2": "LoRA 2"
     },
     "name": "Model",
     "family": "Rodzina",
