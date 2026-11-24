@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     # Folders publishing may write into (ADR-013): bind mounts of Windows folders. Every export
     # target lives under one of them. Empty = publishing is not configured.
     export_roots: Annotated[list[str], NoDecode] = []
+    # Where backups are written and restored from (FR-111): a bind mount of a Windows folder in
+    # compose, so a backup lives outside Docker (ADR-013). Empty means <data_dir>/backups.
+    backups_dir: str = ""
+    # Port of the MCP server on the host, shown in Settings > MCP connection.
+    mcp_port: int = 8411
 
     @field_validator("allowed_hosts", "export_roots", mode="before")
     @classmethod

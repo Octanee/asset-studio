@@ -1,5 +1,5 @@
-"""System endpoints: liveness and the generation engine (FR-043). Full status aggregation
-arrives in WP-16."""
+"""System endpoints: liveness, the generation engine (FR-043) and the system status (WP-16):
+database, queue, storage, consistency, backups and locations, without host paths."""
 
 from typing import Annotated, Any
 
@@ -14,6 +14,8 @@ from asset_studio.errors import DomainError
 from asset_studio.modules.audit.service import record
 from asset_studio.modules.providers.engine import EngineMonitor, get_engine_monitor
 from asset_studio.modules.providers.hostagent import EngineAction
+from asset_studio.modules.storage.local import LocalStorage, get_storage
+from asset_studio.modules.system import status as system_status
 
 router = APIRouter()
 Engine = Annotated[EngineMonitor, Depends(get_engine_monitor)]
@@ -69,3 +71,30 @@ def engine_control(
     result = engine.control(action)
     record(db, actor=actor, action=f"engine.{action}", subject_type="engine", data=result)
     return engine.status()
+
+
+class StatusOut(BaseModel):
+    api: Health
+    engine: EngineOut
+    database: dict[str, Any]
+    queue: dict[str, Any]
+    storage: dict[str, Any]
+    consistency: dict[str, Any]
+    backups: dict[str, Any]
+    locations: dict[str, Any]
+    mcp: dict[str, Any]
+
+
+@router.get("/status", response_model=StatusOut)
+def status(
+    _: CurrentActor,
+    engine: Engine,
+    db: Annotated[Session, Depends(get_session)],
+    storage: Annotated[LocalStorage, Depends(get_storage)],
+) -> dict[str, Any]:
+    """Component health for the System status screen (NFR-003)."""
+    return {
+        "api": Health(status="ok", version=__version__),
+        "engine": engine.status(),
+        **system_status.status(db, storage),
+    }

@@ -18,7 +18,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from asset_studio.errors import DomainError
 from asset_studio.modules.jobs import service
-from asset_studio.modules.jobs.service import KIND_LANES, Lane
+from asset_studio.modules.jobs.service import KIND_LANES, PAUSE_EXEMPT, Lane
 
 log = structlog.get_logger("worker")
 
@@ -67,6 +67,7 @@ class Runner:
         handlers: dict[str, Handler],
         *,
         gates: dict[Lane, Gate] | None = None,
+        paused: Callable[[Session], bool] | None = None,
         cpu_slots: int = 2,
         lease: timedelta = service.DEFAULT_LEASE,
         executor: Executor | None = None,
@@ -76,6 +77,8 @@ class Runner:
             raise ValueError(f"Unknown job kinds: {sorted(unknown)}")
         self.sessions, self.worker_id, self.handlers = sessions, worker_id, handlers
         self.gates = gates or {}
+        # Is the whole queue paused (a setting owned by the system module, read each tick)?
+        self.paused = paused
         self.lease = lease
         self.slots: dict[Lane, int] = {"gpu": 1, "cpu": cpu_slots}
         self.pool = executor or ThreadPoolExecutor(
@@ -109,17 +112,25 @@ class Runner:
             service.heartbeat(s, self.worker_id, list(self.lanes), sorted(self.handlers))
             service.recover(s)
             cancelled = service.touch(s, ids, self.worker_id, self.lease)
+            paused = self.paused(s) if self.paused else False
         with self._lock:
             for jid in cancelled & set(self.running):
                 self.running[jid][1].cancel_event.set()
         started = 0
         for lane in self.lanes:
-            reason = self.gates[lane]() if lane in self.gates else None
+            kinds = self.kinds(lane)
+            if paused:  # only backup and restore start while the queue is paused
+                reason: str | None = "QUEUE_PAUSED"
+                kinds = [k for k in kinds if k in PAUSE_EXEMPT]
+            else:
+                reason = self.gates[lane]() if lane in self.gates else None
             with self.sessions() as s, s.begin():
                 service.set_wait_reason(s, lane, reason)
-            if reason:
+            if not kinds or (reason and not paused):
                 continue
-            while not self.stopping.is_set() and self._free(lane) and self._claim_and_run(lane):
+            while (
+                not self.stopping.is_set() and self._free(lane) and self._claim_and_run(lane, kinds)
+            ):
                 started += 1
         return started
 
@@ -128,10 +139,10 @@ class Runner:
             busy = sum(1 for ln, _, fut in self.running.values() if ln == lane and not fut.done())
         return busy < self.slots[lane]
 
-    def _claim_and_run(self, lane: Lane) -> bool:
+    def _claim_and_run(self, lane: Lane, kinds: list[str]) -> bool:
         with self.sessions() as s, s.begin():
             job = service.claim(
-                s, lane=lane, worker_id=self.worker_id, kinds=self.kinds(lane), lease=self.lease
+                s, lane=lane, worker_id=self.worker_id, kinds=kinds, lease=self.lease
             )
             if job is None:
                 return False

@@ -1,6 +1,6 @@
 # Universal Asset Studio — application services (ADR-005).
 # Every port is published on 127.0.0.1 only (NFR-005). ComfyUI and training run natively
-# under the host agent. The MCP server is added in WP-15.
+# under the host agent. The MCP server only calls the API (ADR-008).
 name: asset-studio
 
 services:
@@ -40,12 +40,17 @@ services:
       ASSET_STUDIO_MODELS_DIR: /models
       # Publishing writes only under this folder: a Windows folder of your choice (ADR-013).
       ASSET_STUDIO_EXPORT_ROOTS: /exports
+      # Backups are written here: a Windows folder, so they live outside Docker (ADR-013).
+      ASSET_STUDIO_BACKUPS_DIR: /backups
+      # Shown in Settings > MCP connection.
+      ASSET_STUDIO_MCP_PORT: ${ASSET_STUDIO_MCP_PORT:-8411}
     extra_hosts: &host-gateway
       - "host.docker.internal:host-gateway"
     volumes:
       - asset-data:/data  # library lives in a named volume (ADR-013)
       - ${ASSET_STUDIO_MODELS_HOST_DIR:-./models}:/models:ro  # scan only
       - ${ASSET_STUDIO_EXPORTS_HOST_DIR:-./exports}:/exports  # plans check existing files
+      - ${ASSET_STUDIO_BACKUPS_HOST_DIR:-./backups}:/backups:ro  # lists backups
     depends_on:
       db:
         condition: service_healthy
@@ -61,6 +66,7 @@ services:
       - asset-data:/data  # library lives in a named volume (ADR-013)
       - ${ASSET_STUDIO_MODELS_HOST_DIR:-./models}:/models  # approved downloads (RULE-008)
       - ${ASSET_STUDIO_EXPORTS_HOST_DIR:-./exports}:/exports  # publishing writes here
+      - ${ASSET_STUDIO_BACKUPS_HOST_DIR:-./backups}:/backups  # backup writes, restore reads
     depends_on:
       db:
         condition: service_healthy

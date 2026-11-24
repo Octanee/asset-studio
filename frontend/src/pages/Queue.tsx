@@ -14,6 +14,7 @@ import {
   type JobState,
 } from "../api/generation";
 import { useEngine } from "../api/queries";
+import { useAppSettings, useUpdateSettings } from "../api/system";
 import { useUi } from "../app/store";
 import { ProblemText } from "./common";
 import { JOB_CLASS, JobProgress, VersionImage, waitReason } from "./GenerationStudio";
@@ -37,6 +38,9 @@ export function Queue() {
   const jobs = useJobs({ projectId: onlyProject ? projectId : null });
   const assets = useAssets(projectId);
   const action = useJobAction();
+  const settings = useAppSettings();
+  const pause = useUpdateSettings();
+  const paused = settings.data?.queue_paused ?? false;
   const rows = jobs.data ?? [];
   const count = (state: string) => rows.filter((j) => j.state === state).length;
   const shown = rows.filter((j) => filter === "all" || j.state === filter);
@@ -80,6 +84,14 @@ export function Queue() {
           )}
           <button
             type="button"
+            className={paused ? "btn primary" : "btn"}
+            disabled={!settings.data || pause.isPending}
+            onClick={() => pause.mutate({ queue_paused: !paused })}
+          >
+            {paused ? t("queuePage.resumeAll") : t("queuePage.pauseAll")}
+          </button>
+          <button
+            type="button"
             className="btn"
             disabled={!retryable.length || action.isPending}
             onClick={() => {
@@ -91,8 +103,13 @@ export function Queue() {
         </div>
       </div>
 
+      {paused && (
+        <p role="status" className="muted" style={{ margin: 0 }}>
+          {t("queuePage.pausedBanner")}
+        </p>
+      )}
       <GpuPanel />
-      <ProblemText error={action.error ?? jobs.error} />
+      <ProblemText error={pause.error ?? action.error ?? jobs.error} />
 
       {jobs.isPending ? (
         <p role="status" className="muted">

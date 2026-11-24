@@ -5,7 +5,9 @@ from fastapi import APIRouter
 from asset_studio.api import (
     assets,
     audit,
+    backups,
     collections,
+    dashboard,
     generation,
     jobs,
     models,
@@ -14,6 +16,7 @@ from asset_studio.api import (
     publishing,
     references,
     session,
+    settings,
     styles,
     system,
     workflows,
@@ -46,4 +49,7 @@ api_router.include_router(publishing.presets_router, prefix="/presets", tags=["p
 api_router.include_router(publishing.targets_router, prefix="/targets", tags=["publishing"])
 api_router.include_router(publishing.router, prefix="/publications", tags=["publishing"])
 api_router.include_router(jobs.jobs_router, prefix="/jobs", tags=["jobs"])
+api_router.include_router(settings.router, prefix="/settings", tags=["system"])
+api_router.include_router(backups.router, prefix="/backups", tags=["system"])
+api_router.include_router(dashboard.router, prefix="/dashboard", tags=["dashboard"])
 api_router.include_router(jobs.events_router, prefix="/events", tags=["events"])

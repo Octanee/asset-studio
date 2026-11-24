@@ -28,6 +28,8 @@ from asset_studio.modules.poses.service import handle_detect_pose
 from asset_studio.modules.processing.service import HANDLERS as PROCESSING_HANDLERS
 from asset_studio.modules.providers.engine import get_engine_monitor
 from asset_studio.modules.publishing.service import HANDLERS as PUBLISHING_HANDLERS
+from asset_studio.modules.system.handlers import HANDLERS as SYSTEM_HANDLERS
+from asset_studio.modules.system.settings import queue_paused
 
 HANDLERS: dict[str, Handler] = {
     "detect_pose": handle_detect_pose,
@@ -36,6 +38,7 @@ HANDLERS: dict[str, Handler] = {
     "verify_model": handle_verify_model,
     **PROCESSING_HANDLERS,
     **PUBLISHING_HANDLERS,
+    **SYSTEM_HANDLERS,
 }
 POLL_SECONDS = 2.0
 
@@ -63,7 +66,9 @@ def main() -> None:
     detector = load_default_detector()
     set_detector(detector)
     log.info("worker.pose_detector", detector=detector.name if detector else None)
-    runner = Runner(get_sessionmaker(), worker_id, HANDLERS, gates={"gpu": engine.gate})
+    runner = Runner(
+        get_sessionmaker(), worker_id, HANDLERS, gates={"gpu": engine.gate}, paused=queue_paused
+    )
     # The API applies migrations on start; wait for them instead of crashing.
     while not _Stop.requested:
         try:

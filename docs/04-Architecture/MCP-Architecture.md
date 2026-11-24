@@ -3,7 +3,7 @@ title: MCP Architecture
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - architecture
   - mcp
@@ -12,7 +12,7 @@ tags:
 # MCP Architecture
 
 - **Server:** Python with the official MCP SDK (`backend/src/asset_studio_mcp`, WP-15). Transport is **Streamable HTTP** at `127.0.0.1:<port>/mcp` (stateless, JSON answers), and Claude Code connects to it as an HTTP MCP server. It runs as the compose service `mcp` from the backend image, published only on loopback (default port 8411), with DNS-rebinding protection (loopback `Host` and `Origin` only).
-- **Auth:** a per-install **MCP token**, shown once in Settings › MCP connection and rotatable. The MCP server forwards it to the API, which maps it to actor `mcp`.
+- **Auth:** a per-install **MCP token**, set in `.env` at setup (`ASSET_STUDIO_MCP_TOKEN`). The app never shows it; Settings › MCP connection shows whether it is set, the address and the command to connect Claude Code. It is changed by editing `.env` and restarting (D-58). The MCP server forwards it to the API, which maps it to actor `mcp`.
 - **No bypass:** the MCP server has **no database or file access**; it only calls the REST API (brief §10). The `mcp` service has no volumes and no database settings, and an import contract forbids the package from importing the backend, SQLAlchemy or psycopg.
 - **Errors:** an API refusal becomes a tool error carrying the problem code and detail (e.g. `MCP_NOT_ALLOWED (403)`), so Claude can tell the user why (FR-121).
 

@@ -134,6 +134,67 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/audit/actions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Audit Actions
+         * @description The actions that appear in the log, for the audit view's filter (FR-115).
+         */
+        get: operations["audit_actions_api_v1_audit_actions_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/backups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Backups */
+        get: operations["list_backups_api_v1_backups_get"];
+        put?: never;
+        /**
+         * Create Backup
+         * @description Queue a backup: database, library files and the model list (no model files).
+         */
+        post: operations["create_backup_api_v1_backups_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/backups:restore": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Restore Backup
+         * @description Queue a restore of a backup from the backup folder into this empty data location.
+         */
+        post: operations["restore_backup_api_v1_backups_restore_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/characters/{character_id}": {
         parameters: {
             query?: never;
@@ -236,6 +297,23 @@ export interface paths {
         post?: never;
         /** Remove Asset */
         delete: operations["remove_asset_api_v1_collections__collection_id__assets__asset_id__delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Dashboard */
+        get: operations["dashboard_api_v1_dashboard_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -1232,6 +1310,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Settings */
+        get: operations["get_settings_api_v1_settings_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update Settings
+         * @description User only; every change is audited.
+         */
+        patch: operations["update_settings_api_v1_settings_patch"];
+        trace?: never;
+    };
     "/api/v1/styles/{style_id}": {
         parameters: {
             query?: never;
@@ -1337,6 +1436,26 @@ export interface paths {
          * @description Liveness probe: the API process is up.
          */
         get: operations["health_api_v1_system_health_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/system/status": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Status
+         * @description Component health for the System status screen (NFR-003).
+         */
+        get: operations["status_api_v1_system_status_get"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1741,6 +1860,19 @@ export interface components {
             /** Name */
             name?: string | null;
         };
+        /** Attention */
+        Attention: {
+            /** Awaiting Review */
+            awaiting_review: number;
+            /** Backup Due */
+            backup_due: boolean;
+            /** Failed Jobs */
+            failed_jobs: number;
+            /** Licence Warnings */
+            licence_warnings: number;
+            /** Processing Failed */
+            processing_failed: number;
+        };
         /** AuditOut */
         AuditOut: {
             /** Action */
@@ -1767,6 +1899,40 @@ export interface components {
             subject_id: string | null;
             /** Subject Type */
             subject_type: string;
+        };
+        /** BackupOut */
+        BackupOut: {
+            /** App Version */
+            app_version?: string | null;
+            /** Bytes */
+            bytes: number;
+            /** Created At */
+            created_at?: string | null;
+            /**
+             * Models
+             * @default 0
+             */
+            models: number;
+            /** Name */
+            name: string;
+            /** Readable */
+            readable: boolean;
+            /** Schema Revision */
+            schema_revision?: string | null;
+            /**
+             * Totals
+             * @default {}
+             */
+            totals: {
+                [key: string]: number;
+            };
+        };
+        /** BackupsOut */
+        BackupsOut: {
+            /** Configured */
+            configured: boolean;
+            /** Items */
+            items: components["schemas"]["BackupOut"][];
         };
         /** BatchItem */
         BatchItem: {
@@ -1971,6 +2137,19 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** DashboardOut */
+        DashboardOut: {
+            attention: components["schemas"]["Attention"];
+            /** Failed Jobs */
+            failed_jobs: components["schemas"]["FailedJob"][];
+            last_backup: components["schemas"]["BackupOut"] | null;
+            /** Latest Versions */
+            latest_versions: components["schemas"]["LatestVersion"][];
+            /** Versions By State */
+            versions_by_state: {
+                [key: string]: number;
+            };
+        };
         /** DetectRequest */
         DetectRequest: {
             /** Box */
@@ -2127,6 +2306,22 @@ export interface components {
             id: string;
             /** Name */
             name: string;
+        };
+        /** FailedJob */
+        FailedJob: {
+            /** Code */
+            code: string | null;
+            /** Finished At */
+            finished_at: string | null;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Kind */
+            kind: string;
+            /** Message */
+            message: string | null;
         };
         /** FamilyUpdate */
         FamilyUpdate: {
@@ -2400,6 +2595,32 @@ export interface components {
             state: string;
             /** Wait Reason */
             wait_reason: string | null;
+        };
+        /** LatestVersion */
+        LatestVersion: {
+            /**
+             * Asset Id
+             * Format: uuid
+             */
+            asset_id: string;
+            /** Asset Name */
+            asset_name: string;
+            /** Category */
+            category: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /**
+             * Id
+             * Format: uuid
+             */
+            id: string;
+            /** Number */
+            number: number;
+            /** State */
+            state: string;
         };
         /** LicenceOut */
         LicenceOut: {
@@ -3135,6 +3356,11 @@ export interface components {
             /** Role */
             role?: ("style" | "character" | "pose" | "composition" | "colour" | "anatomy" | "equipment" | "background" | "other") | null;
         };
+        /** RestoreIn */
+        RestoreIn: {
+            /** Name */
+            name: string;
+        };
         /** RuleResultOut */
         RuleResultOut: {
             /** Details */
@@ -3160,10 +3386,10 @@ export interface components {
             /** Actor */
             actor: string;
         };
-        /** SettingsUpdate */
-        SettingsUpdate: {
-            /** Mcp Can Decide */
-            mcp_can_decide: boolean;
+        /** SettingsOut */
+        SettingsOut: {
+            /** Queue Paused */
+            queue_paused: boolean;
         };
         /** Size */
         Size: {
@@ -3176,6 +3402,39 @@ export interface components {
             suffix: string;
             /** Width */
             width: number;
+        };
+        /** StatusOut */
+        StatusOut: {
+            api: components["schemas"]["Health"];
+            /** Backups */
+            backups: {
+                [key: string]: unknown;
+            };
+            /** Consistency */
+            consistency: {
+                [key: string]: unknown;
+            };
+            /** Database */
+            database: {
+                [key: string]: unknown;
+            };
+            engine: components["schemas"]["EngineOut"];
+            /** Locations */
+            locations: {
+                [key: string]: unknown;
+            };
+            /** Mcp */
+            mcp: {
+                [key: string]: unknown;
+            };
+            /** Queue */
+            queue: {
+                [key: string]: unknown;
+            };
+            /** Storage */
+            storage: {
+                [key: string]: unknown;
+            };
         };
         /** StyleAttributes */
         StyleAttributes: {
@@ -3482,6 +3741,16 @@ export interface components {
             /** Version */
             version: number;
         };
+        /** SettingsUpdate */
+        asset_studio__api__projects__SettingsUpdate: {
+            /** Mcp Can Decide */
+            mcp_can_decide: boolean;
+        };
+        /** SettingsUpdate */
+        asset_studio__api__settings__SettingsUpdate: {
+            /** Queue Paused */
+            queue_paused?: boolean | null;
+        };
     };
     responses: never;
     parameters: never;
@@ -3763,6 +4032,123 @@ export interface operations {
             };
         };
     };
+    audit_actions_api_v1_audit_actions_get: {
+        parameters: {
+            query?: {
+                project_id?: string | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string[];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_backups_api_v1_backups_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BackupsOut"];
+                };
+            };
+        };
+    };
+    create_backup_api_v1_backups_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    restore_backup_api_v1_backups_restore_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "Idempotency-Key"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RestoreIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["JobOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_character_api_v1_characters__character_id__get: {
         parameters: {
             query?: never;
@@ -4009,6 +4395,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["CollectionOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    dashboard_api_v1_dashboard_get: {
+        parameters: {
+            query: {
+                project_id: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DashboardOut"];
                 };
             };
             /** @description Validation Error */
@@ -5624,7 +6041,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SettingsUpdate"];
+                "application/json": components["schemas"]["asset_studio__api__projects__SettingsUpdate"];
             };
         };
         responses: {
@@ -6259,6 +6676,59 @@ export interface operations {
             };
         };
     };
+    get_settings_api_v1_settings_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettingsOut"];
+                };
+            };
+        };
+    };
+    update_settings_api_v1_settings_patch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["asset_studio__api__settings__SettingsUpdate"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SettingsOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_style_api_v1_styles__style_id__get: {
         parameters: {
             query?: never;
@@ -6454,6 +6924,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["Health"];
+                };
+            };
+        };
+    };
+    status_api_v1_system_status_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["StatusOut"];
                 };
             };
         };

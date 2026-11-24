@@ -3,7 +3,7 @@ title: Traceability Matrix
 type: traceability
 status: draft
 created: 2026-11-21
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - traceability
   - requirements
@@ -33,7 +33,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-001 | FR-065 | — | — | WP-09 | `test_fr065_*`, `test_adr010_*`, `test_t04_*`, `generation.test.tsx` |
 | BR-001 | FR-090 | UC-011 | AC-001 | WP-11 | `test_fr090_*`, `publish.test.tsx` |
 | BR-001 | FR-091 | UC-011 | AC-001 | WP-11 | `test_fr091_*` |
-| BR-001 | FR-100 | UC-015 | — | — | — |
+| BR-001 | FR-100 | UC-015 | — | WP-16 | `test_api_settings_status_backups_and_dashboard`, `system.test.tsx` |
 | BR-002 | FR-001 | UC-001 | — | WP-02 | `test_fr001_*` |
 | BR-002 | FR-002 | — | — | WP-02 | `test_rule005_*` |
 | BR-002 | FR-003 | — | AC-005 | WP-02 | `test_fr003_*` |
@@ -68,9 +68,9 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-007 | FR-092 | UC-011 | AC-001 | WP-11 | `test_fr092_*`, `publish.test.tsx` |
 | BR-007 | FR-093 | UC-011 | AC-001 | WP-11 | `test_fr092_fr093_*` |
 | BR-007 | FR-094 | UC-011 | AC-001, AC-003 | WP-11 | `test_rule004_*`, `publish.test.tsx` |
-| BR-007 | FR-111 | UC-016 | AC-009 | — | — |
-| BR-007 | FR-112 | UC-016 | AC-009 | — | — |
-| BR-007 | FR-115 | — | — | WP-02 | `test_fr115_* (API; UI in WP-16)` |
+| BR-007 | FR-111 | UC-016 | AC-009 | WP-16 | `test_ac009_*`, `test_backup_names_*`, `system.test.tsx` |
+| BR-007 | FR-112 | UC-016 | AC-009 | WP-16 | `test_ac009_*`, `test_restore_*`, `system.test.tsx` |
+| BR-007 | FR-115 | — | — | WP-02, WP-16 | `test_fr115_*`, `system.test.tsx` (audit view) |
 | BR-008 | FR-058 | — | — | WP-10 | `review.test.tsx` |
 | BR-008 | FR-059 | — | — | WP-10 | `test_fr059_*` |
 | BR-008 | FR-060 | UC-009 | — | WP-09 | `test_fr060_*`, `test_rule009_*` |
@@ -94,7 +94,7 @@ The chain is: **BR → FR → UC → AC → Implementation → Tests**.
 | BR-011 | FR-011 | UC-004 | — | WP-07 | `test_fr011_*`, `inputs.test.tsx` (Style Studio) |
 | BR-011 | FR-045 | UC-014 | — | — | — |
 | BR-012 | FR-005 | UC-003 | AC-010, AC-015 | WP-02 | `test_ac010_*` |
-| BR-012 | FR-110 | — | — | — | — |
+| BR-012 | FR-110 | — | — | WP-16 | `test_only_the_user_changes_settings`, `test_a_paused_queue_*`, `system.test.tsx` |
 | BR-013 | FR-016 | UC-005 | — | WP-12, WP-13 (moved from WP-07: needs the model registry) | — |
 | BR-013 | FR-070 | UC-012 | — | — | — |
 | BR-013 | FR-071 | UC-012 | — | — | — |

@@ -72,6 +72,12 @@ function ProjectSwitcher() {
   const projectId = useUi((u) => u.projectId);
   const setProjectId = useUi((u) => u.setProjectId);
   const current = projects.data?.find((p) => p.id === projectId);
+  // A remembered project that no longer exists (deleted, or another install) is forgotten,
+  // so screens ask for a project instead of failing with "not found".
+  const stale = !!projectId && !!projects.data && !current;
+  useEffect(() => {
+    if (stale) setProjectId(null);
+  }, [stale, setProjectId]);
 
   return (
     <Menu.Root>

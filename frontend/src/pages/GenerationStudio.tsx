@@ -3,7 +3,7 @@
 import type { TFunction } from "i18next";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router";
+import { Link, useSearchParams } from "react-router";
 
 import {
   ACTIVE,
@@ -178,7 +178,11 @@ function Studio({ projectId }: { projectId: string }) {
   const references = useReferences(projectId);
   const models = useModels(projectId);
   const queue = useQueueGeneration();
-  const [draft, setDraft] = useState<Draft>(START);
+  // The dashboard's "Batch" quick action opens the studio in batch mode (FR-100).
+  const [params] = useSearchParams();
+  const [draft, setDraft] = useState<Draft>(() =>
+    params.get("mode") === "batch" ? { ...START, mode: "batch" } : START,
+  );
   const [jobIds, setJobIds] = useState<string[]>([]);
   const [shownAsset, setShownAsset] = useState<string | null>(null);
   const set = <K extends keyof Draft>(key: K, value: Draft[K]) =>
