@@ -3,7 +3,7 @@ title: Infrastructure
 type: architecture
 status: approved
 created: 2026-11-22
-updated: 2026-11-23
+updated: 2026-11-24
 tags:
   - architecture
   - infrastructure
@@ -26,15 +26,22 @@ tags:
 
 | Component | How it is installed in the MVP |
 |---|---|
-| ComfyUI | Official portable build, **pinned version** (v0.46.0 at the time of the prototype), extracted with a bundled `7zr` (S-2) |
-| Host agent | `uv`-managed Python environment; started by the startup script; optional autostart |
-| Training | kohya sd-scripts at a pinned commit, Python 3.11 venv via `uv`, torch with CUDA |
+| ComfyUI | Official portable build, **pinned** v0.46.0 with its SHA-256, extracted with a pinned and checked `7zr` 26.04 (S-2), plus ComfyUI_IPAdapter_plus at a pinned commit |
+| Host agent | `uv`-managed Python environment; started by the startup script with its settings in `host-agent\.env` |
+| Training | kohya sd-scripts at a pinned commit, Python 3.11 venv via `uv`, torch 2.6.0 with CUDA 12.4 from the official PyTorch index |
 
 ## Startup workflow (MVP)
 
-1. `asset-studio setup`: a PowerShell script that checks prerequisites (Docker, NVIDIA driver, disk), asks for the data and model folders, writes `.env` with generated tokens, and offers to install ComfyUI and training. Every download is listed with its size and needs a yes.
-2. `asset-studio start`: starts the host agent, which starts ComfyUI, then runs `docker compose up -d` and opens `http://127.0.0.1:<port>`.
-3. `asset-studio stop` / `status` / `logs`.
+Built in WP-17 (D-63); the procedure is in [[Install-and-Run]].
+
+1. `asset-studio setup` (`asset-studio.cmd`, Windows PowerShell 5.1):
+   - checks prerequisites (Docker, Compose, Git, uv, NVIDIA driver, disk);
+   - writes `.env` with generated secrets, never replacing set ones;
+   - asks for the native, model, export, backup and training folders;
+   - offers to install ComfyUI, training and the DWPose models. Every download is listed with its host, size and licence and needs a yes; pinned files are checked by size and SHA-256 (`scripts/native-components.json`);
+   - writes `host-agent\.env`.
+2. `asset-studio start`: starts the host agent and asks it to start ComfyUI, then runs `docker compose up -d --build` (so an update rebuilds the images) and opens `http://127.0.0.1:<port>`.
+3. `asset-studio stop` / `status` / `logs [service|agent]`; `install-comfyui` / `install-training` install separately.
 
 The native installer replaces the script after the MVP (D-19).
 

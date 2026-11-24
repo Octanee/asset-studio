@@ -1,9 +1,9 @@
 ---
 title: Operations Index
 type: operations
-status: draft
+status: approved
 created: 2026-11-21
-updated: 2026-11-22
+updated: 2026-11-24
 tags:
   - placeholder
 ---
@@ -12,7 +12,8 @@ tags:
 
 
 - [[Development-Setup]] — local development and checks
-- Install, run, backup/restore, troubleshooting and release procedures follow in WP-17.
+- [[Install-and-Run]] — setup, start, stop, status, logs, pinned native components and troubleshooting on Windows (WP-17)
+- Backup and restore are in the app (Settings → Data and backup, [[Storage-and-Backup]]); release procedures follow with gate G-9.
 
 ## Pages
 

@@ -150,5 +150,4 @@ The registry is seeded from a **versioned catalogue file** in the repo (name, so
   - A run spec carries only the run id, family, base model and VAE file names, output name, resolution, steps, rank, alpha, learning rate and seed. The agent builds the command from its presets.
   - Only the exit code leaves the agent; the log stays in the run's folder.
 - **Not yet:**
-  - installing the pinned ComfyUI build and kohya (WP-17);
   - (LoRAs in generation: done in WP-13 part 2, see above.)
