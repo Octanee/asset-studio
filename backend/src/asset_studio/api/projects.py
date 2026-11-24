@@ -1,7 +1,7 @@
 """Projects API (FR-001 to FR-008)."""
 
 import uuid
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Body, Depends
 from pydantic import BaseModel, Field
@@ -97,6 +97,26 @@ def create_draft(db: Db, actor: CurrentActor, body: DraftCreate) -> DraftOut:
     )
     return DraftOut(
         **DraftOut.model_validate(draft).model_dump(exclude={"problems"}), problems=problems
+    )
+
+
+@router.get("/drafts", response_model=list[DraftOut])
+def list_drafts(
+    db: Db, _: CurrentActor, status: Literal["pending", "confirmed", "discarded"] | None = "pending"
+) -> list[DraftOut]:
+    return [_draft(d) for d in service.list_drafts(db, status)]
+
+
+@router.post("/drafts/{draft_id}/discard", response_model=DraftOut)
+def discard_draft(db: Db, actor: CurrentActor, draft_id: uuid.UUID) -> DraftOut:
+    """User only: turn down a draft (RULE-010)."""
+    return _draft(service.discard_draft(db, draft_id, actor))
+
+
+def _draft(draft: Any) -> DraftOut:
+    return DraftOut(
+        **DraftOut.model_validate(draft).model_dump(exclude={"problems"}),
+        problems=service.draft_problems(draft),
     )
 
 

@@ -339,3 +339,29 @@ def confirm_draft(
         project_id=project.id,
     )
     return project
+
+
+def list_drafts(session: Session, status: str | None = "pending") -> list[ProjectDraft]:
+    """Drafts, newest first: Claude's proposals wait here for the user (FR-008)."""
+    q = select(ProjectDraft).order_by(ProjectDraft.created_at.desc()).limit(100)
+    if status:
+        q = q.where(ProjectDraft.status == status)
+    return list(session.scalars(q))
+
+
+def discard_draft(session: Session, draft_id: uuid.UUID, actor: Actor) -> ProjectDraft:
+    """The user turns a draft down; it stays for the record (RULE-010)."""
+    _require_user(actor, "discard a project draft")
+    draft = get_draft(session, draft_id)
+    if draft.status != "pending":
+        raise DomainError(409, "DRAFT_NOT_PENDING", "This draft was already handled.")
+    draft.status = "discarded"
+    session.flush()
+    record(
+        session,
+        actor=actor,
+        action="project_draft.discarded",
+        subject_type="project_draft",
+        subject_id=draft.id,
+    )
+    return draft

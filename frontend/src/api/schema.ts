@@ -319,6 +319,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/dashboard/projects": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Project Counts
+         * @description Counts for every project, for the Projects screen.
+         */
+        get: operations["project_counts_api_v1_dashboard_projects_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/events": {
         parameters: {
             query?: never;
@@ -744,7 +764,8 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /** List Drafts */
+        get: operations["list_drafts_api_v1_projects_drafts_get"];
         put?: never;
         /** Create Draft */
         post: operations["create_draft_api_v1_projects_drafts_post"];
@@ -783,6 +804,26 @@ export interface paths {
         put?: never;
         /** Confirm Draft */
         post: operations["confirm_draft_api_v1_projects_drafts__draft_id__confirm_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/projects/drafts/{draft_id}/discard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Discard Draft
+         * @description User only: turn down a draft (RULE-010).
+         */
+        post: operations["discard_draft_api_v1_projects_drafts__draft_id__discard_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2123,6 +2164,10 @@ export interface components {
         };
         /** ConfigVersionOut */
         ConfigVersionOut: {
+            /** Config */
+            config: {
+                [key: string]: unknown;
+            };
             /**
              * Created At
              * Format: date-time
@@ -3111,6 +3156,24 @@ export interface components {
             /** Type */
             type: string;
             validation?: components["schemas"]["Validation"];
+        };
+        /** ProjectCounts */
+        ProjectCounts: {
+            /** Approved */
+            approved: number;
+            /** Assets */
+            assets: number;
+            /** Awaiting Review */
+            awaiting_review: number;
+            /**
+             * Project Id
+             * Format: uuid
+             */
+            project_id: string;
+            /** Published */
+            published: number;
+            /** Versions */
+            versions: number;
         };
         /** ProjectDetail */
         ProjectDetail: {
@@ -4439,6 +4502,26 @@ export interface operations {
             };
         };
     };
+    project_counts_api_v1_dashboard_projects_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProjectCounts"][];
+                };
+            };
+        };
+    };
     events_api_v1_events_get: {
         parameters: {
             query?: {
@@ -5286,6 +5369,37 @@ export interface operations {
             };
         };
     };
+    list_drafts_api_v1_projects_drafts_get: {
+        parameters: {
+            query?: {
+                status?: ("pending" | "confirmed" | "discarded") | null;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     create_draft_api_v1_projects_drafts_post: {
         parameters: {
             query?: never;
@@ -5407,6 +5521,37 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProjectDetail"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    discard_draft_api_v1_projects_drafts__draft_id__discard_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                draft_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftOut"];
                 };
             };
             /** @description Validation Error */

@@ -152,3 +152,24 @@ def dashboard(session: Session, project_id: uuid.UUID) -> dict[str, Any]:
         "failed_jobs": failed_jobs,
         "last_backup": newest,
     }
+
+
+def project_counts(session: Session) -> dict[uuid.UUID, dict[str, int]]:
+    """Per project: assets, live versions and versions in each state (Projects screen)."""
+    out: dict[uuid.UUID, dict[str, int]] = {}
+    for pid, n in session.execute(
+        select(Asset.project_id, func.count())
+        .where(Asset.archived_at.is_(None))
+        .group_by(Asset.project_id)
+    ):
+        out.setdefault(pid, {})["assets"] = n
+    for pid, state, n in session.execute(
+        select(Asset.project_id, AssetVersion.state, func.count())
+        .join(Asset, Asset.id == AssetVersion.asset_id)
+        .where(Asset.archived_at.is_(None), AssetVersion.deleted_at.is_(None))
+        .group_by(Asset.project_id, AssetVersion.state)
+    ):
+        row = out.setdefault(pid, {})
+        row[state] = n
+        row["versions"] = row.get("versions", 0) + n
+    return out

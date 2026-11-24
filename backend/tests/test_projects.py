@@ -144,3 +144,33 @@ def test_fr008_mcp_draft_needs_user_confirmation(client: TestClient) -> None:
 def test_unknown_project_is_404(client: TestClient) -> None:
     r = client.get("/api/v1/projects/00000000-0000-7000-8000-000000000000")
     assert r.status_code == 404 and r.json()["code"] == "PROJECT_NOT_FOUND"
+
+
+# --- WP-16 part 2: drafts list, discard, version history with configs, project counts -------
+
+
+def test_rule010_drafts_wait_for_the_user_who_can_discard_them(client: TestClient) -> None:
+    draft = client.post(
+        "/api/v1/projects/drafts",
+        json={"description": "Stretching", "config": project_config(name="Stretch")},
+        headers=MCP,
+    ).json()
+    pending = client.get("/api/v1/projects/drafts").json()
+    assert [d["id"] for d in pending] == [draft["id"]] and pending[0]["problems"] == []
+    url = f"/api/v1/projects/drafts/{draft['id']}/discard"
+    assert client.post(url, headers=MCP).json()["code"] == "ACTOR_NOT_ALLOWED"
+    assert client.post(url, headers=ORIGIN).json()["status"] == "discarded"
+    assert client.get("/api/v1/projects/drafts").json() == []
+    assert client.post(url, headers=ORIGIN).json()["code"] == "DRAFT_NOT_PENDING"
+    gone = client.get("/api/v1/projects/drafts?status=discarded").json()
+    assert [d["id"] for d in gone] == [draft["id"]]
+
+
+def test_fr007_versions_carry_their_config_and_projects_have_counts(client: TestClient) -> None:
+    pid = client.post("/api/v1/projects", json=project_config(), headers=ORIGIN).json()["id"]
+    changed = project_config(description="v2")
+    client.put(f"/api/v1/projects/{pid}/config", json={"config": changed}, headers=ORIGIN)
+    versions = client.get(f"/api/v1/projects/{pid}/config/versions").json()
+    assert [(v["version"], v["config"]["description"]) for v in versions] == [(2, "v2"), (1, "")]
+    counts = client.get("/api/v1/dashboard/projects").json()
+    assert all(c["project_id"] != pid for c in counts)  # no assets yet: not listed

@@ -10,6 +10,8 @@ import { Library } from "../pages/Library";
 import { Models } from "../pages/Models";
 import { Dashboard } from "../pages/Dashboard";
 import { NotFound, Placeholder } from "../pages/pages";
+import { NewProject, ProjectSettings } from "../pages/ProjectEditor";
+import { Projects } from "../pages/Projects";
 import { Poses } from "../pages/Poses";
 import { Publish } from "../pages/Publish";
 import { Queue } from "../pages/Queue";
@@ -102,7 +104,9 @@ export const routes: RouteObject[] = [
           { path: "/settings/data", element: <Settings section="data" /> },
           { path: "/settings/mcp", element: <Settings section="mcp" /> },
           { path: "/settings/audit", element: <Settings section="audit" /> },
-          { path: "/projects", element: <Placeholder module={{ id: "projects", wp: "WP-16" }} /> },
+          { path: "/projects", element: <Projects /> },
+          { path: "/projects/new", element: <NewProject /> },
+          { path: "/projects/:projectId", element: <ProjectSettings /> },
           { path: "/system", element: <SystemStatus /> },
           { path: "*", element: <NotFound /> },
         ],

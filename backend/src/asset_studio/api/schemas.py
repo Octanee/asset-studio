@@ -34,6 +34,7 @@ class ConfigVersionOut(BaseModel):
     created_by_actor: str
     note: str
     created_at: datetime
+    config: dict[str, Any]
 
 
 class DraftOut(BaseModel):

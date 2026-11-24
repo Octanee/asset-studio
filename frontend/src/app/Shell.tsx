@@ -74,7 +74,8 @@ function ProjectSwitcher() {
   const current = projects.data?.find((p) => p.id === projectId);
   // A remembered project that no longer exists (deleted, or another install) is forgotten,
   // so screens ask for a project instead of failing with "not found".
-  const stale = !!projectId && !!projects.data && !current;
+  // Only once the list is settled: a project created a moment ago is not in the old list yet.
+  const stale = !!projectId && !!projects.data && !projects.isFetching && !current;
   useEffect(() => {
     if (stale) setProjectId(null);
   }, [stale, setProjectId]);

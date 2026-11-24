@@ -51,6 +51,30 @@ class DashboardOut(BaseModel):
     last_backup: BackupOut | None
 
 
+class ProjectCounts(BaseModel):
+    project_id: uuid.UUID
+    assets: int
+    versions: int
+    awaiting_review: int
+    approved: int
+    published: int
+
+
+@router.get("/projects", response_model=list[ProjectCounts])
+def project_counts(db: Annotated[Session, Depends(get_session)], _: CurrentActor) -> list[Any]:
+    """Counts for every project, for the Projects screen."""
+    return [
+        {
+            "project_id": pid,
+            **{
+                k: c.get(k, 0)
+                for k in ("assets", "versions", "awaiting_review", "approved", "published")
+            },
+        }
+        for pid, c in status.project_counts(db).items()
+    ]
+
+
 @router.get("", response_model=DashboardOut)
 def dashboard(
     db: Annotated[Session, Depends(get_session)], _: CurrentActor, project_id: uuid.UUID
